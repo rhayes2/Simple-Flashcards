@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="settings_options">
+        <item>Send feedback</item>
+        <item>Rate this app</item>
+        <item>Source code</item>
+    </string-array>
+    <string name="play_store_error">Unable to open the Play Store.</string>
+    <string name="feedback_subject">Simple Flashcards Feedback</string>
+    <string name="send_email">Send email</string>
+
+    <!-- Font Awesome Icons -->
+    <string-array name="settings_icons">
+        <item>{fa-envelope}</item>
+        <item>{fa-thumbs-up}</item>
+        <item>{fa-github}</item>
+    </string-array>
+</resources>
