@@ -3,4 +3,10 @@
     <string name="settings">Settings</string>
     <string name="add_flashcard_set">Add flashcard set</string>
     <string name="flashcard_set_name">Flashcard set name</string>
+
+    <string name="welcome">Welcome</string>
+    <string name="ask_for_help">Hey there, I\'m Alex! I\'m always looking to make my work as awesome as possible
+        for the community, so if you have any ideas on how to improve this app (bug fixes, feature requests, etc),
+        please use the send feedback option in the settings to tell me! Thank you!
+    </string>
 </resources>

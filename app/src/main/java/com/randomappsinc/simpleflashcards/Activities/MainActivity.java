@@ -6,8 +6,10 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ImageView;
 
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.joanzapata.iconify.IconDrawable;
 import com.joanzapata.iconify.fonts.FontAwesomeIcons;
+import com.randomappsinc.simpleflashcards.Persistence.PreferencesManager;
 import com.randomappsinc.simpleflashcards.R;
 
 import butterknife.Bind;
@@ -24,6 +26,15 @@ public class MainActivity extends StandardActivity {
         addButton.setImageDrawable(new IconDrawable(this, FontAwesomeIcons.fa_plus)
                 .colorRes(R.color.white)
                 .actionBarSize());
+
+        if (PreferencesManager.get().isFirstTimeUser()) {
+            PreferencesManager.get().rememberWelcome();
+            new MaterialDialog.Builder(this)
+                    .title(R.string.welcome)
+                    .content(R.string.ask_for_help)
+                    .positiveText(android.R.string.yes)
+                    .show();
+        }
     }
 
     @Override
