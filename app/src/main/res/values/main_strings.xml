@@ -9,4 +9,10 @@
         for the community, so if you have any ideas on how to improve this app (bug fixes, feature requests, etc),
         please use the send feedback option in the settings to tell me! Thank you!
     </string>
+
+    <string name="no_sets">You do not have any flashcard sets.</string>
+    <string name="blank_name">Flashcard set names cannot be blank.</string>
+    <string name="set_already_exists">You already have a flashcard set with that name.</string>
+
+    <string name="edit_icon">{fa-edit}</string>
 </resources>

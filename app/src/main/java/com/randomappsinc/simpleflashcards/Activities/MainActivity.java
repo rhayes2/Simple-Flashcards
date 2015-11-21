@@ -4,19 +4,33 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ListView;
+import android.widget.TextView;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.joanzapata.iconify.IconDrawable;
 import com.joanzapata.iconify.fonts.FontAwesomeIcons;
+import com.randomappsinc.simpleflashcards.Adapters.FlashcardSetsAdapter;
+import com.randomappsinc.simpleflashcards.Persistence.DatabaseManager;
 import com.randomappsinc.simpleflashcards.Persistence.PreferencesManager;
 import com.randomappsinc.simpleflashcards.R;
+import com.randomappsinc.simpleflashcards.Utils.Utils;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 public class MainActivity extends StandardActivity {
-    @Bind(R.id.add_button) ImageView addButton;
+    @Bind(R.id.set_name) EditText setName;
+    @Bind(R.id.add_icon) ImageView addButton;
+    @Bind(R.id.flashcard_sets) ListView sets;
+    @Bind(R.id.no_sets) TextView noSets;
+    @Bind(R.id.parent) View parent;
+
+    private FlashcardSetsAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,6 +48,24 @@ public class MainActivity extends StandardActivity {
                     .content(R.string.ask_for_help)
                     .positiveText(android.R.string.yes)
                     .show();
+        }
+
+        adapter = new FlashcardSetsAdapter(this, noSets);
+        sets.setAdapter(adapter);
+    }
+
+    @OnClick(R.id.add_set)
+    public void addSet(View view) {
+        String newSet = setName.getText().toString().trim();
+        setName.setText("");
+        if (newSet.isEmpty()) {
+            Utils.showSnackbar(parent, R.string.blank_name);
+        }
+        else if (DatabaseManager.get().doesSetExist(newSet)) {
+            Utils.showSnackbar(parent, R.string.set_already_exists);
+        }
+        else {
+            adapter.addSet(newSet);
         }
     }
 

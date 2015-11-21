@@ -21,6 +21,9 @@ android {
         maven { url "https://jitpack.io" }
         mavenCentral()
     }
+    packagingOptions {
+        exclude 'META-INF/services/javax.annotation.processing.Processor'
+    }
 }
 
 dependencies {
