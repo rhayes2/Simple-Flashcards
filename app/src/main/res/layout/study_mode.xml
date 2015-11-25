@@ -1,6 +1,84 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:padding="10dp"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
     android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/set_name"
+        android:textSize="22sp"
+        android:textColor="@color/black"
+        android:layout_gravity="center_horizontal"
+        android:gravity="center_horizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <TextView
+        android:id="@+id/no_flashcards"
+        android:layout_margin="30dp"
+        android:text="@string/no_flashcards"
+        android:textSize="28sp"
+        android:textColor="@color/dark_gray"
+        android:layout_gravity="center_horizontal"
+        android:gravity="center_horizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <LinearLayout
+        xmlns:card_view="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/question_answer_pair"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <android.support.v7.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            card_view:contentPadding="10dp"
+            card_view:cardUseCompatPadding="true"
+            card_view:cardBackgroundColor="@color/white"
+            card_view:cardCornerRadius="3dp"
+            card_view:cardElevation="5dp">
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <TextView
+                    android:text="@string/question_header"
+                    android:layout_gravity="center_horizontal"
+                    android:textColor="@color/dark_gray"
+                    android:textSize="18sp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+                <TextView
+                    android:id="@+id/question"
+                    android:gravity="center"
+                    android:textColor="@color/dark_gray"
+                    android:textSize="18sp"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+
+            </LinearLayout>
+        </android.support.v7.widget.CardView>
+
+        <android.support.v7.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:layout_marginTop="10dp"
+            card_view:contentPadding="10dp"
+            card_view:cardUseCompatPadding="true"
+            card_view:cardBackgroundColor="@color/white"
+            card_view:cardCornerRadius="3dp"
+            card_view:cardElevation="5dp">
+        </android.support.v7.widget.CardView>
+
+    </LinearLayout>
 
 </LinearLayout>

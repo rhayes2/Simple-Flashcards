@@ -4,4 +4,6 @@
     <string name="random_flashcard">Random flashcard</string>
     <string name="next_flashcard">Next flashcard</string>
     <string name="previous_flashcard">Previous flashcard</string>
+    <string name="question_header"><u>Question</u></string>
+    <string name="answer_header"><u>Answer</u></string>
 </resources>
