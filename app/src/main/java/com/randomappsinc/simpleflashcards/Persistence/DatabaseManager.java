@@ -52,7 +52,6 @@ public class DatabaseManager {
                 .equalTo("name", oldName)
                 .findFirst();
         set.setName(newName);
-        realm.copyToRealmOrUpdate(set);
         realm.commitTransaction();
     }
 
@@ -62,13 +61,12 @@ public class DatabaseManager {
             FlashcardSet set = new FlashcardSet();
             set.setName(setNames.get(i));
             set.setPosition(i);
-            realm.copyToRealmOrUpdate(set);
         }
         realm.commitTransaction();
     }
 
     public boolean doesSetExist(String setName) {
-        return !realm.where(FlashcardSet.class).equalTo("name", setName).findAll().isEmpty();
+        return realm.where(FlashcardSet.class).equalTo("name", setName).findFirst() != null;
     }
 
     public void addFlashcard(String question, String answer, String setName) {
@@ -78,7 +76,6 @@ public class DatabaseManager {
         flashcard.setQuestion(question);
         flashcard.setAnswer(answer);
         set.getFlashcards().add(flashcard);
-        realm.copyToRealmOrUpdate(set);
         realm.commitTransaction();
     }
 
@@ -95,10 +92,10 @@ public class DatabaseManager {
 
     public boolean doesFlashcardExist(String setName, String question, String answer) {
         FlashcardSet set = realm.where(FlashcardSet.class).equalTo("name", setName).findFirst();
-        return !set.getFlashcards().where()
+        return set.getFlashcards().where()
                 .equalTo("question", question)
                 .equalTo("answer", answer)
-                .findAll().isEmpty();
+                .findFirst() != null;
     }
 
     public void deleteFlashcardSet(String setName) {
@@ -112,6 +109,9 @@ public class DatabaseManager {
     }
 
     public List<Flashcard> getAllFlashcards(String setName) {
-        return realm.where(FlashcardSet.class).findFirst().getFlashcards();
+        return realm.where(FlashcardSet.class)
+                .equalTo("id", setName)
+                .findFirst()
+                .getFlashcards();
     }
 }
