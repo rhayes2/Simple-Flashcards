@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="study_mode">Study mode</string>
+    <string name="random_flashcard">Random flashcard</string>
+    <string name="next_flashcard">Next flashcard</string>
+    <string name="previous_flashcard">Previous flashcard</string>
+</resources>

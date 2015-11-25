@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -22,8 +23,11 @@ import com.randomappsinc.simpleflashcards.Utils.Utils;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import butterknife.OnItemClick;
 
 public class MainActivity extends StandardActivity {
+    public static final String FLASHCARD_SET_KEY = "flashcardSet";
+
     @Bind(R.id.set_name) EditText setName;
     @Bind(R.id.add_icon) ImageView addButton;
     @Bind(R.id.flashcard_sets) ListView sets;
@@ -54,6 +58,13 @@ public class MainActivity extends StandardActivity {
         sets.setAdapter(adapter);
     }
 
+    @OnItemClick(R.id.flashcard_sets)
+    public void onFlashcardSetClick(AdapterView<?> adapterView, View view, int position, long id) {
+        Intent intent = new Intent(this, StudyModeActivity.class);
+        intent.putExtra(FLASHCARD_SET_KEY, adapter.getItem(position));
+        startActivity(intent);
+    }
+
     @OnClick(R.id.add_set)
     public void addSet(View view) {
         String newSet = setName.getText().toString().trim();
@@ -66,6 +77,9 @@ public class MainActivity extends StandardActivity {
         }
         else {
             adapter.addSet(newSet);
+            Intent intent = new Intent(this, EditFlashcardSetActivity.class);
+            intent.putExtra(FLASHCARD_SET_KEY, newSet);
+            startActivity(intent);
         }
     }
 

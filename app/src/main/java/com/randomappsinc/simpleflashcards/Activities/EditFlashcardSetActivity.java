@@ -22,8 +22,6 @@ import butterknife.OnItemClick;
  * Created by alexanderchiou on 11/24/15.
  */
 public class EditFlashcardSetActivity extends StandardActivity {
-    public static final String FLASHCARD_SET_KEY = "flashcardSet";
-
     @Bind(R.id.no_flashcards) TextView noFlashcards;
     @Bind(R.id.flashcards) ListView flashcards;
     @Bind(R.id.add_flashcard) FloatingActionButton addFlashcard;
@@ -37,7 +35,7 @@ public class EditFlashcardSetActivity extends StandardActivity {
         setContentView(R.layout.edit_flashcard_set);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         ButterKnife.bind(this);
-        setName = getIntent().getStringExtra(FLASHCARD_SET_KEY);
+        setName = getIntent().getStringExtra(MainActivity.FLASHCARD_SET_KEY);
         setTitle(getString(R.string.editing) + setName);
 
         addFlashcard.setImageDrawable(new IconDrawable(this, FontAwesomeIcons.fa_plus).colorRes(R.color.white));
@@ -54,7 +52,7 @@ public class EditFlashcardSetActivity extends StandardActivity {
     @OnItemClick(R.id.flashcards)
     public void onFlashcardClick(AdapterView<?> adapterView, View view, int position, long id) {
         Intent intent = new Intent(this, FlashcardFormActivity.class);
-        intent.putExtra(FLASHCARD_SET_KEY, setName);
+        intent.putExtra(MainActivity.FLASHCARD_SET_KEY, setName);
         intent.putExtra(FlashcardFormActivity.QUESTION_KEY, adapter.getItem(position).getQuestion());
         intent.putExtra(FlashcardFormActivity.ANSWER_KEY, adapter.getItem(position).getAnswer());
         intent.putExtra(FlashcardFormActivity.UPDATE_MODE_KEY, true);
@@ -64,7 +62,7 @@ public class EditFlashcardSetActivity extends StandardActivity {
         @OnClick(R.id.add_flashcard)
     public void addFlashcard(View view) {
         Intent intent = new Intent(this, FlashcardFormActivity.class);
-        intent.putExtra(FLASHCARD_SET_KEY, setName);
+        intent.putExtra(MainActivity.FLASHCARD_SET_KEY, setName);
         startActivity(intent);
     }
 }

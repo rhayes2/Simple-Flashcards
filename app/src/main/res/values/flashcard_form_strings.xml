@@ -6,6 +6,7 @@
     <string name="question">Question</string>
     <string name="answer">Answer</string>
 
+    <string name="dupe_flashcard">This set already has a flashcard with this question and answer pair.</string>
     <string name="blank_question">Questions cannot be blank.</string>
     <string name="blank_answer">Answers cannot be blank.</string>
 

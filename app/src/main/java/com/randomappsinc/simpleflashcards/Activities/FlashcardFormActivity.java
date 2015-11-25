@@ -56,8 +56,7 @@ public class FlashcardFormActivity extends StandardActivity {
         else {
             submit.setText(R.string.add_flashcard);
         }
-
-        setName = getIntent().getStringExtra(EditFlashcardSetActivity.FLASHCARD_SET_KEY);
+        setName = getIntent().getStringExtra(MainActivity.FLASHCARD_SET_KEY);
     }
 
     @OnClick(R.id.flashcard_submit)
@@ -72,11 +71,18 @@ public class FlashcardFormActivity extends StandardActivity {
             Utils.showSnackbar(parent, getString(R.string.blank_answer));
         }
         else {
-            if (updateMode) {
-
+            if (DatabaseManager.get().doesFlashcardExist(setName, newQuestion, newAnswer)) {
+                Utils.showSnackbar(parent, getString(R.string.dupe_flashcard));
             }
             else {
-                DatabaseManager.get().addFlashcard(newQuestion, newAnswer, setName);
+                if (updateMode) {
+                    DatabaseManager.get().updateFlashcard(currentQuestion, currentAnswer,
+                            newQuestion, newAnswer, setName);
+
+                }
+                else {
+                    DatabaseManager.get().addFlashcard(newQuestion, newAnswer, setName);
+                }
                 finish();
             }
         }

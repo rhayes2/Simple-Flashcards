@@ -32,6 +32,11 @@
             android:label="@string/flashcard_form"
             android:configChanges="orientation|screenSize">
         </activity>
+        <activity
+            android:name=".Activities.StudyModeActivity"
+            android:label="@string/study_mode"
+            android:configChanges="orientation|screenSize">
+        </activity>
     </application>
 
 </manifest>
