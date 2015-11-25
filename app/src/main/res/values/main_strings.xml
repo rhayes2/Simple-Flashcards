@@ -15,4 +15,7 @@
     <string name="set_already_exists">You already have a flashcard set with that name.</string>
 
     <string name="edit_icon">{fa-edit}</string>
+
+    <string name="flashcard_set_delete_title">Confirm flashcard set deletion</string>
+    <string name="flashcard_set_delete_message">Are you sure you want to delete the flashcard set&#160;</string>
 </resources>

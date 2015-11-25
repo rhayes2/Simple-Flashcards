@@ -52,6 +52,19 @@ public class FlashcardSetsAdapter extends BaseAdapter {
         notifyDataSetChanged();
     }
 
+    public void renameSet(int position, String newSetName) {
+        DatabaseManager.get().renameSet(setNames.get(position), newSetName);
+        setNames.set(position, newSetName);
+        notifyDataSetChanged();
+    }
+
+    public void deleteSet(int position) {
+        DatabaseManager.get().deleteFlashcardSet(setNames.get(position));
+        setNames.remove(position);
+        notifyDataSetChanged();
+        setNoContent();
+    }
+
     public int getCount()
     {
         return setNames.size();

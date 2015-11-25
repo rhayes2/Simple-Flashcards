@@ -4,4 +4,9 @@
     <string name="no_flashcards">This set currently has no flashcards.</string>
     <string name="question_prefix">Question:&#160;</string>
     <string name="answer_prefix">Answer:&#160;</string>
+
+    <string name="options_for">Options for:&#160;</string>
+    <string name="rename_flashcard_set">Rename flashcard set</string>
+    <string name="delete_flashcard_set">Delete flashcard set</string>
+    <string name="new_flashcard_set_name">New flashcard set name</string>
 </resources>
