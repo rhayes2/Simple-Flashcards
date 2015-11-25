@@ -1,6 +1,5 @@
 package com.randomappsinc.simpleflashcards.Activities;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -12,6 +11,7 @@ import com.joanzapata.iconify.fonts.FontAwesomeIcons;
 import com.randomappsinc.simpleflashcards.Persistence.DataObjects.Flashcard;
 import com.randomappsinc.simpleflashcards.Persistence.DatabaseManager;
 import com.randomappsinc.simpleflashcards.R;
+import com.randomappsinc.simpleflashcards.Utils.MiscUtils;
 
 import java.util.List;
 
@@ -79,11 +79,10 @@ public class StudyModeActivity extends StandardActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == R.id.settings) {
-            startActivity(new Intent(this, SettingsActivity.class));
-        }
         switch (item.getItemId()) {
             case R.id.random_flashcard:
+                currentPosition = MiscUtils.generateRandomNumberInRange(0, flashcards.size() - 1);
+                setUpFlashcard();
                 break;
             case R.id.previous_flashcard:
                 if (currentPosition == 0) {

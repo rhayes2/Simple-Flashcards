@@ -26,7 +26,7 @@ import com.randomappsinc.simpleflashcards.Adapters.FlashcardSetsAdapter;
 import com.randomappsinc.simpleflashcards.Persistence.DatabaseManager;
 import com.randomappsinc.simpleflashcards.Persistence.PreferencesManager;
 import com.randomappsinc.simpleflashcards.R;
-import com.randomappsinc.simpleflashcards.Utils.Utils;
+import com.randomappsinc.simpleflashcards.Utils.MiscUtils;
 
 import butterknife.Bind;
 import butterknife.BindString;
@@ -147,7 +147,7 @@ public class MainActivity extends StandardActivity {
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                Utils.closeKeyboard(activity);
+                MiscUtils.closeKeyboard(activity);
             }
         }, 200);
     }
@@ -173,10 +173,10 @@ public class MainActivity extends StandardActivity {
         String newSet = setName.getText().toString().trim();
         setName.setText("");
         if (newSet.isEmpty()) {
-            Utils.showSnackbar(parent, getString(R.string.blank_name), Snackbar.LENGTH_LONG);
+            MiscUtils.showSnackbar(parent, getString(R.string.blank_name), Snackbar.LENGTH_LONG);
         }
         else if (DatabaseManager.get().doesSetExist(newSet)) {
-            Utils.showSnackbar(parent, getString(R.string.set_already_exists), Snackbar.LENGTH_LONG);
+            MiscUtils.showSnackbar(parent, getString(R.string.set_already_exists), Snackbar.LENGTH_LONG);
         }
         else {
             adapter.addSet(newSet);

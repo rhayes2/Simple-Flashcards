@@ -10,10 +10,12 @@ import android.widget.TextView;
 
 import com.randomappsinc.simpleflashcards.R;
 
+import java.util.Random;
+
 /**
  * Created by alexanderchiou on 11/20/15.
  */
-public class Utils {
+public class MiscUtils {
     public static void closeKeyboard(Activity activity) {
         View view = activity.getCurrentFocus();
         if (view != null) {
@@ -30,5 +32,10 @@ public class Utils {
         TextView tv = (TextView) rootView.findViewById(android.support.design.R.id.snackbar_text);
         tv.setTextColor(Color.WHITE);
         snackbar.show();
+    }
+
+    public static int generateRandomNumberInRange(int min, int max) {
+        Random rand = new Random();
+        return rand.nextInt((max - min) + 1) + min;
     }
 }

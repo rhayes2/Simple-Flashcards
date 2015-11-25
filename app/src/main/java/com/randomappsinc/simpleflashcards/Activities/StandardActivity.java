@@ -5,7 +5,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 
 import com.randomappsinc.simpleflashcards.R;
-import com.randomappsinc.simpleflashcards.Utils.Utils;
+import com.randomappsinc.simpleflashcards.Utils.MiscUtils;
 
 /**
  * Created by alexanderchiou on 11/20/15.
@@ -13,14 +13,14 @@ import com.randomappsinc.simpleflashcards.Utils.Utils;
 public class StandardActivity extends AppCompatActivity {
     @Override
     public void startActivityForResult(Intent intent, int requestCode) {
-        Utils.closeKeyboard(this);
+        MiscUtils.closeKeyboard(this);
         super.startActivityForResult(intent, requestCode);
         overridePendingTransition(R.anim.slide_left_out, R.anim.slide_left_in);
     }
 
     @Override
     public void finish() {
-        Utils.closeKeyboard(this);
+        MiscUtils.closeKeyboard(this);
         super.finish();
         overridePendingTransition(R.anim.slide_right_out, R.anim.slide_right_in);
     }
