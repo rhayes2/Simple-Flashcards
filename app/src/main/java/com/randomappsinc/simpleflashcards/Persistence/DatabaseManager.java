@@ -140,7 +140,7 @@ public class DatabaseManager {
 
     public List<Flashcard> getAllFlashcards(String setName) {
         return realm.where(FlashcardSet.class)
-                .equalTo("id", setName)
+                .equalTo("name", setName)
                 .findFirst()
                 .getFlashcards();
     }

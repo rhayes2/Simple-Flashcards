@@ -10,6 +10,7 @@ import io.realm.annotations.PrimaryKey;
 public class FlashcardSet extends RealmObject {
     @PrimaryKey
     private String name;
+
     private int position;
     private RealmList<Flashcard> flashcards;
 

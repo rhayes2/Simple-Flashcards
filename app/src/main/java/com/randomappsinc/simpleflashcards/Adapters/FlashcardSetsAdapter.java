@@ -65,29 +65,29 @@ public class FlashcardSetsAdapter extends BaseAdapter {
         return position;
     }
 
-    public class NameViewHolder {
-        @Bind(R.id.set_name) public TextView name;
+    public class FlashcardSetViewHolder {
+        @Bind(R.id.set_name) public TextView setName;
         @Bind(R.id.edit_icon) public IconTextView edit;
 
-        public NameViewHolder(View view) {
+        public FlashcardSetViewHolder(View view) {
             ButterKnife.bind(this, view);
         }
     }
 
     // Renders the ListView item that the user has scrolled to or is about to scroll to
     public View getView(final int position, View view, ViewGroup parent) {
-        NameViewHolder holder;
+        FlashcardSetViewHolder holder;
         if (view == null) {
             LayoutInflater vi = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             view = vi.inflate(R.layout.flashcard_set_cell, parent, false);
-            holder = new NameViewHolder(view);
+            holder = new FlashcardSetViewHolder(view);
             view.setTag(holder);
         }
         else {
-            holder = (NameViewHolder) view.getTag();
+            holder = (FlashcardSetViewHolder) view.getTag();
         }
 
-        holder.name.setText(setNames.get(position));
+        holder.setName.setText(setNames.get(position));
         holder.edit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View view) {

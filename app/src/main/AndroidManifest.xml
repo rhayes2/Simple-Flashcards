@@ -26,6 +26,11 @@
             android:name=".Activities.EditFlashcardSetActivity"
             android:configChanges="orientation|screenSize">
         </activity>
+        <activity
+            android:name=".Activities.FlashcardFormActivity"
+            android:label="@string/flashcard_form"
+            android:configChanges="orientation|screenSize">
+        </activity>
     </application>
 
 </manifest>
