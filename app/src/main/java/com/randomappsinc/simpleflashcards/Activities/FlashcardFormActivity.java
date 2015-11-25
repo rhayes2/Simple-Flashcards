@@ -2,6 +2,7 @@ package com.randomappsinc.simpleflashcards.Activities;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.design.widget.Snackbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -65,25 +66,27 @@ public class FlashcardFormActivity extends StandardActivity {
         String newQuestion = question.getText().toString().trim();
         String newAnswer = answer.getText().toString().trim();
         if (newQuestion.isEmpty()) {
-            Utils.showSnackbar(parent, getString(R.string.blank_question));
+            Utils.showSnackbar(parent, getString(R.string.blank_question), Snackbar.LENGTH_LONG);
         }
         else if (newAnswer.isEmpty()) {
-            Utils.showSnackbar(parent, getString(R.string.blank_answer));
+            Utils.showSnackbar(parent, getString(R.string.blank_answer), Snackbar.LENGTH_LONG);
         }
         else {
             if (DatabaseManager.get().doesFlashcardExist(setName, newQuestion, newAnswer)) {
-                Utils.showSnackbar(parent, getString(R.string.dupe_flashcard));
+                Utils.showSnackbar(parent, getString(R.string.dupe_flashcard), Snackbar.LENGTH_LONG);
             }
             else {
                 if (updateMode) {
                     DatabaseManager.get().updateFlashcard(currentQuestion, currentAnswer,
                             newQuestion, newAnswer, setName);
-
+                    finish();
                 }
                 else {
                     DatabaseManager.get().addFlashcard(newQuestion, newAnswer, setName);
+                    Utils.showSnackbar(parent, getString(R.string.flashcard_added), Snackbar.LENGTH_SHORT);
+                    question.setText("");
+                    answer.setText("");
                 }
-                finish();
             }
         }
     }
@@ -96,9 +99,6 @@ public class FlashcardFormActivity extends StandardActivity {
                     new IconDrawable(this, FontAwesomeIcons.fa_trash_o)
                             .colorRes(R.color.white)
                             .actionBarSize());
-        }
-        else {
-            getMenuInflater().inflate(R.menu.blank_menu, menu);
         }
         return true;
     }

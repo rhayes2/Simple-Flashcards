@@ -6,6 +6,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
+import android.support.design.widget.Snackbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -74,6 +75,7 @@ public class MainActivity extends StandardActivity {
     public void onFlashcardSetClick(AdapterView<?> adapterView, View view, int position, long id) {
         Intent intent = new Intent(this, StudyModeActivity.class);
         intent.putExtra(FLASHCARD_SET_KEY, adapter.getItem(position));
+        intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
         startActivity(intent);
     }
 
@@ -171,10 +173,10 @@ public class MainActivity extends StandardActivity {
         String newSet = setName.getText().toString().trim();
         setName.setText("");
         if (newSet.isEmpty()) {
-            Utils.showSnackbar(parent, getString(R.string.blank_name));
+            Utils.showSnackbar(parent, getString(R.string.blank_name), Snackbar.LENGTH_LONG);
         }
         else if (DatabaseManager.get().doesSetExist(newSet)) {
-            Utils.showSnackbar(parent, getString(R.string.set_already_exists));
+            Utils.showSnackbar(parent, getString(R.string.set_already_exists), Snackbar.LENGTH_LONG);
         }
         else {
             adapter.addSet(newSet);

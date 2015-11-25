@@ -47,10 +47,9 @@ public class StudyModeActivity extends StandardActivity {
         else {
             noFlashcards.setVisibility(View.GONE);
             qaPair.setVisibility(View.VISIBLE);
+            currentPosition = 0;
+            setUpFlashcard();
         }
-
-        currentPosition = 0;
-        setUpFlashcard();
     }
 
     public void setUpFlashcard() {
@@ -60,19 +59,21 @@ public class StudyModeActivity extends StandardActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.study_mode_menu, menu);
-        menu.findItem(R.id.random_flashcard).setIcon(
-                new IconDrawable(this, FontAwesomeIcons.fa_random)
-                        .colorRes(R.color.white)
-                        .actionBarSize());
-        menu.findItem(R.id.previous_flashcard).setIcon(
-                new IconDrawable(this, FontAwesomeIcons.fa_arrow_left)
-                        .colorRes(R.color.white)
-                        .actionBarSize());
-        menu.findItem(R.id.next_flashcard).setIcon(
-                new IconDrawable(this, FontAwesomeIcons.fa_arrow_right)
-                        .colorRes(R.color.white)
-                        .actionBarSize());
+        if (flashcards.size() != 0) {
+            getMenuInflater().inflate(R.menu.study_mode_menu, menu);
+            menu.findItem(R.id.random_flashcard).setIcon(
+                    new IconDrawable(this, FontAwesomeIcons.fa_random)
+                            .colorRes(R.color.white)
+                            .actionBarSize());
+            menu.findItem(R.id.previous_flashcard).setIcon(
+                    new IconDrawable(this, FontAwesomeIcons.fa_arrow_left)
+                            .colorRes(R.color.white)
+                            .actionBarSize());
+            menu.findItem(R.id.next_flashcard).setIcon(
+                    new IconDrawable(this, FontAwesomeIcons.fa_arrow_right)
+                            .colorRes(R.color.white)
+                            .actionBarSize());
+        }
         return true;
     }
 

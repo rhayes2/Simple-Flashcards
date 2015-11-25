@@ -11,6 +11,7 @@ import android.widget.ListView;
 
 import com.randomappsinc.simpleflashcards.Adapters.SettingsAdapter;
 import com.randomappsinc.simpleflashcards.R;
+import com.randomappsinc.simpleflashcards.Utils.Utils;
 
 import butterknife.Bind;
 import butterknife.BindString;
@@ -26,7 +27,6 @@ public class SettingsActivity extends StandardActivity {
 
     @Bind(R.id.coordinator_layout) View parent;
     @Bind(R.id.settings_options) ListView settingsOptions;
-    @BindString(R.string.play_store_error) String playStoreError;
     @BindString(R.string.feedback_subject) String feedbackSubject;
     @BindString(R.string.send_email) String sendEmail;
 
@@ -55,7 +55,7 @@ public class SettingsActivity extends StandardActivity {
                 Uri uri =  Uri.parse("market://details?id=" + getApplicationContext().getPackageName());
                 intent = new Intent(Intent.ACTION_VIEW, uri);
                 if (!(getPackageManager().queryIntentActivities(intent, 0).size() > 0)) {
-                    Snackbar.make(parent, playStoreError, Snackbar.LENGTH_LONG).show();
+                    Utils.showSnackbar(parent, getString(R.string.play_store_error), Snackbar.LENGTH_LONG);
                     return;
                 }
                 break;
