@@ -6,4 +6,5 @@
     <string name="previous_flashcard">Previous flashcard</string>
     <string name="question_header"><u>Question</u></string>
     <string name="answer_header"><u>Answer</u></string>
+    <string name="show">Show</string>
 </resources>

@@ -17,6 +17,7 @@ import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 /**
  * Created by alexanderchiou on 11/24/15.
@@ -26,6 +27,8 @@ public class StudyModeActivity extends StandardActivity {
     @Bind(R.id.no_flashcards) View noFlashcards;
     @Bind(R.id.question_answer_pair) View qaPair;
     @Bind(R.id.question) TextView question;
+    @Bind(R.id.show_answer) View showAnswer;
+    @Bind(R.id.answer) TextView answer;
 
     private List<Flashcard> flashcards;
     private int currentPosition;
@@ -55,6 +58,15 @@ public class StudyModeActivity extends StandardActivity {
     public void setUpFlashcard() {
         Flashcard flashcard = flashcards.get(currentPosition);
         question.setText(flashcard.getQuestion());
+        answer.setVisibility(View.GONE);
+        showAnswer.setVisibility(View.VISIBLE);
+        answer.setText(flashcard.getAnswer());
+    }
+
+    @OnClick(R.id.show_answer)
+    public void showAnswer(View view) {
+        showAnswer.setVisibility(View.GONE);
+        answer.setVisibility(View.VISIBLE);
     }
 
     @Override

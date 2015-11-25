@@ -21,24 +21,14 @@
 
             <EditText
                 android:id="@+id/question"
-                android:gravity="top|left"
-                android:lines="5"
-                android:padding="10dp"
-                android:background="@drawable/text_input_border"
                 android:hint="@string/question"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                style="@style/flashcard_form_input" />
 
             <EditText
                 android:id="@+id/answer"
-                android:gravity="top|left"
                 android:layout_marginTop="10dp"
-                android:padding="10dp"
                 android:hint="@string/answer"
-                android:lines="5"
-                android:background="@drawable/text_input_border"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                style="@style/flashcard_form_input" />
 
             <com.rey.material.widget.Button
                 xmlns:app="http://schemas.android.com/apk/res-auto"
