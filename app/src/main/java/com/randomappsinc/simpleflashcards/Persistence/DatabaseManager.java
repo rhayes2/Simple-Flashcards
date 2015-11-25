@@ -69,8 +69,7 @@ public class DatabaseManager {
         try {
             realm.beginTransaction();
             for (int i = 0; i < setNames.size(); i++) {
-                FlashcardSet set = new FlashcardSet();
-                set.setName(setNames.get(i));
+                FlashcardSet set = realm.where(FlashcardSet.class).equalTo("name", setNames.get(i)).findFirst();
                 set.setPosition(i);
             }
             realm.commitTransaction();

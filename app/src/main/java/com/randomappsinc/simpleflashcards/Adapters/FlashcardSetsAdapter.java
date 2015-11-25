@@ -31,10 +31,13 @@ public class FlashcardSetsAdapter extends BaseAdapter {
 
     public FlashcardSetsAdapter(Context context, TextView noSets) {
         this.context = context;
-        this.setNames = new ArrayList<>();
         List<FlashcardSet> sets = DatabaseManager.get().getAllFlashcardSets();
+        this.setNames = new ArrayList<>(sets.size());
+        for (int i = 0; i < sets.size(); i++) {
+            setNames.add("");
+        }
         for (FlashcardSet set : sets) {
-            this.setNames.add(set.getName());
+            this.setNames.set(set.getPosition(), set.getName());
         }
         this.noSets = noSets;
         setNoContent();
@@ -61,6 +64,7 @@ public class FlashcardSetsAdapter extends BaseAdapter {
     public void deleteSet(int position) {
         DatabaseManager.get().deleteFlashcardSet(setNames.get(position));
         setNames.remove(position);
+        DatabaseManager.get().rearrangeSetOrder(setNames);
         notifyDataSetChanged();
         setNoContent();
     }
