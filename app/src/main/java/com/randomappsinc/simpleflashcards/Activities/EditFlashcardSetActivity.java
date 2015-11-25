@@ -27,6 +27,7 @@ public class EditFlashcardSetActivity extends StandardActivity {
     @Bind(R.id.add_flashcard) FloatingActionButton addFlashcard;
 
     private FlashcardsAdapter adapter;
+    private String setName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,16 +35,18 @@ public class EditFlashcardSetActivity extends StandardActivity {
         setContentView(R.layout.edit_flashcard_set);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         ButterKnife.bind(this);
-        String flashcardSetName = getIntent().getStringExtra(FLASHCARD_SET_KEY);
-        setTitle(getString(R.string.editing) + flashcardSetName);
+        setName = getIntent().getStringExtra(FLASHCARD_SET_KEY);
+        setTitle(getString(R.string.editing) + setName);
 
         addFlashcard.setImageDrawable(new IconDrawable(this, FontAwesomeIcons.fa_plus).colorRes(R.color.white));
-        adapter = new FlashcardsAdapter(this, flashcardSetName, noFlashcards);
+        adapter = new FlashcardsAdapter(this, setName, noFlashcards);
         flashcards.setAdapter(adapter);
     }
 
     @OnClick(R.id.add_flashcard)
     public void addFlashcard(View view) {
-        startActivity(new Intent(this, FlashcardFormActivity.class));
+        Intent intent = new Intent(this, FlashcardFormActivity.class);
+        intent.putExtra(FLASHCARD_SET_KEY, setName);
+        startActivity(intent);
     }
 }

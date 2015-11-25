@@ -2,6 +2,6 @@
 <resources>
     <string name="editing">Editing:&#160;</string>
     <string name="no_flashcards">This set currently has no flashcards.</string>
-    <string name="question">Question:&#160;</string>
-    <string name="answer">Answer:&#160;</string>
+    <string name="question_prefix">Question:&#160;</string>
+    <string name="answer_prefix">Answer:&#160;</string>
 </resources>

@@ -22,9 +22,9 @@ public class Utils {
         }
     }
 
-    public static void showSnackbar(View parent, int messageResId) {
+    public static void showSnackbar(View parent, String message) {
         Context context = MyApplication.get().getApplicationContext();
-        Snackbar snackbar = Snackbar.make(parent, messageResId, Snackbar.LENGTH_LONG);
+        Snackbar snackbar = Snackbar.make(parent, message, Snackbar.LENGTH_LONG);
         View rootView = snackbar.getView();
         snackbar.getView().setBackgroundColor(context.getResources().getColor(R.color.app_blue));
         TextView tv = (TextView) rootView.findViewById(android.support.design.R.id.snackbar_text);

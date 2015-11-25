@@ -28,6 +28,7 @@
         </activity>
         <activity
             android:name=".Activities.FlashcardFormActivity"
+            android:windowSoftInputMode="adjustResize"
             android:label="@string/flashcard_form"
             android:configChanges="orientation|screenSize">
         </activity>

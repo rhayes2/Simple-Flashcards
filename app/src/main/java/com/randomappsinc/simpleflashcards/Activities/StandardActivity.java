@@ -20,6 +20,7 @@ public class StandardActivity extends AppCompatActivity {
 
     @Override
     public void finish() {
+        Utils.closeKeyboard(this);
         super.finish();
         overridePendingTransition(R.anim.slide_right_out, R.anim.slide_right_in);
     }
@@ -27,7 +28,6 @@ public class StandardActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
-            Utils.closeKeyboard(this);
             finish();
             return true;
         }

@@ -1,4 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="flashcard_form">Flashcard form</string>
+    <string name="add_flashcard">Add flashcard</string>
+    <string name="update_flashcard">Update flashcard</string>
+    <string name="question">Question</string>
+    <string name="answer">Answer</string>
+
+    <string name="blank_question">Questions cannot be blank.</string>
+    <string name="blank_answer">Answers cannot be blank.</string>
 </resources>

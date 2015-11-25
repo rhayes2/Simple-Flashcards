@@ -82,9 +82,9 @@ public class FlashcardsAdapter extends BaseAdapter {
             holder = (FlashcardViewHolder) view.getTag();
         }
 
-        String question = "<b>" + context.getString(R.string.question) + "</b>" + flashcards.get(position).getQuestion();
+        String question = "<b>" + context.getString(R.string.question_prefix) + "</b>" + flashcards.get(position).getQuestion();
         holder.question.setText(Html.fromHtml(question));
-        String answer = "<b>" + context.getString(R.string.answer) + "</b>" + flashcards.get(position).getAnswer();
+        String answer = "<b>" + context.getString(R.string.answer_prefix) + "</b>" + flashcards.get(position).getAnswer();
         holder.answer.setText(Html.fromHtml(answer));
 
         return view;

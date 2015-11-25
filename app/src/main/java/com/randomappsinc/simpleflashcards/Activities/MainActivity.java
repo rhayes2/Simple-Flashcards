@@ -59,10 +59,10 @@ public class MainActivity extends StandardActivity {
         String newSet = setName.getText().toString().trim();
         setName.setText("");
         if (newSet.isEmpty()) {
-            Utils.showSnackbar(parent, R.string.blank_name);
+            Utils.showSnackbar(parent, getString(R.string.blank_name));
         }
         else if (DatabaseManager.get().doesSetExist(newSet)) {
-            Utils.showSnackbar(parent, R.string.set_already_exists);
+            Utils.showSnackbar(parent, getString(R.string.set_already_exists));
         }
         else {
             adapter.addSet(newSet);

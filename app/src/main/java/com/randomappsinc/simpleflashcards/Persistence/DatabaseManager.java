@@ -99,6 +99,27 @@ public class DatabaseManager {
         }
     }
 
+    public void updateFlashcard(String oldQuestion, String oldAnswer, String newQuestion,
+                                String newAnswer, String setName) {
+        try {
+            realm.beginTransaction();
+            Flashcard flashcard = realm.where(FlashcardSet.class)
+                    .equalTo("name", setName)
+                    .findFirst()
+                    .getFlashcards()
+                    .where()
+                    .equalTo("question", oldQuestion)
+                    .equalTo("answer", oldAnswer)
+                    .findFirst();
+            flashcard.setQuestion(newQuestion);
+            flashcard.setAnswer(newAnswer);
+            realm.commitTransaction();
+        }
+        catch (Exception e) {
+            realm.cancelTransaction();
+        }
+    }
+
     public void deleteFlashcard(Flashcard flashcard, String setName) {
         try {
             realm.beginTransaction();

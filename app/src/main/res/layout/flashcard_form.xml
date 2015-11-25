@@ -1,6 +1,51 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+<android.support.design.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/parent"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true">
 
-</LinearLayout>
+    <ScrollView
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:padding="10dp"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <EditText
+                android:id="@+id/question"
+                android:gravity="top|left"
+                android:lines="5"
+                android:padding="10dp"
+                android:background="@drawable/text_input_border"
+                android:hint="@string/question"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <EditText
+                android:id="@+id/answer"
+                android:gravity="top|left"
+                android:layout_marginTop="10dp"
+                android:padding="10dp"
+                android:hint="@string/answer"
+                android:lines="5"
+                android:background="@drawable/text_input_border"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <com.rey.material.widget.Button
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                android:id="@+id/flashcard_submit"
+                android:layout_marginTop="10dp"
+                style="@style/ripple_button_style"
+                app:rd_style="@style/button_ripple_attributes"/>
+        </LinearLayout>
+    </ScrollView>
+</android.support.design.widget.CoordinatorLayout>
