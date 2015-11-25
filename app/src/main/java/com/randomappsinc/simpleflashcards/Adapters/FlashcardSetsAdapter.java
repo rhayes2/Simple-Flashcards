@@ -1,6 +1,7 @@
 package com.randomappsinc.simpleflashcards.Adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,6 +9,7 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import com.joanzapata.iconify.widget.IconTextView;
+import com.randomappsinc.simpleflashcards.Activities.EditFlashcardSetActivity;
 import com.randomappsinc.simpleflashcards.Persistence.DataObjects.FlashcardSet;
 import com.randomappsinc.simpleflashcards.Persistence.DatabaseManager;
 import com.randomappsinc.simpleflashcards.R;
@@ -89,7 +91,10 @@ public class FlashcardSetsAdapter extends BaseAdapter {
         holder.edit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View view) {
-
+                Intent intent = new Intent(context, EditFlashcardSetActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+                intent.putExtra(EditFlashcardSetActivity.FLASHCARD_SET_KEY, getItem(position));
+                context.startActivity(intent);
             }
         });
         return view;
