@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -15,6 +16,7 @@ import com.randomappsinc.simpleflashcards.R;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import butterknife.OnItemClick;
 
 /**
  * Created by alexanderchiou on 11/24/15.
@@ -43,7 +45,23 @@ public class EditFlashcardSetActivity extends StandardActivity {
         flashcards.setAdapter(adapter);
     }
 
-    @OnClick(R.id.add_flashcard)
+    @Override
+    protected void onResume() {
+        super.onResume();
+        adapter.refreshSet();
+    }
+
+    @OnItemClick(R.id.flashcards)
+    public void onFlashcardClick(AdapterView<?> adapterView, View view, int position, long id) {
+        Intent intent = new Intent(this, FlashcardFormActivity.class);
+        intent.putExtra(FLASHCARD_SET_KEY, setName);
+        intent.putExtra(FlashcardFormActivity.QUESTION_KEY, adapter.getItem(position).getQuestion());
+        intent.putExtra(FlashcardFormActivity.ANSWER_KEY, adapter.getItem(position).getAnswer());
+        intent.putExtra(FlashcardFormActivity.UPDATE_MODE_KEY, true);
+        startActivity(intent);
+    }
+
+        @OnClick(R.id.add_flashcard)
     public void addFlashcard(View view) {
         Intent intent = new Intent(this, FlashcardFormActivity.class);
         intent.putExtra(FLASHCARD_SET_KEY, setName);

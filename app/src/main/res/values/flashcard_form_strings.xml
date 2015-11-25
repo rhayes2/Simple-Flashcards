@@ -8,4 +8,8 @@
 
     <string name="blank_question">Questions cannot be blank.</string>
     <string name="blank_answer">Answers cannot be blank.</string>
+
+    <string name="delete_flashcard">Delete flashcard</string>
+    <string name="flashcard_delete_title">Confirm flashcard deletion</string>
+    <string name="flashcard_delete_message">Are you sure that you want to delete this flashcard?</string>
 </resources>

@@ -120,13 +120,13 @@ public class DatabaseManager {
         }
     }
 
-    public void deleteFlashcard(Flashcard flashcard, String setName) {
+    public void deleteFlashcard(String question, String answer, String setName) {
         try {
             realm.beginTransaction();
             FlashcardSet set = realm.where(FlashcardSet.class).equalTo("name", setName).findFirst();
             set.getFlashcards().where()
-                    .equalTo("question", flashcard.getQuestion())
-                    .equalTo("answer", flashcard.getAnswer())
+                    .equalTo("question", question)
+                    .equalTo("answer", answer)
                     .findFirst()
                     .removeFromRealm();
             realm.commitTransaction();

@@ -1,9 +1,17 @@
 package com.randomappsinc.simpleflashcards.Activities;
 
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 
+import com.afollestad.materialdialogs.DialogAction;
+import com.afollestad.materialdialogs.MaterialDialog;
+import com.joanzapata.iconify.IconDrawable;
+import com.joanzapata.iconify.fonts.FontAwesomeIcons;
+import com.randomappsinc.simpleflashcards.Persistence.DatabaseManager;
 import com.randomappsinc.simpleflashcards.R;
 import com.randomappsinc.simpleflashcards.Utils.Utils;
 import com.rey.material.widget.Button;
@@ -25,6 +33,7 @@ public class FlashcardFormActivity extends StandardActivity {
     @Bind(R.id.answer) EditText answer;
     @Bind(R.id.flashcard_submit) Button submit;
 
+    private boolean updateMode;
     private String setName;
     private String currentQuestion;
     private String currentAnswer;
@@ -36,11 +45,13 @@ public class FlashcardFormActivity extends StandardActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         ButterKnife.bind(this);
 
-        boolean updateMode = getIntent().getBooleanExtra(UPDATE_MODE_KEY, false);
+        updateMode = getIntent().getBooleanExtra(UPDATE_MODE_KEY, false);
         if (updateMode) {
             submit.setText(R.string.update_flashcard);
             currentQuestion = getIntent().getStringExtra(QUESTION_KEY);
+            question.setText(currentQuestion);
             currentAnswer = getIntent().getStringExtra(ANSWER_KEY);
+            answer.setText(currentAnswer);
         }
         else {
             submit.setText(R.string.add_flashcard);
@@ -51,6 +62,7 @@ public class FlashcardFormActivity extends StandardActivity {
 
     @OnClick(R.id.flashcard_submit)
     public void submitFlashcard(View view) {
+        Utils.closeKeyboard(this);
         String newQuestion = question.getText().toString().trim();
         String newAnswer = answer.getText().toString().trim();
         if (newQuestion.isEmpty()) {
@@ -59,5 +71,49 @@ public class FlashcardFormActivity extends StandardActivity {
         else if (newAnswer.isEmpty()) {
             Utils.showSnackbar(parent, getString(R.string.blank_answer));
         }
+        else {
+            if (updateMode) {
+
+            }
+            else {
+                DatabaseManager.get().addFlashcard(newQuestion, newAnswer, setName);
+                finish();
+            }
+        }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        if (updateMode) {
+            getMenuInflater().inflate(R.menu.update_flashcard_menu, menu);
+            menu.findItem(R.id.delete_flashcard).setIcon(
+                    new IconDrawable(this, FontAwesomeIcons.fa_trash_o)
+                            .colorRes(R.color.white)
+                            .actionBarSize());
+        }
+        else {
+            getMenuInflater().inflate(R.menu.blank_menu, menu);
+        }
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.delete_flashcard) {
+            new MaterialDialog.Builder(this)
+                    .title(R.string.flashcard_delete_title)
+                    .content(R.string.flashcard_delete_message)
+                    .positiveText(android.R.string.yes)
+                    .negativeText(android.R.string.no)
+                    .onPositive(new MaterialDialog.SingleButtonCallback() {
+                        @Override
+                        public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                            DatabaseManager.get().deleteFlashcard(currentQuestion, currentAnswer, setName);
+                            finish();
+                        }
+                    })
+                    .show();
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

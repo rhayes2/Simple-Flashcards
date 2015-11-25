@@ -1,32 +1,38 @@
-<android.support.v7.widget.CardView
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:card_view="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/add_set"
-    android:layout_width="50dp"
-    android:layout_height="match_parent"
-    android:layout_margin="10dp"
-    card_view:contentPadding="10dp"
-    card_view:cardUseCompatPadding="true"
-    card_view:cardBackgroundColor="@color/white"
-    card_view:cardCornerRadius="3dp"
-    card_view:cardElevation="5dp">
+    android:background="@color/white"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="10dp">
 
-    <LinearLayout
+    <android.support.v7.widget.CardView
+        xmlns:card_view="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        card_view:contentPadding="10dp"
+        card_view:cardUseCompatPadding="true"
+        card_view:cardBackgroundColor="@color/white"
+        card_view:cardCornerRadius="3dp"
+        card_view:cardElevation="5dp">
 
-        <TextView
-            android:id="@+id/question"
-            android:textColor="@color/black"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/answer"
-            android:layout_marginTop="10dp"
-            android:textColor="@color/black"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-    </LinearLayout>
-</android.support.v7.widget.CardView>
+            <TextView
+                android:id="@+id/question"
+                android:textColor="@color/black"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                android:id="@+id/answer"
+                android:layout_marginTop="10dp"
+                android:textColor="@color/black"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+    </android.support.v7.widget.CardView>
+
+</LinearLayout>
