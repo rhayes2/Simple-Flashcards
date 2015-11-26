@@ -1,39 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.balysv.materialripple.MaterialRippleLayout
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    app:mrl_rippleColor="@color/app_blue"
-    app:mrl_rippleDelayClick="true"
-    app:mrl_rippleInAdapter="true"
-    app:mrl_rippleDuration="@integer/shorter_anim_length"
+    android:background="@android:color/transparent"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-    <RelativeLayout
+    <com.nhaarman.listviewanimations.itemmanipulation.dragdrop.GripView
+        android:id="@+id/list_row_draganddrop_touchview"
+        android:layout_width="wrap_content"
+        android:layout_height="60dp"
+        android:layout_centerVertical="true"
+        android:color="@android:color/darker_gray"
+        android:padding="10dp" />
+
+    <com.joanzapata.iconify.widget.IconTextView
+        android:id="@+id/edit_icon"
+        android:padding="10dp"
+        android:text="@string/edit_icon"
+        android:textColor="@color/dark_gray"
+        android:layout_alignParentRight="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="32sp"
+        android:layout_centerVertical="true"/>
+
+    <TextView
+        android:id="@+id/set_name"
+        android:layout_toRightOf="@+id/list_row_draganddrop_touchview"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
+        android:textColor="@color/dark_gray"
+        android:layout_centerVertical="true"
+        android:textSize="28sp"
+        android:layout_toLeftOf="@+id/edit_icon"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <com.joanzapata.iconify.widget.IconTextView
-            android:id="@+id/edit_icon"
-            android:padding="10dp"
-            android:text="@string/edit_icon"
-            android:textColor="@color/dark_gray"
-            android:layout_alignParentRight="true"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="32sp"
-            android:layout_centerVertical="true"/>
-
-        <TextView
-            android:id="@+id/set_name"
-            android:paddingLeft="10dp"
-            android:paddingTop="10dp"
-            android:paddingBottom="10dp"
-            android:textColor="@color/dark_gray"
-            android:layout_centerVertical="true"
-            android:textSize="28sp"
-            android:layout_toLeftOf="@+id/edit_icon"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
-    </RelativeLayout>
-</com.balysv.materialripple.MaterialRippleLayout>
+        android:layout_height="wrap_content"/>
+</RelativeLayout>

@@ -9,6 +9,7 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import com.joanzapata.iconify.widget.IconTextView;
+import com.nhaarman.listviewanimations.util.Swappable;
 import com.randomappsinc.simpleflashcards.Activities.EditFlashcardSetActivity;
 import com.randomappsinc.simpleflashcards.Activities.MainActivity;
 import com.randomappsinc.simpleflashcards.Persistence.DataObjects.FlashcardSet;
@@ -24,7 +25,7 @@ import butterknife.ButterKnife;
 /**
  * Created by alexanderchiou on 11/20/15.
  */
-public class FlashcardSetsAdapter extends BaseAdapter {
+public class FlashcardSetsAdapter extends BaseAdapter implements Swappable {
     private Context context;
     private List<String> setNames;
     private TextView noSets;
@@ -64,7 +65,19 @@ public class FlashcardSetsAdapter extends BaseAdapter {
     }
 
     public long getItemId(int position) {
-        return position;
+        return getItem(position).hashCode();
+    }
+
+    @Override
+    public boolean hasStableIds() {
+        return true;
+    }
+
+    public void swapItems(int positionOne, int positionTwo) {
+        String setOne = setNames.get(positionOne);
+        setNames.set(positionOne, setNames.get(positionTwo));
+        setNames.set(positionTwo, setOne);
+        notifyDataSetChanged();
     }
 
     public class FlashcardSetViewHolder {

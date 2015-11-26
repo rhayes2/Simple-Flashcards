@@ -67,13 +67,13 @@ public class DatabaseManager {
         }
     }
 
-    public void rearrangeSetOrder(List<String> setNames) {
+    public void swapSetsAtPositions(int positionOne, int positionTwo) {
         try {
             realm.beginTransaction();
-            for (int i = 0; i < setNames.size(); i++) {
-                FlashcardSet set = realm.where(FlashcardSet.class).equalTo("name", setNames.get(i)).findFirst();
-                set.setPosition(i);
-            }
+            FlashcardSet setOne = realm.where(FlashcardSet.class).equalTo("position", positionOne).findFirst();
+            FlashcardSet setTwo = realm.where(FlashcardSet.class).equalTo("position", positionTwo).findFirst();
+            setOne.setPosition(positionTwo);
+            setTwo.setPosition(positionOne);
             realm.commitTransaction();
         }
         catch (Exception e) {

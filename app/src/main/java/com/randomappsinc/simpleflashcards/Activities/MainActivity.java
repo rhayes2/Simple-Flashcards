@@ -9,12 +9,14 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.TextView;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.joanzapata.iconify.IconDrawable;
 import com.joanzapata.iconify.fonts.FontAwesomeIcons;
+import com.nhaarman.listviewanimations.itemmanipulation.DynamicListView;
+import com.nhaarman.listviewanimations.itemmanipulation.dragdrop.OnItemMovedListener;
+import com.nhaarman.listviewanimations.itemmanipulation.dragdrop.TouchViewDraggableManager;
 import com.randomappsinc.simpleflashcards.Adapters.FlashcardSetsAdapter;
 import com.randomappsinc.simpleflashcards.Persistence.DatabaseManager;
 import com.randomappsinc.simpleflashcards.Persistence.PreferencesManager;
@@ -31,7 +33,7 @@ public class MainActivity extends StandardActivity {
 
     @Bind(R.id.set_name) EditText setName;
     @Bind(R.id.add_icon) ImageView addButton;
-    @Bind(R.id.flashcard_sets) ListView sets;
+    @Bind(R.id.flashcard_sets) DynamicListView sets;
     @Bind(R.id.no_sets) TextView noSets;
     @Bind(R.id.parent) View parent;
 
@@ -57,6 +59,9 @@ public class MainActivity extends StandardActivity {
 
         adapter = new FlashcardSetsAdapter(this, noSets);
         sets.setAdapter(adapter);
+        sets.enableDragAndDrop();
+        sets.setDraggableManager(new TouchViewDraggableManager(R.id.list_row_draganddrop_touchview));
+        sets.setOnItemMovedListener(new OnFlashcardSetMoved());
     }
 
     @Override
@@ -69,7 +74,6 @@ public class MainActivity extends StandardActivity {
     public void onFlashcardSetClick(AdapterView<?> adapterView, View view, int position, long id) {
         Intent intent = new Intent(this, StudyModeActivity.class);
         intent.putExtra(FLASHCARD_SET_KEY, adapter.getItem(position));
-        intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
         startActivity(intent);
     }
 
@@ -88,6 +92,13 @@ public class MainActivity extends StandardActivity {
             Intent intent = new Intent(this, EditFlashcardSetActivity.class);
             intent.putExtra(FLASHCARD_SET_KEY, newSet);
             startActivity(intent);
+        }
+    }
+
+    private class OnFlashcardSetMoved implements OnItemMovedListener {
+        @Override
+        public void onItemMoved(int originalPosition, int newPosition) {
+            DatabaseManager.get().swapSetsAtPositions(originalPosition, newPosition);
         }
     }
 

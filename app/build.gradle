@@ -39,11 +39,7 @@ dependencies {
     compile 'com.jakewharton:butterknife:7.0.1'
     compile 'com.joanzapata.iconify:android-iconify-fontawesome:2.1.0'
     compile 'com.github.rey5137:material:1.2.1'
-    compile 'com.balysv:material-ripple:1.0.2'
     compile('com.github.afollestad.material-dialogs:core:0.8.5.1@aar') {
-        transitive = true
-    }
-    compile('com.github.afollestad.material-dialogs:commons:0.8.5.1@aar') {
         transitive = true
     }
     compile 'io.realm:realm-android:0.85.0'
