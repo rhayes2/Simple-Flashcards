@@ -12,6 +12,10 @@
         android:padding="10dp">
 
         <TextView
+            android:id="@+id/set_name"
+            style="@style/set_title" />
+
+        <TextView
             android:id="@+id/no_flashcards"
             android:layout_margin="35dp"
             android:text="@string/no_flashcards"

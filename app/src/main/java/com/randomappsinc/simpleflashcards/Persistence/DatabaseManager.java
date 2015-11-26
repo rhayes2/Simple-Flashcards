@@ -6,7 +6,9 @@ import com.randomappsinc.simpleflashcards.Persistence.DataObjects.Flashcard;
 import com.randomappsinc.simpleflashcards.Persistence.DataObjects.FlashcardSet;
 import com.randomappsinc.simpleflashcards.Utils.MyApplication;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import io.realm.Realm;
 
@@ -37,7 +39,7 @@ public class DatabaseManager {
         realm = Realm.getInstance(context);
     }
 
-    public void addSet(String setName, int position) {
+    public void addFlashcardSet(String setName, int position) {
         try {
             realm.beginTransaction();
             FlashcardSet set = new FlashcardSet();
@@ -146,7 +148,35 @@ public class DatabaseManager {
     public void deleteFlashcardSet(String setName) {
         try {
             realm.beginTransaction();
-            realm.where(FlashcardSet.class).equalTo("name", setName).findFirst().removeFromRealm();
+            FlashcardSet setToRemove = realm.where(FlashcardSet.class).equalTo("name", setName).findFirst();
+            Map<String, Integer> mappings = getNewPositions(setToRemove.getPosition());
+            setToRemove.removeFromRealm();
+            realm.commitTransaction();
+            redoPositions(mappings);
+        }
+        catch (Exception e) {
+            realm.cancelTransaction();
+        }
+    }
+
+    private Map<String, Integer> getNewPositions(int deletedPosition) {
+        Map<String, Integer> newPositions = new HashMap<>();
+        List<FlashcardSet> lowerSets = realm.where(FlashcardSet.class)
+                .greaterThan("position", deletedPosition)
+                .findAll();
+        for (FlashcardSet lowerSet : lowerSets) {
+            newPositions.put(lowerSet.getName(), lowerSet.getPosition());
+        }
+        return newPositions;
+    }
+
+    private void redoPositions(Map<String, Integer> mappings) {
+        try {
+            realm.beginTransaction();
+            for (String setName : mappings.keySet()) {
+                FlashcardSet set = realm.where(FlashcardSet.class).equalTo("name", setName).findFirst();
+                set.setPosition(mappings.get(setName) - 1);
+            }
             realm.commitTransaction();
         }
         catch (Exception e) {

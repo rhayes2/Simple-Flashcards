@@ -8,13 +8,7 @@
 
     <TextView
         android:id="@+id/set_name"
-        android:layout_marginTop="10dp"
-        android:textSize="22sp"
-        android:textColor="@color/black"
-        android:layout_gravity="center_horizontal"
-        android:gravity="center_horizontal"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        style="@style/set_title"/>
 
     <TextView
         android:id="@+id/no_flashcards"
@@ -76,6 +70,8 @@
                     <com.rey.material.widget.Button
                         xmlns:app="http://schemas.android.com/apk/res-auto"
                         android:id="@+id/show_answer"
+                        android:paddingLeft="50dp"
+                        android:paddingRight="50dp"
                         android:layout_width="wrap_content"
                         android:text="@string/show"
                         style="@style/ripple_button_style"

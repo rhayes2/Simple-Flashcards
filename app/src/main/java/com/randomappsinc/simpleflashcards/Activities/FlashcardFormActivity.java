@@ -86,6 +86,7 @@ public class FlashcardFormActivity extends StandardActivity {
                     MiscUtils.showSnackbar(parent, getString(R.string.flashcard_added), Snackbar.LENGTH_SHORT);
                     question.setText("");
                     answer.setText("");
+                    question.requestFocus();
                 }
             }
         }

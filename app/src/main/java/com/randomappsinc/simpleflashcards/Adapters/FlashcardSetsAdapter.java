@@ -31,6 +31,11 @@ public class FlashcardSetsAdapter extends BaseAdapter {
 
     public FlashcardSetsAdapter(Context context, TextView noSets) {
         this.context = context;
+        this.noSets = noSets;
+        refreshContent();
+    }
+
+    public void refreshContent() {
         List<FlashcardSet> sets = DatabaseManager.get().getAllFlashcardSets();
         this.setNames = new ArrayList<>(sets.size());
         for (int i = 0; i < sets.size(); i++) {
@@ -39,34 +44,13 @@ public class FlashcardSetsAdapter extends BaseAdapter {
         for (FlashcardSet set : sets) {
             this.setNames.set(set.getPosition(), set.getName());
         }
-        this.noSets = noSets;
         setNoContent();
+        notifyDataSetChanged();
     }
 
     public void setNoContent() {
         int viewVisibility = setNames.isEmpty() ? View.VISIBLE : View.GONE;
         noSets.setVisibility(viewVisibility);
-    }
-
-    public void addSet(String newSetName) {
-        DatabaseManager.get().addSet(newSetName, setNames.size());
-        setNames.add(newSetName);
-        setNoContent();
-        notifyDataSetChanged();
-    }
-
-    public void renameSet(int position, String newSetName) {
-        DatabaseManager.get().renameSet(setNames.get(position), newSetName);
-        setNames.set(position, newSetName);
-        notifyDataSetChanged();
-    }
-
-    public void deleteSet(int position) {
-        DatabaseManager.get().deleteFlashcardSet(setNames.get(position));
-        setNames.remove(position);
-        DatabaseManager.get().rearrangeSetOrder(setNames);
-        notifyDataSetChanged();
-        setNoContent();
     }
 
     public int getCount()

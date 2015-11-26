@@ -95,7 +95,7 @@ public class StudyModeActivity extends StandardActivity {
             case R.id.random_flashcard:
                 currentPosition = MiscUtils.generateRandomNumberInRange(0, flashcards.size() - 1);
                 setUpFlashcard();
-                break;
+                return true;
             case R.id.previous_flashcard:
                 if (currentPosition == 0) {
                     currentPosition = flashcards.size() - 1;
@@ -104,7 +104,7 @@ public class StudyModeActivity extends StandardActivity {
                     currentPosition--;
                 }
                 setUpFlashcard();
-                break;
+                return true;
             case R.id.next_flashcard:
                 if (currentPosition == flashcards.size() - 1) {
                     currentPosition = 0;
@@ -113,7 +113,7 @@ public class StudyModeActivity extends StandardActivity {
                     currentPosition++;
                 }
                 setUpFlashcard();
-                break;
+                return true;
         }
         return super.onOptionsItemSelected(item);
     }

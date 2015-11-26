@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="editing">Editing:&#160;</string>
+    <string name="edit_flashcard_set">Edit flashcard set</string>
     <string name="no_flashcards">This set currently has no flashcards.</string>
     <string name="question_prefix">Question:&#160;</string>
     <string name="answer_prefix">Answer:&#160;</string>
@@ -9,4 +9,6 @@
     <string name="rename_flashcard_set">Rename flashcard set</string>
     <string name="delete_flashcard_set">Delete flashcard set</string>
     <string name="new_flashcard_set_name">New flashcard set name</string>
+    <string name="flashcard_set_delete_title">Confirm flashcard set deletion</string>
+    <string name="flashcard_set_delete_message">Are you sure you want to delete this flashcard set?</string>
 </resources>
