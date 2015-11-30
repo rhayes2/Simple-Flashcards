@@ -10,7 +10,9 @@ import android.widget.TextView;
 
 import com.randomappsinc.simpleflashcards.R;
 
-import java.util.Random;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * Created by alexanderchiou on 11/20/15.
@@ -34,8 +36,14 @@ public class MiscUtils {
         snackbar.show();
     }
 
-    public static int generateRandomNumberInRange(int min, int max) {
-        Random rand = new Random();
-        return rand.nextInt((max - min) + 1) + min;
+    public static int getRandomFlashcardPosition(int numFlashcards, int currentPosition) {
+        List<Integer> positions = new ArrayList<>();
+        for (int i = 0; i < numFlashcards; i++) {
+            if (i != currentPosition) {
+                positions.add(i);
+            }
+        }
+        Collections.shuffle(positions);
+        return positions.get(0);
     }
 }

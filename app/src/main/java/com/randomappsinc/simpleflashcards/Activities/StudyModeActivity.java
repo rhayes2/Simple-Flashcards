@@ -93,7 +93,9 @@ public class StudyModeActivity extends StandardActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.random_flashcard:
-                currentPosition = MiscUtils.generateRandomNumberInRange(0, flashcards.size() - 1);
+                if (flashcards.size() != 1) {
+                    currentPosition = MiscUtils.getRandomFlashcardPosition(flashcards.size(), currentPosition);
+                }
                 setUpFlashcard();
                 return true;
             case R.id.previous_flashcard:
