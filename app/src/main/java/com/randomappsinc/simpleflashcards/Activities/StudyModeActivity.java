@@ -64,7 +64,7 @@ public class StudyModeActivity extends StandardActivity {
     }
 
     @OnClick(R.id.show_answer)
-    public void showAnswer(View view) {
+    public void showAnswer() {
         showAnswer.setVisibility(View.GONE);
         answer.setVisibility(View.VISIBLE);
     }

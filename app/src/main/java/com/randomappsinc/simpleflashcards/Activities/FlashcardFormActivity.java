@@ -61,7 +61,7 @@ public class FlashcardFormActivity extends StandardActivity {
     }
 
     @OnClick(R.id.flashcard_submit)
-    public void submitFlashcard(View view) {
+    public void submitFlashcard() {
         MiscUtils.closeKeyboard(this);
         String newQuestion = question.getText().toString().trim();
         String newAnswer = answer.getText().toString().trim();

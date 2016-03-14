@@ -1,7 +1,5 @@
 package com.randomappsinc.simpleflashcards.Persistence;
 
-import android.content.Context;
-
 import com.randomappsinc.simpleflashcards.Persistence.DataObjects.Flashcard;
 import com.randomappsinc.simpleflashcards.Persistence.DataObjects.FlashcardSet;
 import com.randomappsinc.simpleflashcards.Utils.MyApplication;
@@ -35,8 +33,7 @@ public class DatabaseManager {
     private Realm realm;
 
     private DatabaseManager() {
-        Context context = MyApplication.get().getApplicationContext();
-        realm = Realm.getInstance(context);
+        realm = Realm.getInstance(MyApplication.getAppContext());
     }
 
     public void addFlashcardSet(String setName, int position) {

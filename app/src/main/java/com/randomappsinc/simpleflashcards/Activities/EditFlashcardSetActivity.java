@@ -6,8 +6,6 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -59,7 +57,7 @@ public class EditFlashcardSetActivity extends StandardActivity {
     }
 
     @OnItemClick(R.id.flashcards)
-    public void onFlashcardClick(AdapterView<?> adapterView, View view, int position, long id) {
+    public void onFlashcardClick(int position) {
         Intent intent = new Intent(this, FlashcardFormActivity.class);
         intent.putExtra(MainActivity.FLASHCARD_SET_KEY, setName);
         intent.putExtra(FlashcardFormActivity.QUESTION_KEY, adapter.getItem(position).getQuestion());
@@ -69,7 +67,7 @@ public class EditFlashcardSetActivity extends StandardActivity {
     }
 
     @OnClick(R.id.add_flashcard)
-    public void addFlashcard(View view) {
+    public void addFlashcard() {
         Intent intent = new Intent(this, FlashcardFormActivity.class);
         intent.putExtra(MainActivity.FLASHCARD_SET_KEY, setName);
         startActivity(intent);

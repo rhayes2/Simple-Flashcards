@@ -1,6 +1,5 @@
 package com.randomappsinc.simpleflashcards.Persistence;
 
-import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
@@ -30,8 +29,7 @@ public class PreferencesManager {
     }
 
     private PreferencesManager() {
-        Context context = MyApplication.get().getApplicationContext();
-        prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        prefs = PreferenceManager.getDefaultSharedPreferences(MyApplication.getAppContext());
     }
 
     public boolean isFirstTimeUser() {

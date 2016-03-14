@@ -6,7 +6,6 @@ import android.support.design.widget.Snackbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -71,14 +70,14 @@ public class MainActivity extends StandardActivity {
     }
 
     @OnItemClick(R.id.flashcard_sets)
-    public void onFlashcardSetClick(AdapterView<?> adapterView, View view, int position, long id) {
+    public void onFlashcardSetClick(int position) {
         Intent intent = new Intent(this, StudyModeActivity.class);
         intent.putExtra(FLASHCARD_SET_KEY, adapter.getItem(position));
         startActivity(intent);
     }
 
     @OnClick(R.id.add_set)
-    public void addSet(View view) {
+    public void addSet() {
         String newSet = setName.getText().toString().trim();
         setName.setText("");
         if (newSet.isEmpty()) {
