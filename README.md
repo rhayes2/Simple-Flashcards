@@ -3,7 +3,7 @@ If you want to contribute to this project, fork this repo and send me a pull req
 License
 =======
 
-    Copyright 2015-2016 Alexander Chiou
+    Copyright 2015-present Alexander Chiou
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
