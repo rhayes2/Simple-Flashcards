@@ -1,4 +1,4 @@
-package com.randomappsinc.simpleflashcards.Adapters;
+package com.randomappsinc.simpleflashcards.adapters;
 
 import android.content.Context;
 import android.content.Intent;
@@ -10,22 +10,20 @@ import android.widget.TextView;
 
 import com.joanzapata.iconify.widget.IconTextView;
 import com.nhaarman.listviewanimations.util.Swappable;
-import com.randomappsinc.simpleflashcards.Activities.EditFlashcardSetActivity;
-import com.randomappsinc.simpleflashcards.Activities.MainActivity;
-import com.randomappsinc.simpleflashcards.Persistence.DataObjects.FlashcardSet;
-import com.randomappsinc.simpleflashcards.Persistence.DatabaseManager;
+import com.randomappsinc.simpleflashcards.activities.EditFlashcardSetActivity;
+import com.randomappsinc.simpleflashcards.activities.MainActivity;
+import com.randomappsinc.simpleflashcards.persistence.models.FlashcardSet;
+import com.randomappsinc.simpleflashcards.persistence.DatabaseManager;
 import com.randomappsinc.simpleflashcards.R;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 
-/**
- * Created by alexanderchiou on 11/20/15.
- */
 public class FlashcardSetsAdapter extends BaseAdapter implements Swappable {
+
     private Context context;
     private List<String> setNames;
     private TextView noSets;
@@ -49,7 +47,7 @@ public class FlashcardSetsAdapter extends BaseAdapter implements Swappable {
         notifyDataSetChanged();
     }
 
-    public void setNoContent() {
+    private void setNoContent() {
         int viewVisibility = setNames.isEmpty() ? View.VISIBLE : View.GONE;
         noSets.setVisibility(viewVisibility);
     }
@@ -81,10 +79,10 @@ public class FlashcardSetsAdapter extends BaseAdapter implements Swappable {
     }
 
     public class FlashcardSetViewHolder {
-        @Bind(R.id.set_name) public TextView setName;
-        @Bind(R.id.edit_icon) public IconTextView edit;
+        @BindView(R.id.set_name) public TextView setName;
+        @BindView(R.id.edit_icon) public IconTextView edit;
 
-        public FlashcardSetViewHolder(View view) {
+        FlashcardSetViewHolder(View view) {
             ButterKnife.bind(this, view);
         }
     }

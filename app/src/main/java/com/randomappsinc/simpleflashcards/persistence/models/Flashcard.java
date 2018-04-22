@@ -1,4 +1,4 @@
-package com.randomappsinc.simpleflashcards.Persistence.DataObjects;
+package com.randomappsinc.simpleflashcards.persistence.models;
 
 import io.realm.RealmObject;
 

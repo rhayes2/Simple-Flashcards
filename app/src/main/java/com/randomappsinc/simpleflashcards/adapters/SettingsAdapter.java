@@ -1,4 +1,4 @@
-package com.randomappsinc.simpleflashcards.Adapters;
+package com.randomappsinc.simpleflashcards.adapters;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -10,13 +10,11 @@ import android.widget.TextView;
 import com.joanzapata.iconify.widget.IconTextView;
 import com.randomappsinc.simpleflashcards.R;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 
-/**
- * Created by alexanderchiou on 11/20/15.
- */
 public class SettingsAdapter extends BaseAdapter {
+
     private String[] itemNames;
     private String[] itemIcons;
     private Context context;
@@ -43,10 +41,10 @@ public class SettingsAdapter extends BaseAdapter {
     }
 
     public class SettingsViewHolder {
-        @Bind(R.id.icon) public IconTextView itemIcon;
-        @Bind(R.id.option) public TextView itemName;
+        @BindView(R.id.icon) public IconTextView itemIcon;
+        @BindView(R.id.option) public TextView itemName;
 
-        public SettingsViewHolder(View view) {
+        SettingsViewHolder(View view) {
             ButterKnife.bind(this, view);
         }
     }

@@ -1,4 +1,4 @@
-package com.randomappsinc.simpleflashcards.Adapters;
+package com.randomappsinc.simpleflashcards.adapters;
 
 import android.content.Context;
 import android.text.Html;
@@ -8,19 +8,17 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
-import com.randomappsinc.simpleflashcards.Persistence.DataObjects.Flashcard;
-import com.randomappsinc.simpleflashcards.Persistence.DatabaseManager;
+import com.randomappsinc.simpleflashcards.persistence.models.Flashcard;
+import com.randomappsinc.simpleflashcards.persistence.DatabaseManager;
 import com.randomappsinc.simpleflashcards.R;
 
 import java.util.List;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 
-/**
- * Created by alexanderchiou on 11/24/15.
- */
 public class FlashcardsAdapter extends BaseAdapter {
+
     private Context context;
     private List<Flashcard> flashcards;
     private View noContent;
@@ -34,7 +32,7 @@ public class FlashcardsAdapter extends BaseAdapter {
         setNoContent();
     }
 
-    public void setNoContent() {
+    private void setNoContent() {
         int visibility = flashcards.size() == 0 ? View.VISIBLE : View.GONE;
         noContent.setVisibility(visibility);
     }
@@ -61,10 +59,10 @@ public class FlashcardsAdapter extends BaseAdapter {
     }
 
     public class FlashcardViewHolder {
-        @Bind(R.id.question) public TextView question;
-        @Bind(R.id.answer) public TextView answer;
+        @BindView(R.id.question) public TextView question;
+        @BindView(R.id.answer) public TextView answer;
 
-        public FlashcardViewHolder(View view) {
+        FlashcardViewHolder(View view) {
             ButterKnife.bind(this, view);
         }
     }

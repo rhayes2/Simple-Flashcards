@@ -1,4 +1,4 @@
-package com.randomappsinc.simpleflashcards.Utils;
+package com.randomappsinc.simpleflashcards.utils;
 
 import android.app.Activity;
 import android.content.Context;
@@ -14,10 +14,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-/**
- * Created by alexanderchiou on 11/20/15.
- */
 public class MiscUtils {
+
     public static void closeKeyboard(Activity activity) {
         View view = activity.getCurrentFocus();
         if (view != null) {
@@ -31,7 +29,7 @@ public class MiscUtils {
         Snackbar snackbar = Snackbar.make(parent, message, length);
         View rootView = snackbar.getView();
         snackbar.getView().setBackgroundColor(context.getResources().getColor(R.color.app_blue));
-        TextView tv = (TextView) rootView.findViewById(android.support.design.R.id.snackbar_text);
+        TextView tv = rootView.findViewById(android.support.design.R.id.snackbar_text);
         tv.setTextColor(Color.WHITE);
         snackbar.show();
     }
