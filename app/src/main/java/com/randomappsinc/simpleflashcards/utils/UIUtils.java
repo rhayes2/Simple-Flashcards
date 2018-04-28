@@ -10,18 +10,18 @@ import android.widget.TextView;
 
 import com.randomappsinc.simpleflashcards.R;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-
-public class MiscUtils {
+public class UIUtils {
 
     public static void closeKeyboard(Activity activity) {
-        View view = activity.getCurrentFocus();
-        if (view != null) {
-            InputMethodManager imm = (InputMethodManager) activity.getSystemService(Context.INPUT_METHOD_SERVICE);
-            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+        InputMethodManager inputMethodManager = (InputMethodManager) activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
+        if (inputMethodManager == null) {
+            return;
         }
+        View view = activity.getCurrentFocus();
+        if (view == null) {
+            view = new View(activity);
+        }
+        inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
 
     public static void showSnackbar(View parent, String message, int length) {
@@ -32,16 +32,5 @@ public class MiscUtils {
         TextView tv = rootView.findViewById(android.support.design.R.id.snackbar_text);
         tv.setTextColor(Color.WHITE);
         snackbar.show();
-    }
-
-    public static int getRandomFlashcardPosition(int numFlashcards, int currentPosition) {
-        List<Integer> positions = new ArrayList<>();
-        for (int i = 0; i < numFlashcards; i++) {
-            if (i != currentPosition) {
-                positions.add(i);
-            }
-        }
-        Collections.shuffle(positions);
-        return positions.get(0);
     }
 }

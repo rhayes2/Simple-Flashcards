@@ -9,7 +9,7 @@ import android.widget.ListView;
 
 import com.randomappsinc.simpleflashcards.R;
 import com.randomappsinc.simpleflashcards.adapters.SettingsAdapter;
-import com.randomappsinc.simpleflashcards.utils.MiscUtils;
+import com.randomappsinc.simpleflashcards.utils.UIUtils;
 
 import butterknife.BindString;
 import butterknife.BindView;
@@ -54,7 +54,7 @@ public class SettingsActivity extends StandardActivity {
                 Uri uri =  Uri.parse("market://details?id=" + getApplicationContext().getPackageName());
                 intent = new Intent(Intent.ACTION_VIEW, uri);
                 if (!(getPackageManager().queryIntentActivities(intent, 0).size() > 0)) {
-                    MiscUtils.showSnackbar(parent, getString(R.string.play_store_error), Snackbar.LENGTH_LONG);
+                    UIUtils.showSnackbar(parent, getString(R.string.play_store_error), Snackbar.LENGTH_LONG);
                     return;
                 }
                 break;

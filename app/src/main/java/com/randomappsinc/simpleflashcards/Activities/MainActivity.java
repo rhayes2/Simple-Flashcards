@@ -2,7 +2,7 @@ package com.randomappsinc.simpleflashcards.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.Snackbar;
+import android.support.design.widget.FloatingActionButton;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -15,33 +15,32 @@ import com.joanzapata.iconify.IconDrawable;
 import com.joanzapata.iconify.fonts.IoniconsIcons;
 import com.randomappsinc.simpleflashcards.R;
 import com.randomappsinc.simpleflashcards.adapters.FlashcardSetsAdapter;
-import com.randomappsinc.simpleflashcards.persistence.DatabaseManager;
+import com.randomappsinc.simpleflashcards.dialogs.FlashcardSetCreatorDialog;
 import com.randomappsinc.simpleflashcards.persistence.PreferencesManager;
-import com.randomappsinc.simpleflashcards.utils.MiscUtils;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import butterknife.OnItemClick;
 
 public class MainActivity extends StandardActivity {
 
     public static final String FLASHCARD_SET_KEY = "flashcardSet";
 
-    @BindView(R.id.set_name) EditText setName;
+    @BindView(R.id.parent) View parent;
+    @BindView(R.id.flashcard_set_search) EditText setSearch;
     @BindView(R.id.flashcard_sets) ListView sets;
     @BindView(R.id.no_sets) TextView noSets;
-    @BindView(R.id.parent) View parent;
+    @BindView(R.id.add_flashcard_set) FloatingActionButton addFlashcardSet;
 
     private FlashcardSetsAdapter adapter;
+    private FlashcardSetCreatorDialog flashcardSetCreatorDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
-        /* addButton.setImageDrawable(new IconDrawable(this, FontAwesomeIcons.fa_plus)
-                .colorRes(R.color.white)
-                .actionBarSize()); */
 
         if (PreferencesManager.get().isFirstTimeUser()) {
             PreferencesManager.get().rememberWelcome();
@@ -51,6 +50,12 @@ public class MainActivity extends StandardActivity {
                     .positiveText(android.R.string.yes)
                     .show();
         }
+
+        addFlashcardSet.setImageDrawable(new IconDrawable(this, IoniconsIcons.ion_android_add)
+                .colorRes(R.color.white)
+                .actionBarSize());
+
+        flashcardSetCreatorDialog = new FlashcardSetCreatorDialog(this, setCreatedListener);
 
         adapter = new FlashcardSetsAdapter(this, noSets);
         sets.setAdapter(adapter);
@@ -69,20 +74,20 @@ public class MainActivity extends StandardActivity {
         startActivity(intent);
     }
 
+    @OnClick(R.id.add_flashcard_set)
     public void addSet() {
-        String newSet = setName.getText().toString().trim();
-        setName.setText("");
-        if (newSet.isEmpty()) {
-            MiscUtils.showSnackbar(parent, getString(R.string.blank_name), Snackbar.LENGTH_LONG);
-        } else if (DatabaseManager.get().doesSetExist(newSet)) {
-            MiscUtils.showSnackbar(parent, getString(R.string.set_already_exists), Snackbar.LENGTH_LONG);
-        } else {
-            DatabaseManager.get().addFlashcardSet(newSet);
-            Intent intent = new Intent(this, EditFlashcardSetActivity.class);
-            intent.putExtra(FLASHCARD_SET_KEY, newSet);
-            startActivity(intent);
-        }
+        flashcardSetCreatorDialog.show();
     }
+
+    private final FlashcardSetCreatorDialog.Listener setCreatedListener =
+            new FlashcardSetCreatorDialog.Listener() {
+                @Override
+                public void onFlashcardSetCreated(String createdSetName) {
+                    Intent intent = new Intent(MainActivity.this, EditFlashcardSetActivity.class);
+                    intent.putExtra(FLASHCARD_SET_KEY, createdSetName);
+                    startActivity(intent);
+                }
+            };
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

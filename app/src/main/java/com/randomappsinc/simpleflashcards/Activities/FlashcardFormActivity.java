@@ -14,7 +14,7 @@ import com.joanzapata.iconify.IconDrawable;
 import com.joanzapata.iconify.fonts.IoniconsIcons;
 import com.randomappsinc.simpleflashcards.R;
 import com.randomappsinc.simpleflashcards.persistence.DatabaseManager;
-import com.randomappsinc.simpleflashcards.utils.MiscUtils;
+import com.randomappsinc.simpleflashcards.utils.UIUtils;
 import com.rey.material.widget.Button;
 
 import butterknife.BindView;
@@ -60,18 +60,18 @@ public class FlashcardFormActivity extends StandardActivity {
 
     @OnClick(R.id.flashcard_submit)
     public void submitFlashcard() {
-        MiscUtils.closeKeyboard(this);
+        UIUtils.closeKeyboard(this);
         String newQuestion = question.getText().toString().trim();
         String newAnswer = answer.getText().toString().trim();
         if (newQuestion.isEmpty()) {
-            MiscUtils.showSnackbar(parent, getString(R.string.blank_question), Snackbar.LENGTH_LONG);
+            UIUtils.showSnackbar(parent, getString(R.string.blank_question), Snackbar.LENGTH_LONG);
         }
         else if (newAnswer.isEmpty()) {
-            MiscUtils.showSnackbar(parent, getString(R.string.blank_answer), Snackbar.LENGTH_LONG);
+            UIUtils.showSnackbar(parent, getString(R.string.blank_answer), Snackbar.LENGTH_LONG);
         }
         else {
             if (DatabaseManager.get().doesFlashcardExist(setName, newQuestion, newAnswer)) {
-                MiscUtils.showSnackbar(parent, getString(R.string.dupe_flashcard), Snackbar.LENGTH_LONG);
+                UIUtils.showSnackbar(parent, getString(R.string.dupe_flashcard), Snackbar.LENGTH_LONG);
             }
             else {
                 if (updateMode) {
@@ -81,7 +81,7 @@ public class FlashcardFormActivity extends StandardActivity {
                 }
                 else {
                     DatabaseManager.get().addFlashcard(newQuestion, newAnswer, setName);
-                    MiscUtils.showSnackbar(parent, getString(R.string.flashcard_added), Snackbar.LENGTH_SHORT);
+                    UIUtils.showSnackbar(parent, getString(R.string.flashcard_added), Snackbar.LENGTH_SHORT);
                     question.setText("");
                     answer.setText("");
                     question.requestFocus();

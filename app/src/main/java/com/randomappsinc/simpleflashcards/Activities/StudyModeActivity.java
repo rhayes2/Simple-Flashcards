@@ -11,7 +11,7 @@ import com.joanzapata.iconify.fonts.IoniconsIcons;
 import com.randomappsinc.simpleflashcards.R;
 import com.randomappsinc.simpleflashcards.persistence.DatabaseManager;
 import com.randomappsinc.simpleflashcards.persistence.models.Flashcard;
-import com.randomappsinc.simpleflashcards.utils.MiscUtils;
+import com.randomappsinc.simpleflashcards.utils.FlashcardUtils;
 
 import java.util.List;
 
@@ -92,7 +92,7 @@ public class StudyModeActivity extends StandardActivity {
         switch (item.getItemId()) {
             case R.id.random_flashcard:
                 if (flashcards.size() != 1) {
-                    currentPosition = MiscUtils.getRandomFlashcardPosition(flashcards.size(), currentPosition);
+                    currentPosition = FlashcardUtils.getRandomFlashcardPosition(flashcards.size(), currentPosition);
                 }
                 setUpFlashcard();
                 return true;

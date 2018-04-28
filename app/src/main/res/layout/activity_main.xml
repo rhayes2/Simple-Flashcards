@@ -15,7 +15,7 @@
         android:focusableInTouchMode="true">
 
         <EditText
-            android:id="@+id/set_name"
+            android:id="@+id/flashcard_set_search"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="8dp"
@@ -43,6 +43,15 @@
         <ListView
             android:id="@+id/flashcard_sets"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
+            android:layout_height="match_parent"
+            android:clipToPadding="false"
+            android:paddingBottom="88dp"/>
     </LinearLayout>
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/add_flashcard_set"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_margin="@dimen/fab_margin"/>
 </android.support.design.widget.CoordinatorLayout>
