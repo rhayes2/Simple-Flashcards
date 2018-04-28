@@ -15,5 +15,5 @@
     <string name="blank_name">Flashcard set names cannot be blank.</string>
     <string name="set_already_exists">You already have a flashcard set with that name.</string>
 
-    <string name="edit_icon">{fa-edit}</string>
+    <string name="edit_icon">{ion-edit}</string>
 </resources>

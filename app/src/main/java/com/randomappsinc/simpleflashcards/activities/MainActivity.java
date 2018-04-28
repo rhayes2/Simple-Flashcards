@@ -12,7 +12,7 @@ import android.widget.TextView;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.joanzapata.iconify.IconDrawable;
-import com.joanzapata.iconify.fonts.FontAwesomeIcons;
+import com.joanzapata.iconify.fonts.IoniconsIcons;
 import com.randomappsinc.simpleflashcards.R;
 import com.randomappsinc.simpleflashcards.adapters.FlashcardSetsAdapter;
 import com.randomappsinc.simpleflashcards.persistence.DatabaseManager;
@@ -88,7 +88,7 @@ public class MainActivity extends StandardActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_main, menu);
         menu.findItem(R.id.settings).setIcon(
-                new IconDrawable(this, FontAwesomeIcons.fa_gear)
+                new IconDrawable(this, IoniconsIcons.ion_android_settings)
                         .colorRes(R.color.white)
                         .actionBarSize());
         return true;

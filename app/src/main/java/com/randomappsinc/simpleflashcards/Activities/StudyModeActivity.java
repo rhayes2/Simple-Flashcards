@@ -7,7 +7,7 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.joanzapata.iconify.IconDrawable;
-import com.joanzapata.iconify.fonts.FontAwesomeIcons;
+import com.joanzapata.iconify.fonts.IoniconsIcons;
 import com.randomappsinc.simpleflashcards.R;
 import com.randomappsinc.simpleflashcards.persistence.DatabaseManager;
 import com.randomappsinc.simpleflashcards.persistence.models.Flashcard;
@@ -72,15 +72,15 @@ public class StudyModeActivity extends StandardActivity {
         if (flashcards.size() != 0) {
             getMenuInflater().inflate(R.menu.study_mode_menu, menu);
             menu.findItem(R.id.random_flashcard).setIcon(
-                    new IconDrawable(this, FontAwesomeIcons.fa_random)
+                    new IconDrawable(this, IoniconsIcons.ion_shuffle)
                             .colorRes(R.color.white)
                             .actionBarSize());
             menu.findItem(R.id.previous_flashcard).setIcon(
-                    new IconDrawable(this, FontAwesomeIcons.fa_arrow_left)
+                    new IconDrawable(this, IoniconsIcons.ion_android_arrow_back)
                             .colorRes(R.color.white)
                             .actionBarSize());
             menu.findItem(R.id.next_flashcard).setIcon(
-                    new IconDrawable(this, FontAwesomeIcons.fa_arrow_right)
+                    new IconDrawable(this, IoniconsIcons.ion_android_arrow_forward)
                             .colorRes(R.color.white)
                             .actionBarSize());
         }
@@ -99,8 +99,7 @@ public class StudyModeActivity extends StandardActivity {
             case R.id.previous_flashcard:
                 if (currentPosition == 0) {
                     currentPosition = flashcards.size() - 1;
-                }
-                else {
+                } else {
                     currentPosition--;
                 }
                 setUpFlashcard();
@@ -108,8 +107,7 @@ public class StudyModeActivity extends StandardActivity {
             case R.id.next_flashcard:
                 if (currentPosition == flashcards.size() - 1) {
                     currentPosition = 0;
-                }
-                else {
+                } else {
                     currentPosition++;
                 }
                 setUpFlashcard();

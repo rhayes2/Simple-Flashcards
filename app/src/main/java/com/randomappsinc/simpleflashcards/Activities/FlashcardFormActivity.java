@@ -11,7 +11,7 @@ import android.widget.EditText;
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.joanzapata.iconify.IconDrawable;
-import com.joanzapata.iconify.fonts.FontAwesomeIcons;
+import com.joanzapata.iconify.fonts.IoniconsIcons;
 import com.randomappsinc.simpleflashcards.R;
 import com.randomappsinc.simpleflashcards.persistence.DatabaseManager;
 import com.randomappsinc.simpleflashcards.utils.MiscUtils;
@@ -95,7 +95,7 @@ public class FlashcardFormActivity extends StandardActivity {
         if (updateMode) {
             getMenuInflater().inflate(R.menu.update_flashcard_menu, menu);
             menu.findItem(R.id.delete_flashcard).setIcon(
-                    new IconDrawable(this, FontAwesomeIcons.fa_trash_o)
+                    new IconDrawable(this, IoniconsIcons.ion_android_delete)
                             .colorRes(R.color.white)
                             .actionBarSize());
         }

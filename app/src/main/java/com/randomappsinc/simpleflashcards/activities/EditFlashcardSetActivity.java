@@ -12,7 +12,7 @@ import android.widget.TextView;
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.joanzapata.iconify.IconDrawable;
-import com.joanzapata.iconify.fonts.FontAwesomeIcons;
+import com.joanzapata.iconify.fonts.IoniconsIcons;
 import com.randomappsinc.simpleflashcards.R;
 import com.randomappsinc.simpleflashcards.adapters.FlashcardsAdapter;
 import com.randomappsinc.simpleflashcards.persistence.DatabaseManager;
@@ -43,7 +43,9 @@ public class EditFlashcardSetActivity extends StandardActivity {
         setName = getIntent().getStringExtra(MainActivity.FLASHCARD_SET_KEY);
         flashcardSetTitle.setText(setName);
 
-        addFlashcard.setImageDrawable(new IconDrawable(this, FontAwesomeIcons.fa_plus).colorRes(R.color.white));
+        addFlashcard.setImageDrawable(
+                new IconDrawable(this, IoniconsIcons.ion_android_add)
+                        .colorRes(R.color.white));
         adapter = new FlashcardsAdapter(this, setName, noFlashcards);
         flashcards.setAdapter(adapter);
     }
@@ -118,11 +120,11 @@ public class EditFlashcardSetActivity extends StandardActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.flashcard_set_menu, menu);
         menu.findItem(R.id.rename_set).setIcon(
-                new IconDrawable(this, FontAwesomeIcons.fa_edit)
+                new IconDrawable(this, IoniconsIcons.ion_edit)
                         .colorRes(R.color.white)
                         .actionBarSize());
         menu.findItem(R.id.delete_set).setIcon(
-                new IconDrawable(this, FontAwesomeIcons.fa_trash_o)
+                new IconDrawable(this, IoniconsIcons.ion_android_delete)
                         .colorRes(R.color.white)
                         .actionBarSize());
         return true;
