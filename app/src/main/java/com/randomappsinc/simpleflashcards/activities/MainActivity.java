@@ -7,7 +7,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -22,7 +21,6 @@ import com.randomappsinc.simpleflashcards.utils.MiscUtils;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
 import butterknife.OnItemClick;
 
 public class MainActivity extends StandardActivity {
@@ -30,7 +28,6 @@ public class MainActivity extends StandardActivity {
     public static final String FLASHCARD_SET_KEY = "flashcardSet";
 
     @BindView(R.id.set_name) EditText setName;
-    @BindView(R.id.add_icon) ImageView addButton;
     @BindView(R.id.flashcard_sets) ListView sets;
     @BindView(R.id.no_sets) TextView noSets;
     @BindView(R.id.parent) View parent;
@@ -42,9 +39,9 @@ public class MainActivity extends StandardActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
-        addButton.setImageDrawable(new IconDrawable(this, FontAwesomeIcons.fa_plus)
+        /* addButton.setImageDrawable(new IconDrawable(this, FontAwesomeIcons.fa_plus)
                 .colorRes(R.color.white)
-                .actionBarSize());
+                .actionBarSize()); */
 
         if (PreferencesManager.get().isFirstTimeUser()) {
             PreferencesManager.get().rememberWelcome();
@@ -72,7 +69,6 @@ public class MainActivity extends StandardActivity {
         startActivity(intent);
     }
 
-    @OnClick(R.id.add_set)
     public void addSet() {
         String newSet = setName.getText().toString().trim();
         setName.setText("");

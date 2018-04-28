@@ -1,28 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:background="@android:color/transparent"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:padding="8dp"
+    tools:ignore="SpUsage, RtlHardcoded">
 
     <com.joanzapata.iconify.widget.IconTextView
         android:id="@+id/edit_icon"
-        android:padding="10dp"
         android:text="@string/edit_icon"
         android:textColor="@color/dark_gray"
         android:layout_alignParentRight="true"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="32sp"
+        android:textSize="32dp"
         android:layout_centerVertical="true"/>
 
     <TextView
         android:id="@+id/set_name"
-        android:paddingTop="10dp"
-        android:paddingBottom="10dp"
         android:textColor="@color/dark_gray"
         android:layout_centerVertical="true"
-        android:textSize="28sp"
+        android:textSize="28dp"
         android:layout_toLeftOf="@+id/edit_icon"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
