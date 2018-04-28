@@ -7,8 +7,8 @@ import android.support.design.widget.Snackbar;
 import android.view.View;
 import android.widget.ListView;
 
-import com.randomappsinc.simpleflashcards.adapters.SettingsAdapter;
 import com.randomappsinc.simpleflashcards.R;
+import com.randomappsinc.simpleflashcards.adapters.SettingsAdapter;
 import com.randomappsinc.simpleflashcards.utils.MiscUtils;
 
 import butterknife.BindString;

@@ -9,20 +9,17 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import com.joanzapata.iconify.widget.IconTextView;
-import com.nhaarman.listviewanimations.util.Swappable;
+import com.randomappsinc.simpleflashcards.R;
 import com.randomappsinc.simpleflashcards.activities.EditFlashcardSetActivity;
 import com.randomappsinc.simpleflashcards.activities.MainActivity;
-import com.randomappsinc.simpleflashcards.persistence.models.FlashcardSet;
 import com.randomappsinc.simpleflashcards.persistence.DatabaseManager;
-import com.randomappsinc.simpleflashcards.R;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class FlashcardSetsAdapter extends BaseAdapter implements Swappable {
+public class FlashcardSetsAdapter extends BaseAdapter {
 
     private Context context;
     private List<String> setNames;
@@ -35,14 +32,7 @@ public class FlashcardSetsAdapter extends BaseAdapter implements Swappable {
     }
 
     public void refreshContent() {
-        List<FlashcardSet> sets = DatabaseManager.get().getAllFlashcardSets();
-        this.setNames = new ArrayList<>(sets.size());
-        for (int i = 0; i < sets.size(); i++) {
-            setNames.add("");
-        }
-        for (FlashcardSet set : sets) {
-            this.setNames.set(set.getPosition(), set.getName());
-        }
+        setNames = DatabaseManager.get().getAllFlashcardSets();
         setNoContent();
         notifyDataSetChanged();
     }
@@ -69,13 +59,6 @@ public class FlashcardSetsAdapter extends BaseAdapter implements Swappable {
     @Override
     public boolean hasStableIds() {
         return true;
-    }
-
-    public void swapItems(int positionOne, int positionTwo) {
-        String setOne = setNames.get(positionOne);
-        setNames.set(positionOne, setNames.get(positionTwo));
-        setNames.set(positionTwo, setOne);
-        notifyDataSetChanged();
     }
 
     public class FlashcardSetViewHolder {

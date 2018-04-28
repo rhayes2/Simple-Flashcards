@@ -8,18 +8,16 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.joanzapata.iconify.IconDrawable;
 import com.joanzapata.iconify.fonts.FontAwesomeIcons;
-import com.nhaarman.listviewanimations.itemmanipulation.DynamicListView;
-import com.nhaarman.listviewanimations.itemmanipulation.dragdrop.OnItemMovedListener;
-import com.nhaarman.listviewanimations.itemmanipulation.dragdrop.TouchViewDraggableManager;
+import com.randomappsinc.simpleflashcards.R;
 import com.randomappsinc.simpleflashcards.adapters.FlashcardSetsAdapter;
 import com.randomappsinc.simpleflashcards.persistence.DatabaseManager;
 import com.randomappsinc.simpleflashcards.persistence.PreferencesManager;
-import com.randomappsinc.simpleflashcards.R;
 import com.randomappsinc.simpleflashcards.utils.MiscUtils;
 
 import butterknife.BindView;
@@ -33,7 +31,7 @@ public class MainActivity extends StandardActivity {
 
     @BindView(R.id.set_name) EditText setName;
     @BindView(R.id.add_icon) ImageView addButton;
-    @BindView(R.id.flashcard_sets) DynamicListView sets;
+    @BindView(R.id.flashcard_sets) ListView sets;
     @BindView(R.id.no_sets) TextView noSets;
     @BindView(R.id.parent) View parent;
 
@@ -59,9 +57,6 @@ public class MainActivity extends StandardActivity {
 
         adapter = new FlashcardSetsAdapter(this, noSets);
         sets.setAdapter(adapter);
-        sets.enableDragAndDrop();
-        sets.setDraggableManager(new TouchViewDraggableManager(R.id.list_row_draganddrop_touchview));
-        sets.setOnItemMovedListener(new OnFlashcardSetMoved());
     }
 
     @Override
@@ -83,22 +78,13 @@ public class MainActivity extends StandardActivity {
         setName.setText("");
         if (newSet.isEmpty()) {
             MiscUtils.showSnackbar(parent, getString(R.string.blank_name), Snackbar.LENGTH_LONG);
-        }
-        else if (DatabaseManager.get().doesSetExist(newSet)) {
+        } else if (DatabaseManager.get().doesSetExist(newSet)) {
             MiscUtils.showSnackbar(parent, getString(R.string.set_already_exists), Snackbar.LENGTH_LONG);
-        }
-        else {
-            DatabaseManager.get().addFlashcardSet(newSet, adapter.getCount());
+        } else {
+            DatabaseManager.get().addFlashcardSet(newSet);
             Intent intent = new Intent(this, EditFlashcardSetActivity.class);
             intent.putExtra(FLASHCARD_SET_KEY, newSet);
             startActivity(intent);
-        }
-    }
-
-    private class OnFlashcardSetMoved implements OnItemMovedListener {
-        @Override
-        public void onItemMoved(int originalPosition, int newPosition) {
-            DatabaseManager.get().swapSetsAtPositions(originalPosition, newPosition);
         }
     }
 
