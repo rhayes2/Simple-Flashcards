@@ -57,6 +57,7 @@ public class DatabaseManager {
             if (oldVersion == 0) {
                 RealmObjectSchema setSchema = schema.get("FlashcardSet");
                 if (setSchema != null) {
+                    setSchema.removePrimaryKey();
                     setSchema.removeField("position");
                 }
             }

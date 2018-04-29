@@ -21,7 +21,7 @@ public class FlashcardSetCreatorDialog {
     public FlashcardSetCreatorDialog(Context context, @NonNull Listener listener) {
         mListener = listener;
         mAdderDialog = new MaterialDialog.Builder(context)
-                .title(R.string.flashcard_set_name)
+                .title(R.string.create_flashcard_set)
                 .alwaysCallInputCallback()
                 .inputType(InputType.TYPE_TEXT_FLAG_CAP_WORDS)
                 .input(context.getString(R.string.flashcard_set_name),
