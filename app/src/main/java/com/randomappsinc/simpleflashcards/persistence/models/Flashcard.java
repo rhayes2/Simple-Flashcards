@@ -2,10 +2,8 @@ package com.randomappsinc.simpleflashcards.persistence.models;
 
 import io.realm.RealmObject;
 
-/**
- * Created by alexanderchiou on 11/20/15.
- */
 public class Flashcard extends RealmObject {
+
     private String question;
     private String answer;
 

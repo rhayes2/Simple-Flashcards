@@ -21,7 +21,6 @@ import butterknife.OnClick;
 
 public class StudyModeActivity extends StandardActivity {
 
-    @BindView(R.id.set_name) TextView flashcardSetTitle;
     @BindView(R.id.no_flashcards) View noFlashcards;
     @BindView(R.id.question_answer_pair) View qaPair;
     @BindView(R.id.question) TextView question;
@@ -39,13 +38,12 @@ public class StudyModeActivity extends StandardActivity {
         ButterKnife.bind(this);
 
         String setName = getIntent().getStringExtra(MainActivity.FLASHCARD_SET_KEY);
-        flashcardSetTitle.setText(setName);
+        setTitle(setName);
         flashcards = DatabaseManager.get().getAllFlashcards(setName);
         if (flashcards.size() == 0) {
             qaPair.setVisibility(View.GONE);
             noFlashcards.setVisibility(View.VISIBLE);
-        }
-        else {
+        } else {
             noFlashcards.setVisibility(View.GONE);
             qaPair.setVisibility(View.VISIBLE);
             currentPosition = 0;
@@ -92,7 +90,9 @@ public class StudyModeActivity extends StandardActivity {
         switch (item.getItemId()) {
             case R.id.random_flashcard:
                 if (flashcards.size() != 1) {
-                    currentPosition = FlashcardUtils.getRandomFlashcardPosition(flashcards.size(), currentPosition);
+                    currentPosition = FlashcardUtils.getRandomFlashcardPosition(
+                            flashcards.size(),
+                            currentPosition);
                 }
                 setUpFlashcard();
                 return true;

@@ -25,7 +25,6 @@ import butterknife.OnItemClick;
 
 public class EditFlashcardSetActivity extends StandardActivity {
 
-    @BindView(R.id.set_name) TextView flashcardSetTitle;
     @BindView(R.id.no_flashcards) TextView noFlashcards;
     @BindView(R.id.flashcards) ListView flashcards;
     @BindView(R.id.add_flashcard) FloatingActionButton addFlashcard;
@@ -40,8 +39,9 @@ public class EditFlashcardSetActivity extends StandardActivity {
         setContentView(R.layout.edit_flashcard_set);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         ButterKnife.bind(this);
+
         setName = getIntent().getStringExtra(MainActivity.FLASHCARD_SET_KEY);
-        flashcardSetTitle.setText(setName);
+        setTitle(setName);
 
         addFlashcard.setImageDrawable(
                 new IconDrawable(this, IoniconsIcons.ion_android_add)
@@ -93,7 +93,7 @@ public class EditFlashcardSetActivity extends StandardActivity {
                             String newSetName = dialog.getInputEditText().getText().toString();
                             DatabaseManager.get().renameSet(setName, newSetName);
                             setName = newSetName;
-                            flashcardSetTitle.setText(setName);
+                            setTitle(setName);
                         }
                     }
                 })
