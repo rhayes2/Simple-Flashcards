@@ -9,6 +9,7 @@ import com.randomappsinc.simpleflashcards.utils.MyApplication;
 import java.util.ArrayList;
 import java.util.List;
 
+import io.realm.Case;
 import io.realm.DynamicRealm;
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
@@ -164,8 +165,16 @@ public class DatabaseManager {
         }
     }
 
-    public List<String> getAllFlashcardSets() {
-        List<FlashcardSet> flashcardSets = realm.where(FlashcardSet.class).findAll();
+    public List<String> getFlashcardSets(String searchTerm) {
+        List<FlashcardSet> flashcardSets;
+        if (searchTerm.trim().isEmpty()) {
+            flashcardSets = realm.where(FlashcardSet.class).findAll();
+        } else {
+            flashcardSets = realm
+                    .where(FlashcardSet.class)
+                    .contains("name", searchTerm, Case.INSENSITIVE)
+                    .findAll();
+        }
         List<String> setNames = new ArrayList<>();
         for (FlashcardSet flashcardSet : flashcardSets) {
             setNames.add(flashcardSet.getName());

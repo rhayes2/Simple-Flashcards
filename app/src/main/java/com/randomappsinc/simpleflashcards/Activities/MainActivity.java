@@ -3,6 +3,7 @@ package com.randomappsinc.simpleflashcards.activities;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.text.Editable;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -22,6 +23,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.OnItemClick;
+import butterknife.OnTextChanged;
 
 public class MainActivity extends StandardActivity {
 
@@ -29,6 +31,7 @@ public class MainActivity extends StandardActivity {
 
     @BindView(R.id.parent) View parent;
     @BindView(R.id.flashcard_set_search) EditText setSearch;
+    @BindView(R.id.clear_search) View clearSearch;
     @BindView(R.id.flashcard_sets) ListView sets;
     @BindView(R.id.no_sets) TextView noSets;
     @BindView(R.id.add_flashcard_set) FloatingActionButton addFlashcardSet;
@@ -64,7 +67,18 @@ public class MainActivity extends StandardActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        adapter.refreshContent();
+        adapter.refreshContent(setSearch.getText().toString());
+    }
+
+    @OnTextChanged(value = R.id.flashcard_set_search, callback = OnTextChanged.Callback.AFTER_TEXT_CHANGED)
+    public void afterTextChanged(Editable input) {
+        adapter.refreshContent(input.toString());
+        clearSearch.setVisibility(input.length() == 0 ? View.GONE : View.VISIBLE);
+    }
+
+    @OnClick(R.id.clear_search)
+    public void clearSearch() {
+        setSearch.setText("");
     }
 
     @OnItemClick(R.id.flashcard_sets)

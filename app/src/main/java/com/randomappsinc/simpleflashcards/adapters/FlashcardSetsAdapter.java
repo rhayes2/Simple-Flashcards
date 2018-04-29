@@ -14,6 +14,7 @@ import com.randomappsinc.simpleflashcards.activities.EditFlashcardSetActivity;
 import com.randomappsinc.simpleflashcards.activities.MainActivity;
 import com.randomappsinc.simpleflashcards.persistence.DatabaseManager;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -27,12 +28,13 @@ public class FlashcardSetsAdapter extends BaseAdapter {
 
     public FlashcardSetsAdapter(Context context, TextView noSets) {
         this.context = context;
+        this.setNames = new ArrayList<>();
         this.noSets = noSets;
-        refreshContent();
     }
 
-    public void refreshContent() {
-        setNames = DatabaseManager.get().getAllFlashcardSets();
+    public void refreshContent(String searchTerm) {
+        setNames.clear();
+        setNames.addAll(DatabaseManager.get().getFlashcardSets(searchTerm));
         setNoContent();
         notifyDataSetChanged();
     }
@@ -42,8 +44,7 @@ public class FlashcardSetsAdapter extends BaseAdapter {
         noSets.setVisibility(viewVisibility);
     }
 
-    public int getCount()
-    {
+    public int getCount() {
         return setNames.size();
     }
 
