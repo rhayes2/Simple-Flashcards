@@ -6,10 +6,20 @@ import io.realm.annotations.Required;
 
 public class FlashcardSet extends RealmObject {
 
+    private int id;
+
     @Required
     private String name;
 
     private RealmList<Flashcard> flashcards;
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
 
     public String getName() {
         return name;

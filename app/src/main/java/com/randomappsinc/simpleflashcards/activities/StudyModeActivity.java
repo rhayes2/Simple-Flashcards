@@ -37,9 +37,9 @@ public class StudyModeActivity extends StandardActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         ButterKnife.bind(this);
 
-        String setName = getIntent().getStringExtra(MainActivity.FLASHCARD_SET_KEY);
-        setTitle(setName);
-        flashcards = DatabaseManager.get().getAllFlashcards(setName);
+        int setId = getIntent().getIntExtra(MainActivity.FLASHCARD_SET_KEY, 0);
+        setTitle(DatabaseManager.get().getSetName(setId));
+        flashcards = DatabaseManager.get().getAllFlashcards(setId);
         if (flashcards.size() == 0) {
             qaPair.setVisibility(View.GONE);
             noFlashcards.setVisibility(View.VISIBLE);

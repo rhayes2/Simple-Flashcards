@@ -31,7 +31,7 @@ public class EditFlashcardSetActivity extends StandardActivity {
     @BindString(R.string.new_flashcard_set_name) String newSetName;
 
     private FlashcardsAdapter adapter;
-    private String setName;
+    private int setId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,13 +40,13 @@ public class EditFlashcardSetActivity extends StandardActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         ButterKnife.bind(this);
 
-        setName = getIntent().getStringExtra(MainActivity.FLASHCARD_SET_KEY);
-        setTitle(setName);
+        setId = getIntent().getIntExtra(MainActivity.FLASHCARD_SET_KEY, 0);
+        setTitle(DatabaseManager.get().getSetName(setId));
 
         addFlashcard.setImageDrawable(
                 new IconDrawable(this, IoniconsIcons.ion_android_add)
                         .colorRes(R.color.white));
-        adapter = new FlashcardsAdapter(this, setName, noFlashcards);
+        adapter = new FlashcardsAdapter(this, setId, noFlashcards);
         flashcards.setAdapter(adapter);
     }
 
@@ -59,9 +59,7 @@ public class EditFlashcardSetActivity extends StandardActivity {
     @OnItemClick(R.id.flashcards)
     public void onFlashcardClick(int position) {
         Intent intent = new Intent(this, FlashcardFormActivity.class);
-        intent.putExtra(MainActivity.FLASHCARD_SET_KEY, setName);
-        intent.putExtra(FlashcardFormActivity.QUESTION_KEY, adapter.getItem(position).getQuestion());
-        intent.putExtra(FlashcardFormActivity.ANSWER_KEY, adapter.getItem(position).getAnswer());
+        intent.putExtra(FlashcardFormActivity.FLASHCARD_ID_KEY, adapter.getItem(position).getId());
         intent.putExtra(FlashcardFormActivity.UPDATE_MODE_KEY, true);
         startActivity(intent);
     }
@@ -69,7 +67,7 @@ public class EditFlashcardSetActivity extends StandardActivity {
     @OnClick(R.id.add_flashcard)
     public void addFlashcard() {
         Intent intent = new Intent(this, FlashcardFormActivity.class);
-        intent.putExtra(MainActivity.FLASHCARD_SET_KEY, setName);
+        intent.putExtra(MainActivity.FLASHCARD_SET_KEY, setId);
         startActivity(intent);
     }
 
@@ -79,8 +77,7 @@ public class EditFlashcardSetActivity extends StandardActivity {
                 .input(newSetName, "", new MaterialDialog.InputCallback() {
                     @Override
                     public void onInput(MaterialDialog dialog, CharSequence input) {
-                        boolean submitEnabled = !(input.toString().trim().isEmpty() ||
-                                DatabaseManager.get().doesSetExist(input.toString()));
+                        boolean submitEnabled = !input.toString().trim().isEmpty();
                         dialog.getActionButton(DialogAction.POSITIVE).setEnabled(submitEnabled);
                     }
                 })
@@ -91,9 +88,8 @@ public class EditFlashcardSetActivity extends StandardActivity {
                     public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
                         if (which == DialogAction.POSITIVE) {
                             String newSetName = dialog.getInputEditText().getText().toString();
-                            DatabaseManager.get().renameSet(setName, newSetName);
-                            setName = newSetName;
-                            setTitle(setName);
+                            DatabaseManager.get().renameSet(setId, newSetName);
+                            setTitle(newSetName);
                         }
                     }
                 })
@@ -109,7 +105,7 @@ public class EditFlashcardSetActivity extends StandardActivity {
                 .onPositive(new MaterialDialog.SingleButtonCallback() {
                     @Override
                     public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                        DatabaseManager.get().deleteFlashcardSet(setName);
+                        DatabaseManager.get().deleteFlashcardSet(setId);
                         finish();
                     }
                 })

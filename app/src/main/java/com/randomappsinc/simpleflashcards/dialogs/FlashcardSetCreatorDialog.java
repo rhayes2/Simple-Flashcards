@@ -12,7 +12,7 @@ import com.randomappsinc.simpleflashcards.persistence.DatabaseManager;
 public class FlashcardSetCreatorDialog {
 
     public interface Listener {
-        void onFlashcardSetCreated(String createdSetName);
+        void onFlashcardSetCreated(int createdSetId);
     }
 
     @NonNull private Listener mListener;
@@ -31,8 +31,7 @@ public class FlashcardSetCreatorDialog {
                             public void onInput(@NonNull MaterialDialog dialog, CharSequence input) {
                                 String setName = input.toString();
                                 boolean notEmpty = !setName.trim().isEmpty();
-                                boolean notDupe = !DatabaseManager.get().doesSetExist(setName);
-                                dialog.getActionButton(DialogAction.POSITIVE).setEnabled(notEmpty && notDupe);
+                                dialog.getActionButton(DialogAction.POSITIVE).setEnabled(notEmpty);
                             }
                         })
                 .positiveText(R.string.create)
@@ -41,8 +40,8 @@ public class FlashcardSetCreatorDialog {
                     @Override
                     public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
                         String setName = dialog.getInputEditText().getText().toString().trim();
-                        DatabaseManager.get().addFlashcardSet(setName);
-                        mListener.onFlashcardSetCreated(setName);
+                        int newSetId = DatabaseManager.get().addFlashcardSet(setName);
+                        mListener.onFlashcardSetCreated(newSetId);
                     }
                 })
                 .build();

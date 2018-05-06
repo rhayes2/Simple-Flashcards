@@ -84,7 +84,7 @@ public class MainActivity extends StandardActivity {
     @OnItemClick(R.id.flashcard_sets)
     public void onFlashcardSetClick(int position) {
         Intent intent = new Intent(this, StudyModeActivity.class);
-        intent.putExtra(FLASHCARD_SET_KEY, adapter.getItem(position));
+        intent.putExtra(FLASHCARD_SET_KEY, adapter.getItem(position).getId());
         startActivity(intent);
     }
 
@@ -96,9 +96,9 @@ public class MainActivity extends StandardActivity {
     private final FlashcardSetCreatorDialog.Listener setCreatedListener =
             new FlashcardSetCreatorDialog.Listener() {
                 @Override
-                public void onFlashcardSetCreated(String createdSetName) {
+                public void onFlashcardSetCreated(int createdSetId) {
                     Intent intent = new Intent(MainActivity.this, EditFlashcardSetActivity.class);
-                    intent.putExtra(FLASHCARD_SET_KEY, createdSetName);
+                    intent.putExtra(FLASHCARD_SET_KEY, createdSetId);
                     startActivity(intent);
                 }
             };

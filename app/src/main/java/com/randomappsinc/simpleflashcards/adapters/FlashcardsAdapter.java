@@ -22,12 +22,12 @@ public class FlashcardsAdapter extends BaseAdapter {
     private Context context;
     private List<Flashcard> flashcards;
     private View noContent;
-    private String setName;
+    private int setId;
 
-    public FlashcardsAdapter(Context context, String setName, View noContent) {
+    public FlashcardsAdapter(Context context, int setId, View noContent) {
         this.context = context;
-        this.setName = setName;
-        this.flashcards = DatabaseManager.get().getAllFlashcards(setName);
+        this.setId = setId;
+        this.flashcards = DatabaseManager.get().getAllFlashcards(setId);
         this.noContent = noContent;
         setNoContent();
     }
@@ -38,7 +38,7 @@ public class FlashcardsAdapter extends BaseAdapter {
     }
 
     public void refreshSet() {
-        this.flashcards = DatabaseManager.get().getAllFlashcards(setName);
+        this.flashcards = DatabaseManager.get().getAllFlashcards(setId);
         setNoContent();
         notifyDataSetChanged();
     }
