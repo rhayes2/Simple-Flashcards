@@ -6,7 +6,6 @@ import com.randomappsinc.simpleflashcards.persistence.models.Flashcard;
 import com.randomappsinc.simpleflashcards.persistence.models.FlashcardSet;
 import com.randomappsinc.simpleflashcards.utils.MyApplication;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import io.realm.Case;
@@ -19,7 +18,7 @@ import io.realm.RealmSchema;
 
 public class DatabaseManager {
 
-    private static final int CURRENT_REALM_VERSION = 1;
+    private static final int CURRENT_REALM_VERSION = 2;
 
     private static DatabaseManager instance;
 
@@ -38,6 +37,7 @@ public class DatabaseManager {
     }
 
     private Realm realm;
+    private boolean idMigrationNeeded;
 
     private DatabaseManager() {
         Realm.init(MyApplication.getAppContext());
@@ -47,41 +47,91 @@ public class DatabaseManager {
                 .build();
         Realm.setDefaultConfiguration(realmConfig);
         realm = Realm.getDefaultInstance();
+
+        if (idMigrationNeeded) {
+            addIdsToEverything();
+        }
     }
 
-    private RealmMigration migration = new RealmMigration() {
+    private final RealmMigration migration = new RealmMigration() {
         @Override
         public void migrate(@NonNull DynamicRealm realm, long oldVersion, long newVersion) {
             RealmSchema schema = realm.getSchema();
 
-            // Support for dish tagging
+            // Remove flashcard positioning
             if (oldVersion == 0) {
                 RealmObjectSchema setSchema = schema.get("FlashcardSet");
                 if (setSchema != null) {
                     setSchema.removePrimaryKey();
                     setSchema.removeField("position");
                 }
+                oldVersion++;
+            }
+            // Add IDs to objects
+            if (oldVersion == 1) {
+                RealmObjectSchema setSchema = schema.get("FlashcardSet");
+                if (setSchema != null) {
+                    setSchema.addField("id", int.class);
+                } else {
+                    throw new IllegalStateException("FlashcardSet schema doesn't exist.");
+                }
+                RealmObjectSchema cardSchema = schema.get("Flashcard");
+                if (cardSchema != null) {
+                    cardSchema.addField("id", int.class);
+                } else {
+                    throw new IllegalStateException("Flashcard schema doesn't exist.");
+                }
+                idMigrationNeeded = true;
             }
         }
     };
 
-    public void addFlashcardSet(String setName) {
+    private void addIdsToEverything() {
+        realm.executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(@NonNull Realm realm) {
+                List<FlashcardSet> flashcardSets = realm.where(FlashcardSet.class).findAll();
+                for (FlashcardSet flashcardSet : flashcardSets) {
+                    flashcardSet.setId(getNextSetId());
+                    for (Flashcard flashcard : flashcardSet.getFlashcards()) {
+                        flashcard.setId(getNextFlashcardId());
+                    }
+                }
+            }
+        });
+    }
+
+    public int addFlashcardSet(String setName) {
         try {
             realm.beginTransaction();
             FlashcardSet set = new FlashcardSet();
+            int newSetId = getNextSetId();
+            set.setId(newSetId);
             set.setName(setName);
             realm.copyToRealm(set);
             realm.commitTransaction();
+            return newSetId;
         } catch (Exception e) {
             realm.cancelTransaction();
         }
+        return 0;
     }
 
-    public void renameSet(String oldName, String newName) {
+    private int getNextSetId() {
+        Number number = realm.where(FlashcardSet.class).findAll().max("id");
+        return number == null ? 1 : number.intValue() + 1;
+    }
+
+    private int getNextFlashcardId() {
+        Number number = realm.where(Flashcard.class).findAll().max("id");
+        return number == null ? 1 : number.intValue() + 1;
+    }
+
+    public void renameSet(int setId, String newName) {
         try {
             realm.beginTransaction();
             FlashcardSet set = realm.where(FlashcardSet.class)
-                    .equalTo("name", oldName)
+                    .equalTo("id", setId)
                     .findFirst();
             set.setName(newName);
             realm.commitTransaction();
@@ -90,14 +140,10 @@ public class DatabaseManager {
         }
     }
 
-    public boolean doesSetExist(String setName) {
-        return realm.where(FlashcardSet.class).equalTo("name", setName).findFirst() != null;
-    }
-
-    public void addFlashcard(String question, String answer, String setName) {
+    public void addFlashcard(int setId, String question, String answer) {
         try {
             realm.beginTransaction();
-            FlashcardSet set = realm.where(FlashcardSet.class).equalTo("name", setName).findFirst();
+            FlashcardSet set = realm.where(FlashcardSet.class).equalTo("id", setId).findFirst();
             Flashcard flashcard = new Flashcard();
             flashcard.setQuestion(question);
             flashcard.setAnswer(answer);
@@ -108,17 +154,11 @@ public class DatabaseManager {
         }
     }
 
-    public void updateFlashcard(String oldQuestion, String oldAnswer, String newQuestion,
-                                String newAnswer, String setName) {
+    public void updateFlashcard(int flashcardId, String newQuestion, String newAnswer) {
         try {
             realm.beginTransaction();
-            Flashcard flashcard = realm.where(FlashcardSet.class)
-                    .equalTo("name", setName)
-                    .findFirst()
-                    .getFlashcards()
-                    .where()
-                    .equalTo("question", oldQuestion)
-                    .equalTo("answer", oldAnswer)
+            Flashcard flashcard = realm.where(Flashcard.class)
+                    .equalTo("id", flashcardId)
                     .findFirst();
             flashcard.setQuestion(newQuestion);
             flashcard.setAnswer(newAnswer);
@@ -128,35 +168,23 @@ public class DatabaseManager {
         }
     }
 
-    public void deleteFlashcard(String question, String answer, String setName) {
+    public void deleteFlashcard(int flashcardId) {
         try {
             realm.beginTransaction();
-            FlashcardSet set = realm.where(FlashcardSet.class).equalTo("name", setName).findFirst();
-            set.getFlashcards().where()
-                    .equalTo("question", question)
-                    .equalTo("answer", answer)
-                    .findFirst()
-                    .deleteFromRealm();
+            Flashcard flashcard = realm.where(Flashcard.class).equalTo("id", flashcardId).findFirst();
+            flashcard.deleteFromRealm();
             realm.commitTransaction();
         } catch (Exception e) {
             realm.cancelTransaction();
         }
     }
 
-    public boolean doesFlashcardExist(String setName, String question, String answer) {
-        FlashcardSet set = realm.where(FlashcardSet.class).equalTo("name", setName).findFirst();
-        return set.getFlashcards().where()
-                .equalTo("question", question)
-                .equalTo("answer", answer)
-                .findFirst() != null;
-    }
-
-    public void deleteFlashcardSet(String setName) {
+    public void deleteFlashcardSet(int setId) {
         try {
             realm.beginTransaction();
             FlashcardSet setToRemove = realm
                     .where(FlashcardSet.class)
-                    .equalTo("name", setName)
+                    .equalTo("id", setId)
                     .findFirst();
             setToRemove.deleteFromRealm();
             realm.commitTransaction();
@@ -165,7 +193,7 @@ public class DatabaseManager {
         }
     }
 
-    public List<String> getFlashcardSets(String searchTerm) {
+    public List<FlashcardSet> getFlashcardSets(String searchTerm) {
         List<FlashcardSet> flashcardSets;
         if (searchTerm.trim().isEmpty()) {
             flashcardSets = realm.where(FlashcardSet.class).findAll();
@@ -175,17 +203,26 @@ public class DatabaseManager {
                     .contains("name", searchTerm, Case.INSENSITIVE)
                     .findAll();
         }
-        List<String> setNames = new ArrayList<>();
-        for (FlashcardSet flashcardSet : flashcardSets) {
-            setNames.add(flashcardSet.getName());
-        }
-        return setNames;
+        return flashcardSets;
     }
 
-    public List<Flashcard> getAllFlashcards(String setName) {
+    public List<Flashcard> getAllFlashcards(int setId) {
         return realm.where(FlashcardSet.class)
-                .equalTo("name", setName)
+                .equalTo("id", setId)
                 .findFirst()
                 .getFlashcards();
+    }
+
+    public String getSetName(int setId) {
+        return realm.where(FlashcardSet.class)
+                .equalTo("id", setId)
+                .findFirst()
+                .getName();
+    }
+
+    public Flashcard getFlashcard(int cardId) {
+        return realm.where(Flashcard.class)
+                .equalTo("id", cardId)
+                .findFirst();
     }
 }

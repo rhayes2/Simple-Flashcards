@@ -13,6 +13,7 @@ import com.randomappsinc.simpleflashcards.R;
 import com.randomappsinc.simpleflashcards.activities.EditFlashcardSetActivity;
 import com.randomappsinc.simpleflashcards.activities.MainActivity;
 import com.randomappsinc.simpleflashcards.persistence.DatabaseManager;
+import com.randomappsinc.simpleflashcards.persistence.models.FlashcardSet;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,36 +24,37 @@ import butterknife.ButterKnife;
 public class FlashcardSetsAdapter extends BaseAdapter {
 
     private Context context;
-    private List<String> setNames;
+    private List<FlashcardSet> flashcardSets;
     private TextView noSets;
 
     public FlashcardSetsAdapter(Context context, TextView noSets) {
         this.context = context;
-        this.setNames = new ArrayList<>();
+        this.flashcardSets = new ArrayList<>();
         this.noSets = noSets;
     }
 
     public void refreshContent(String searchTerm) {
-        setNames.clear();
-        setNames.addAll(DatabaseManager.get().getFlashcardSets(searchTerm));
+        flashcardSets.clear();
+        flashcardSets.addAll(DatabaseManager.get().getFlashcardSets(searchTerm));
         setNoContent();
         notifyDataSetChanged();
     }
 
     private void setNoContent() {
-        int viewVisibility = setNames.isEmpty() ? View.VISIBLE : View.GONE;
+        int viewVisibility = flashcardSets.isEmpty() ? View.VISIBLE : View.GONE;
         noSets.setVisibility(viewVisibility);
     }
 
     public int getCount() {
-        return setNames.size();
+        return flashcardSets.size();
     }
 
-    public String getItem(int position)
-    {
-        return setNames.get(position);
+    @Override
+    public FlashcardSet getItem(int position) {
+        return flashcardSets.get(position);
     }
 
+    @Override
     public long getItemId(int position) {
         return getItem(position).hashCode();
     }
@@ -84,13 +86,13 @@ public class FlashcardSetsAdapter extends BaseAdapter {
             holder = (FlashcardSetViewHolder) view.getTag();
         }
 
-        holder.setName.setText(setNames.get(position));
+        holder.setName.setText(flashcardSets.get(position).getName());
         holder.edit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View view) {
                 Intent intent = new Intent(context, EditFlashcardSetActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
-                intent.putExtra(MainActivity.FLASHCARD_SET_KEY, getItem(position));
+                intent.putExtra(MainActivity.FLASHCARD_SET_KEY, getItem(position).getId());
                 context.startActivity(intent);
             }
         });

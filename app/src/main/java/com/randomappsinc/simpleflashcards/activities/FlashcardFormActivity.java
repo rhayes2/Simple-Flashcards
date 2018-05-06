@@ -14,6 +14,7 @@ import com.joanzapata.iconify.IconDrawable;
 import com.joanzapata.iconify.fonts.IoniconsIcons;
 import com.randomappsinc.simpleflashcards.R;
 import com.randomappsinc.simpleflashcards.persistence.DatabaseManager;
+import com.randomappsinc.simpleflashcards.persistence.models.Flashcard;
 import com.randomappsinc.simpleflashcards.utils.UIUtils;
 import com.rey.material.widget.Button;
 
@@ -24,8 +25,7 @@ import butterknife.OnClick;
 public class FlashcardFormActivity extends StandardActivity {
 
     public static final String UPDATE_MODE_KEY = "updateMode";
-    public static final String QUESTION_KEY = "question";
-    public static final String ANSWER_KEY = "answer";
+    public static final String FLASHCARD_ID_KEY = "flashcardId";
 
     @BindView(R.id.parent) View parent;
     @BindView(R.id.question) EditText question;
@@ -33,9 +33,8 @@ public class FlashcardFormActivity extends StandardActivity {
     @BindView(R.id.flashcard_submit) Button submit;
 
     private boolean updateMode;
-    private String setName;
-    private String currentQuestion;
-    private String currentAnswer;
+    private int setId;
+    private int flashcardId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,15 +46,14 @@ public class FlashcardFormActivity extends StandardActivity {
         updateMode = getIntent().getBooleanExtra(UPDATE_MODE_KEY, false);
         if (updateMode) {
             submit.setText(R.string.update_flashcard);
-            currentQuestion = getIntent().getStringExtra(QUESTION_KEY);
-            question.setText(currentQuestion);
-            currentAnswer = getIntent().getStringExtra(ANSWER_KEY);
-            answer.setText(currentAnswer);
-        }
-        else {
+            flashcardId = getIntent().getIntExtra(FLASHCARD_ID_KEY, 0);
+            Flashcard flashcard = DatabaseManager.get().getFlashcard(flashcardId);
+            question.setText(flashcard.getQuestion());
+            answer.setText(flashcard.getAnswer());
+        } else {
             submit.setText(R.string.add_flashcard);
         }
-        setName = getIntent().getStringExtra(MainActivity.FLASHCARD_SET_KEY);
+        setId = getIntent().getIntExtra(MainActivity.FLASHCARD_SET_KEY, 0);
     }
 
     @OnClick(R.id.flashcard_submit)
@@ -65,27 +63,18 @@ public class FlashcardFormActivity extends StandardActivity {
         String newAnswer = answer.getText().toString().trim();
         if (newQuestion.isEmpty()) {
             UIUtils.showSnackbar(parent, getString(R.string.blank_question), Snackbar.LENGTH_LONG);
-        }
-        else if (newAnswer.isEmpty()) {
+        } else if (newAnswer.isEmpty()) {
             UIUtils.showSnackbar(parent, getString(R.string.blank_answer), Snackbar.LENGTH_LONG);
-        }
-        else {
-            if (DatabaseManager.get().doesFlashcardExist(setName, newQuestion, newAnswer)) {
-                UIUtils.showSnackbar(parent, getString(R.string.dupe_flashcard), Snackbar.LENGTH_LONG);
-            }
-            else {
-                if (updateMode) {
-                    DatabaseManager.get().updateFlashcard(currentQuestion, currentAnswer,
-                            newQuestion, newAnswer, setName);
-                    finish();
-                }
-                else {
-                    DatabaseManager.get().addFlashcard(newQuestion, newAnswer, setName);
-                    UIUtils.showSnackbar(parent, getString(R.string.flashcard_added), Snackbar.LENGTH_SHORT);
-                    question.setText("");
-                    answer.setText("");
-                    question.requestFocus();
-                }
+        } else {
+            if (updateMode) {
+                DatabaseManager.get().updateFlashcard(flashcardId, newQuestion, newAnswer);
+                finish();
+            } else {
+                DatabaseManager.get().addFlashcard(setId, newQuestion, newAnswer);
+                UIUtils.showSnackbar(parent, getString(R.string.flashcard_added), Snackbar.LENGTH_SHORT);
+                question.setText("");
+                answer.setText("");
+                question.requestFocus();
             }
         }
     }
@@ -113,7 +102,7 @@ public class FlashcardFormActivity extends StandardActivity {
                     .onPositive(new MaterialDialog.SingleButtonCallback() {
                         @Override
                         public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                            DatabaseManager.get().deleteFlashcard(currentQuestion, currentAnswer, setName);
+                            DatabaseManager.get().deleteFlashcard(flashcardId);
                             finish();
                         }
                     })
