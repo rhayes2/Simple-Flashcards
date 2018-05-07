@@ -7,6 +7,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -16,7 +17,6 @@ import com.randomappsinc.simpleflashcards.R;
 import com.randomappsinc.simpleflashcards.persistence.DatabaseManager;
 import com.randomappsinc.simpleflashcards.persistence.models.Flashcard;
 import com.randomappsinc.simpleflashcards.utils.UIUtils;
-import com.rey.material.widget.Button;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -30,7 +30,7 @@ public class FlashcardFormActivity extends StandardActivity {
     @BindView(R.id.parent) View parent;
     @BindView(R.id.question) EditText question;
     @BindView(R.id.answer) EditText answer;
-    @BindView(R.id.flashcard_submit) Button submit;
+    @BindView(R.id.flashcard_submit) TextView submit;
 
     private boolean updateMode;
     private int setId;

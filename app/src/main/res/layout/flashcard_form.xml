@@ -12,7 +12,7 @@
         android:layout_height="match_parent">
 
         <LinearLayout
-            android:padding="10dp"
+            android:padding="8dp"
             android:focusable="true"
             android:focusableInTouchMode="true"
             android:orientation="vertical"
@@ -22,20 +22,18 @@
             <EditText
                 android:id="@+id/question"
                 android:hint="@string/question"
-                style="@style/flashcard_form_input" />
+                style="@style/flashcard_form_input"/>
 
             <EditText
                 android:id="@+id/answer"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="8dp"
                 android:hint="@string/answer"
-                style="@style/flashcard_form_input" />
+                style="@style/flashcard_form_input"/>
 
-            <com.rey.material.widget.Button
-                xmlns:app="http://schemas.android.com/apk/res-auto"
+            <TextView
                 android:id="@+id/flashcard_submit"
-                android:layout_marginTop="10dp"
-                style="@style/ripple_button_style"
-                app:rd_style="@style/button_ripple_attributes"/>
+                android:layout_marginTop="8dp"
+                style="@style/rounded_button"/>
         </LinearLayout>
     </ScrollView>
 </android.support.design.widget.CoordinatorLayout>

@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:padding="8dp"
     android:background="@color/white"
     android:orientation="vertical"
@@ -66,14 +65,13 @@
                     android:orientation="vertical"
                     android:gravity="center">
 
-                    <com.rey.material.widget.Button
+                    <TextView
                         android:id="@+id/show_answer"
-                        android:paddingLeft="50dp"
-                        android:paddingRight="50dp"
+                        android:paddingLeft="48dp"
+                        android:paddingRight="48dp"
                         android:layout_width="wrap_content"
                         android:text="@string/show"
-                        style="@style/ripple_button_style"
-                        app:rd_style="@style/button_ripple_attributes"/>
+                        style="@style/rounded_button"/>
 
                     <TextView
                         android:id="@+id/answer"
