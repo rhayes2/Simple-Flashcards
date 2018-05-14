@@ -17,14 +17,17 @@ import butterknife.Unbinder;
 
 public class FlashcardFragment extends Fragment {
 
-    public static FlashcardFragment create(int flashcardId) {
+    public static FlashcardFragment create(int flashcardId, int flashcardPosition, int setSize) {
         FlashcardFragment flashcardFragment = new FlashcardFragment();
         Bundle bundle = new Bundle();
         bundle.putInt(Constants.FLASHCARD_ID_KEY, flashcardId);
+        bundle.putInt(Constants.FLASHCARD_POSITION_KEY, flashcardPosition);
+        bundle.putInt(Constants.FLASHCARD_SET_SIZE_KEY, setSize);
         flashcardFragment.setArguments(bundle);
         return flashcardFragment;
     }
 
+    private Flashcard flashcard;
     private Unbinder unbinder;
 
     @Override
@@ -33,9 +36,13 @@ public class FlashcardFragment extends Fragment {
         unbinder = ButterKnife.bind(this, rootView);
 
         int flashcardId = getArguments().getInt(Constants.FLASHCARD_ID_KEY);
-        Flashcard flashcard = DatabaseManager.get().getFlashcard(flashcardId);
+        flashcard = DatabaseManager.get().getFlashcard(flashcardId);
 
         return rootView;
+    }
+
+    private void loadFlashcardIntoView() {
+
     }
 
     @Override

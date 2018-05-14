@@ -1,10 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="study_mode">Study mode</string>
-    <string name="random_flashcard">Random flashcard</string>
-    <string name="next_flashcard">Next flashcard</string>
-    <string name="previous_flashcard">Previous flashcard</string>
+    <string name="shuffle">Shuffle</string>
     <string name="question_header"><u>Question</u></string>
     <string name="answer_header"><u>Answer</u></string>
-    <string name="show">Show</string>
 </resources>
