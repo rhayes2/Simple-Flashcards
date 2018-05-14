@@ -16,6 +16,7 @@ import com.joanzapata.iconify.fonts.IoniconsIcons;
 import com.randomappsinc.simpleflashcards.R;
 import com.randomappsinc.simpleflashcards.persistence.DatabaseManager;
 import com.randomappsinc.simpleflashcards.persistence.models.Flashcard;
+import com.randomappsinc.simpleflashcards.utils.Constants;
 import com.randomappsinc.simpleflashcards.utils.UIUtils;
 
 import butterknife.BindView;
@@ -53,7 +54,7 @@ public class FlashcardFormActivity extends StandardActivity {
         } else {
             submit.setText(R.string.add_flashcard);
         }
-        setId = getIntent().getIntExtra(MainActivity.FLASHCARD_SET_KEY, 0);
+        setId = getIntent().getIntExtra(Constants.FLASHCARD_SET_ID_KEY, 0);
     }
 
     @OnClick(R.id.flashcard_submit)

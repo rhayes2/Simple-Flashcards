@@ -18,6 +18,7 @@ import com.randomappsinc.simpleflashcards.R;
 import com.randomappsinc.simpleflashcards.adapters.FlashcardSetsAdapter;
 import com.randomappsinc.simpleflashcards.dialogs.FlashcardSetCreatorDialog;
 import com.randomappsinc.simpleflashcards.persistence.PreferencesManager;
+import com.randomappsinc.simpleflashcards.utils.Constants;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -26,8 +27,6 @@ import butterknife.OnItemClick;
 import butterknife.OnTextChanged;
 
 public class MainActivity extends StandardActivity {
-
-    public static final String FLASHCARD_SET_KEY = "flashcardSet";
 
     @BindView(R.id.parent) View parent;
     @BindView(R.id.flashcard_set_search) EditText setSearch;
@@ -84,7 +83,7 @@ public class MainActivity extends StandardActivity {
     @OnItemClick(R.id.flashcard_sets)
     public void onFlashcardSetClick(int position) {
         Intent intent = new Intent(this, StudyModeActivity.class);
-        intent.putExtra(FLASHCARD_SET_KEY, adapter.getItem(position).getId());
+        intent.putExtra(Constants.FLASHCARD_SET_ID_KEY, adapter.getItem(position).getId());
         startActivity(intent);
     }
 
@@ -98,7 +97,7 @@ public class MainActivity extends StandardActivity {
                 @Override
                 public void onFlashcardSetCreated(int createdSetId) {
                     Intent intent = new Intent(MainActivity.this, EditFlashcardSetActivity.class);
-                    intent.putExtra(FLASHCARD_SET_KEY, createdSetId);
+                    intent.putExtra(Constants.FLASHCARD_SET_ID_KEY, createdSetId);
                     startActivity(intent);
                 }
             };

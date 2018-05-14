@@ -14,8 +14,9 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import com.joanzapata.iconify.IconDrawable;
 import com.joanzapata.iconify.fonts.IoniconsIcons;
 import com.randomappsinc.simpleflashcards.R;
-import com.randomappsinc.simpleflashcards.adapters.FlashcardsAdapter;
+import com.randomappsinc.simpleflashcards.adapters.FlashcardsOverviewAdapter;
 import com.randomappsinc.simpleflashcards.persistence.DatabaseManager;
+import com.randomappsinc.simpleflashcards.utils.Constants;
 
 import butterknife.BindString;
 import butterknife.BindView;
@@ -30,7 +31,7 @@ public class EditFlashcardSetActivity extends StandardActivity {
     @BindView(R.id.add_flashcard) FloatingActionButton addFlashcard;
     @BindString(R.string.new_flashcard_set_name) String newSetName;
 
-    private FlashcardsAdapter adapter;
+    private FlashcardsOverviewAdapter adapter;
     private int setId;
 
     @Override
@@ -40,13 +41,13 @@ public class EditFlashcardSetActivity extends StandardActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         ButterKnife.bind(this);
 
-        setId = getIntent().getIntExtra(MainActivity.FLASHCARD_SET_KEY, 0);
+        setId = getIntent().getIntExtra(Constants.FLASHCARD_SET_ID_KEY, 0);
         setTitle(DatabaseManager.get().getSetName(setId));
 
         addFlashcard.setImageDrawable(
                 new IconDrawable(this, IoniconsIcons.ion_android_add)
                         .colorRes(R.color.white));
-        adapter = new FlashcardsAdapter(this, setId, noFlashcards);
+        adapter = new FlashcardsOverviewAdapter(this, setId, noFlashcards);
         flashcards.setAdapter(adapter);
     }
 
@@ -67,7 +68,7 @@ public class EditFlashcardSetActivity extends StandardActivity {
     @OnClick(R.id.add_flashcard)
     public void addFlashcard() {
         Intent intent = new Intent(this, FlashcardFormActivity.class);
-        intent.putExtra(MainActivity.FLASHCARD_SET_KEY, setId);
+        intent.putExtra(Constants.FLASHCARD_SET_ID_KEY, setId);
         startActivity(intent);
     }
 

@@ -11,6 +11,7 @@ import com.joanzapata.iconify.fonts.IoniconsIcons;
 import com.randomappsinc.simpleflashcards.R;
 import com.randomappsinc.simpleflashcards.persistence.DatabaseManager;
 import com.randomappsinc.simpleflashcards.persistence.models.Flashcard;
+import com.randomappsinc.simpleflashcards.utils.Constants;
 import com.randomappsinc.simpleflashcards.utils.FlashcardUtils;
 
 import java.util.List;
@@ -37,7 +38,7 @@ public class StudyModeActivity extends StandardActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         ButterKnife.bind(this);
 
-        int setId = getIntent().getIntExtra(MainActivity.FLASHCARD_SET_KEY, 0);
+        int setId = getIntent().getIntExtra(Constants.FLASHCARD_SET_ID_KEY, 0);
         setTitle(DatabaseManager.get().getSetName(setId));
         flashcards = DatabaseManager.get().getAllFlashcards(setId);
         if (flashcards.size() == 0) {

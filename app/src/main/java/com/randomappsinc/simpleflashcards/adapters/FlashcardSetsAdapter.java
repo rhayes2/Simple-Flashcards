@@ -11,9 +11,9 @@ import android.widget.TextView;
 import com.joanzapata.iconify.widget.IconTextView;
 import com.randomappsinc.simpleflashcards.R;
 import com.randomappsinc.simpleflashcards.activities.EditFlashcardSetActivity;
-import com.randomappsinc.simpleflashcards.activities.MainActivity;
 import com.randomappsinc.simpleflashcards.persistence.DatabaseManager;
 import com.randomappsinc.simpleflashcards.persistence.models.FlashcardSet;
+import com.randomappsinc.simpleflashcards.utils.Constants;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -92,7 +92,7 @@ public class FlashcardSetsAdapter extends BaseAdapter {
             public void onClick(final View view) {
                 Intent intent = new Intent(context, EditFlashcardSetActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
-                intent.putExtra(MainActivity.FLASHCARD_SET_KEY, getItem(position).getId());
+                intent.putExtra(Constants.FLASHCARD_SET_ID_KEY, getItem(position).getId());
                 context.startActivity(intent);
             }
         });

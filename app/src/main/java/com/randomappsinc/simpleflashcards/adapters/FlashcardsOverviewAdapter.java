@@ -17,14 +17,14 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class FlashcardsAdapter extends BaseAdapter {
+public class FlashcardsOverviewAdapter extends BaseAdapter {
 
     private Context context;
     private List<Flashcard> flashcards;
     private View noContent;
     private int setId;
 
-    public FlashcardsAdapter(Context context, int setId, View noContent) {
+    public FlashcardsOverviewAdapter(Context context, int setId, View noContent) {
         this.context = context;
         this.setId = setId;
         this.flashcards = DatabaseManager.get().getAllFlashcards(setId);
