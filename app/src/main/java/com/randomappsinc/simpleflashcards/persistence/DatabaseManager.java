@@ -18,7 +18,7 @@ import io.realm.RealmSchema;
 
 public class DatabaseManager {
 
-    private static final int CURRENT_REALM_VERSION = 2;
+    private static final int CURRENT_REALM_VERSION = 3;
 
     private static DatabaseManager instance;
 
@@ -67,6 +67,7 @@ public class DatabaseManager {
                 }
                 oldVersion++;
             }
+
             // Add IDs to objects
             if (oldVersion == 1) {
                 RealmObjectSchema setSchema = schema.get("FlashcardSet");
@@ -82,6 +83,18 @@ public class DatabaseManager {
                     throw new IllegalStateException("Flashcard schema doesn't exist.");
                 }
                 idMigrationNeeded = true;
+                oldVersion++;
+            }
+
+            // Rename "question" and "answer" to "term" and "definition"
+            if (oldVersion == 2) {
+                RealmObjectSchema cardSchema = schema.get("Flashcard");
+                if (cardSchema != null) {
+                    cardSchema.renameField("question", "term");
+                    cardSchema.renameField("answer", "definition");
+                } else {
+                    throw new IllegalStateException("Flashcard schema doesn't exist.");
+                }
             }
         }
     };
@@ -145,8 +158,8 @@ public class DatabaseManager {
             realm.beginTransaction();
             FlashcardSet set = realm.where(FlashcardSet.class).equalTo("id", setId).findFirst();
             Flashcard flashcard = new Flashcard();
-            flashcard.setQuestion(question);
-            flashcard.setAnswer(answer);
+            flashcard.setTerm(question);
+            flashcard.setDefinition(answer);
             set.getFlashcards().add(flashcard);
             realm.commitTransaction();
         } catch (Exception e) {
@@ -160,8 +173,8 @@ public class DatabaseManager {
             Flashcard flashcard = realm.where(Flashcard.class)
                     .equalTo("id", flashcardId)
                     .findFirst();
-            flashcard.setQuestion(newQuestion);
-            flashcard.setAnswer(newAnswer);
+            flashcard.setTerm(newQuestion);
+            flashcard.setDefinition(newAnswer);
             realm.commitTransaction();
         } catch (Exception e) {
             realm.cancelTransaction();

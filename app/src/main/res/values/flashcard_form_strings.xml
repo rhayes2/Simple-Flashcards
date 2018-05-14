@@ -3,12 +3,12 @@
     <string name="flashcard_form">Flashcard form</string>
     <string name="add_flashcard">Add flashcard</string>
     <string name="update_flashcard">Update flashcard</string>
-    <string name="question">Question</string>
-    <string name="answer">Answer</string>
+    <string name="term">Term</string>
+    <string name="definition">Definition</string>
     <string name="flashcard_added">Flashcard added.</string>
 
-    <string name="blank_question">Questions cannot be blank.</string>
-    <string name="blank_answer">Answers cannot be blank.</string>
+    <string name="blank_term">Terms cannot be blank.</string>
+    <string name="blank_definition">Definitions cannot be blank.</string>
 
     <string name="delete_flashcard">Delete flashcard</string>
     <string name="flashcard_delete_title">Confirm flashcard deletion</string>

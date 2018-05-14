@@ -20,14 +20,14 @@
             android:layout_height="wrap_content">
 
             <EditText
-                android:id="@+id/question"
-                android:hint="@string/question"
+                android:id="@+id/term"
+                android:hint="@string/term"
                 style="@style/flashcard_form_input"/>
 
             <EditText
-                android:id="@+id/answer"
+                android:id="@+id/definition"
                 android:layout_marginTop="8dp"
-                android:hint="@string/answer"
+                android:hint="@string/definition"
                 style="@style/flashcard_form_input"/>
 
             <TextView

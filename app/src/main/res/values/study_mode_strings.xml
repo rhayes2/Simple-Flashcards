@@ -2,6 +2,6 @@
 <resources>
     <string name="study_mode">Study mode</string>
     <string name="shuffle">Shuffle</string>
-    <string name="question_header"><u>Question</u></string>
-    <string name="answer_header"><u>Answer</u></string>
+
+    <string name="speaker_icon">(ion-speakerphone)</string>
 </resources>

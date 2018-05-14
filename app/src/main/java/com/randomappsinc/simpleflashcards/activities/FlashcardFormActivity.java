@@ -29,8 +29,8 @@ public class FlashcardFormActivity extends StandardActivity {
     public static final String FLASHCARD_ID_KEY = "flashcardId";
 
     @BindView(R.id.parent) View parent;
-    @BindView(R.id.question) EditText question;
-    @BindView(R.id.answer) EditText answer;
+    @BindView(R.id.term) EditText question;
+    @BindView(R.id.definition) EditText answer;
     @BindView(R.id.flashcard_submit) TextView submit;
 
     private boolean updateMode;
@@ -49,8 +49,8 @@ public class FlashcardFormActivity extends StandardActivity {
             submit.setText(R.string.update_flashcard);
             flashcardId = getIntent().getIntExtra(FLASHCARD_ID_KEY, 0);
             Flashcard flashcard = DatabaseManager.get().getFlashcard(flashcardId);
-            question.setText(flashcard.getQuestion());
-            answer.setText(flashcard.getAnswer());
+            question.setText(flashcard.getTerm());
+            answer.setText(flashcard.getDefinition());
         } else {
             submit.setText(R.string.add_flashcard);
         }
@@ -63,9 +63,9 @@ public class FlashcardFormActivity extends StandardActivity {
         String newQuestion = question.getText().toString().trim();
         String newAnswer = answer.getText().toString().trim();
         if (newQuestion.isEmpty()) {
-            UIUtils.showSnackbar(parent, getString(R.string.blank_question), Snackbar.LENGTH_LONG);
+            UIUtils.showSnackbar(parent, getString(R.string.blank_term), Snackbar.LENGTH_LONG);
         } else if (newAnswer.isEmpty()) {
-            UIUtils.showSnackbar(parent, getString(R.string.blank_answer), Snackbar.LENGTH_LONG);
+            UIUtils.showSnackbar(parent, getString(R.string.blank_definition), Snackbar.LENGTH_LONG);
         } else {
             if (updateMode) {
                 DatabaseManager.get().updateFlashcard(flashcardId, newQuestion, newAnswer);

@@ -59,8 +59,8 @@ public class FlashcardsOverviewAdapter extends BaseAdapter {
     }
 
     public class FlashcardViewHolder {
-        @BindView(R.id.question) public TextView question;
-        @BindView(R.id.answer) public TextView answer;
+        @BindView(R.id.term) TextView term;
+        @BindView(R.id.definition) TextView definition;
 
         FlashcardViewHolder(View view) {
             ButterKnife.bind(this, view);
@@ -80,10 +80,10 @@ public class FlashcardsOverviewAdapter extends BaseAdapter {
             holder = (FlashcardViewHolder) view.getTag();
         }
 
-        String question = "<b>" + context.getString(R.string.question_prefix) + "</b>" + flashcards.get(position).getQuestion();
-        holder.question.setText(Html.fromHtml(question));
-        String answer = "<b>" + context.getString(R.string.answer_prefix) + "</b>" + flashcards.get(position).getAnswer();
-        holder.answer.setText(Html.fromHtml(answer));
+        String question = "<b>" + context.getString(R.string.term_prefix) + "</b>" + flashcards.get(position).getTerm();
+        holder.term.setText(Html.fromHtml(question));
+        String answer = "<b>" + context.getString(R.string.definition_prefix) + "</b>" + flashcards.get(position).getDefinition();
+        holder.definition.setText(Html.fromHtml(answer));
 
         return view;
     }

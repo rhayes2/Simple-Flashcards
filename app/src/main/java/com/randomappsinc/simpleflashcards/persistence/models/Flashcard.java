@@ -5,8 +5,8 @@ import io.realm.RealmObject;
 public class Flashcard extends RealmObject {
 
     private int id;
-    private String question;
-    private String answer;
+    private String term;
+    private String definition;
 
     public int getId() {
         return id;
@@ -16,19 +16,19 @@ public class Flashcard extends RealmObject {
         this.id = id;
     }
 
-    public String getQuestion() {
-        return question;
+    public String getTerm() {
+        return term;
     }
 
-    public void setQuestion(String question) {
-        this.question = question;
+    public void setTerm(String term) {
+        this.term = term;
     }
 
-    public String getAnswer() {
-        return answer;
+    public String getDefinition() {
+        return definition;
     }
 
-    public void setAnswer(String answer) {
-        this.answer = answer;
+    public void setDefinition(String definition) {
+        this.definition = definition;
     }
 }
