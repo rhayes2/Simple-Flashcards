@@ -8,6 +8,7 @@ import com.randomappsinc.simpleflashcards.utils.MyApplication;
 public class PreferencesManager {
 
     private static final String FIRST_TIME_USER = "firstTimeUser";
+    private static final String NUM_OPENS_KEY = "numOpens";
 
     private SharedPreferences prefs;
     private static PreferencesManager instance;
@@ -36,5 +37,13 @@ public class PreferencesManager {
 
     public void rememberWelcome() {
         prefs.edit().putBoolean(FIRST_TIME_USER, false).apply();
+    }
+
+    public int getNumAppOpens() {
+        return prefs.getInt(NUM_OPENS_KEY, 0);
+    }
+
+    public void logAppOpen() {
+        prefs.edit().putInt(NUM_OPENS_KEY, getNumAppOpens() + 1).apply();
     }
 }

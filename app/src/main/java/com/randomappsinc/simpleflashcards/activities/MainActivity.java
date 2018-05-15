@@ -19,6 +19,7 @@ import com.randomappsinc.simpleflashcards.adapters.FlashcardSetsAdapter;
 import com.randomappsinc.simpleflashcards.dialogs.FlashcardSetCreatorDialog;
 import com.randomappsinc.simpleflashcards.persistence.PreferencesManager;
 import com.randomappsinc.simpleflashcards.utils.Constants;
+import com.randomappsinc.simpleflashcards.utils.UIUtils;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -44,6 +45,7 @@ public class MainActivity extends StandardActivity {
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
 
+        PreferencesManager.get().logAppOpen();
         if (PreferencesManager.get().isFirstTimeUser()) {
             PreferencesManager.get().rememberWelcome();
             new MaterialDialog.Builder(this)
@@ -51,6 +53,8 @@ public class MainActivity extends StandardActivity {
                     .content(R.string.ask_for_help)
                     .positiveText(android.R.string.yes)
                     .show();
+        } else {
+            UIUtils.askForRatingIfAppropriate(this);
         }
 
         addFlashcardSet.setImageDrawable(new IconDrawable(this, IoniconsIcons.ion_android_add)
