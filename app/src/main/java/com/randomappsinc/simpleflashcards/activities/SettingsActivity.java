@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.ShareCompat;
 import android.view.View;
 import android.widget.ListView;
 
@@ -48,9 +49,18 @@ public class SettingsActivity extends StandardActivity {
                 startActivity(Intent.createChooser(sendIntent, sendEmail));
                 return;
             case 1:
+                Intent shareIntent = ShareCompat.IntentBuilder.from(this)
+                        .setType("text/plain")
+                        .setText(getString(R.string.share_app_message))
+                        .getIntent();
+                if (shareIntent.resolveActivity(getPackageManager()) != null) {
+                    startActivity(shareIntent);
+                }
+                return;
+            case 2:
                 intent = new Intent(Intent.ACTION_VIEW, Uri.parse(OTHER_APPS_URL));
                 break;
-            case 2:
+            case 3:
                 Uri uri =  Uri.parse("market://details?id=" + getApplicationContext().getPackageName());
                 intent = new Intent(Intent.ACTION_VIEW, uri);
                 if (!(getPackageManager().queryIntentActivities(intent, 0).size() > 0)) {
@@ -58,7 +68,7 @@ public class SettingsActivity extends StandardActivity {
                     return;
                 }
                 break;
-            case 3:
+            case 4:
                 intent = new Intent(Intent.ACTION_VIEW, Uri.parse(REPO_URL));
                 break;
         }
