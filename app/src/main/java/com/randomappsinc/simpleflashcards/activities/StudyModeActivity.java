@@ -7,11 +7,14 @@ import android.widget.SeekBar;
 import com.randomappsinc.simpleflashcards.R;
 import com.randomappsinc.simpleflashcards.adapters.FlashcardsBrowsingAdapter;
 import com.randomappsinc.simpleflashcards.persistence.DatabaseManager;
+import com.randomappsinc.simpleflashcards.persistence.models.FlashcardSet;
 import com.randomappsinc.simpleflashcards.utils.Constants;
+import com.randomappsinc.simpleflashcards.utils.UIUtils;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import butterknife.OnPageChange;
 
 public class StudyModeActivity extends StandardActivity {
 
@@ -27,17 +30,44 @@ public class StudyModeActivity extends StandardActivity {
         ButterKnife.bind(this);
 
         int setId = getIntent().getIntExtra(Constants.FLASHCARD_SET_ID_KEY, 0);
-        setTitle(DatabaseManager.get().getSetName(setId));
+        FlashcardSet flashcardSet = DatabaseManager.get().getFlashcardSet(setId);
+        setTitle(flashcardSet.getName());
 
         flashcardsBrowsingAdapter = new FlashcardsBrowsingAdapter(getSupportFragmentManager(), setId);
         flashcardsPager.setAdapter(flashcardsBrowsingAdapter);
 
-        flashcardsSlider.setMax(100);
+        flashcardsSlider.setMax(flashcardSet.getFlashcards().size() - 1);
+        flashcardsSlider.setOnSeekBarChangeListener(flashcardsSliderListener);
+    }
+
+    private final SeekBar.OnSeekBarChangeListener flashcardsSliderListener =
+            new SeekBar.OnSeekBarChangeListener() {
+                @Override
+                public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                    if (fromUser) {
+                        flashcardsPager.setCurrentItem(progress);
+                    }
+                }
+
+                @Override
+                public void onStartTrackingTouch(SeekBar seekBar) {}
+
+                @Override
+                public void onStopTrackingTouch(SeekBar seekBar) {}
+            };
+
+    @OnPageChange(R.id.flashcards_pager)
+    public void onFlashcardChanged(int position) {
+        flashcardsSlider.setProgress(position);
     }
 
     @OnClick(R.id.shuffle)
     public void shuffleFlashcards() {
         flashcardsBrowsingAdapter.shuffle();
+        flashcardsPager.setAdapter(flashcardsBrowsingAdapter);
+        flashcardsPager.setCurrentItem(0);
+        flashcardsSlider.setProgress(0);
+        UIUtils.showShortToast(R.string.flashcard_set_shuffled);
     }
 
     @OnClick(R.id.back)

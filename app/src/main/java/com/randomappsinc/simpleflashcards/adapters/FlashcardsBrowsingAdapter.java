@@ -27,7 +27,6 @@ public class FlashcardsBrowsingAdapter extends FragmentStatePagerAdapter {
 
     public void shuffle() {
         Collections.shuffle(flashcardIds);
-        notifyDataSetChanged();
     }
 
     @Override

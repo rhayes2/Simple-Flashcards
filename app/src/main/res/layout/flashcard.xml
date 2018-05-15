@@ -45,7 +45,7 @@
             android:padding="12dp"
             android:text="@string/speak_icon"
             android:textColor="@color/dark_gray"
-            android:textSize="24dp"
+            android:textSize="36dp"
             android:gravity="center"/>
 
         <FrameLayout
@@ -60,7 +60,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:textColor="@color/dark_gray"
-                android:textSize="17sp"/>
+                android:textSize="21sp"/>
         </FrameLayout>
     </RelativeLayout>
 </FrameLayout>

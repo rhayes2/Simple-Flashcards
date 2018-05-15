@@ -4,7 +4,9 @@
     <string name="term_underlined"><u>Term</u></string>
     <string name="definition_underlined"><u>Definition</u></string>
 
-    <string name="speak_icon">{ion-android-microphone}</string>
+    <string name="speak_icon">{ion-ios-volume-high}</string>
     <string name="back_arrow_icon">{ion-android-arrow-back}</string>
     <string name="shuffle_icon">{ion-shuffle}</string>
+
+    <string name="flashcard_set_shuffled">Flashcard set shuffled.</string>
 </resources>

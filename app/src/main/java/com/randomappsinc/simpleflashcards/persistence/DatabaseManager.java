@@ -239,4 +239,10 @@ public class DatabaseManager {
                 .equalTo("id", cardId)
                 .findFirst();
     }
+
+    public FlashcardSet getFlashcardSet(int setId) {
+        return realm.where(FlashcardSet.class)
+                .equalTo("id", setId)
+                .findFirst();
+    }
 }
