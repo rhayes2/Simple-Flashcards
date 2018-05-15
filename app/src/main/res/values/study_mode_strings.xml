@@ -2,6 +2,8 @@
 <resources>
     <string name="study_mode">Study mode</string>
     <string name="shuffle">Shuffle</string>
+    <string name="term_underlined"><u>Term</u></string>
+    <string name="definition_underlined"><u>Definition</u></string>
 
-    <string name="speaker_icon">(ion-speakerphone)</string>
+    <string name="speak_icon">{ion-android-microphone}</string>
 </resources>

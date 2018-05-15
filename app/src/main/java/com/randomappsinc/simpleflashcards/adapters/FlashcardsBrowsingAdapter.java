@@ -27,7 +27,10 @@ public class FlashcardsBrowsingAdapter extends FragmentStatePagerAdapter {
 
     @Override
     public Fragment getItem(int position) {
-        return FlashcardFragment.create(flashcards.get(position).getId(), position, flashcards.size());
+        return FlashcardFragment.create(
+                flashcards.get(position).getId(),
+                position + 1,
+                flashcards.size());
     }
 
     @Override
