@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="study_mode">Study mode</string>
-    <string name="shuffle">Shuffle</string>
     <string name="term_underlined"><u>Term</u></string>
     <string name="definition_underlined"><u>Definition</u></string>
 
     <string name="speak_icon">{ion-android-microphone}</string>
+    <string name="back_arrow_icon">{ion-android-arrow-back}</string>
+    <string name="shuffle_icon">{ion-shuffle}</string>
 </resources>

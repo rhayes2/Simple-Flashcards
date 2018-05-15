@@ -1,6 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v4.view.ViewPager
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/flashcards_pager"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"/>
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/theater_black"
+    tools:ignore="RtlHardcoded">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <com.joanzapata.iconify.widget.IconTextView
+            android:id="@+id/back"
+            android:text="@string/back_arrow_icon"
+            android:layout_alignParentLeft="true"
+            style="@style/action_bar_icon"/>
+
+        <com.joanzapata.iconify.widget.IconTextView
+            android:id="@+id/shuffle"
+            android:text="@string/shuffle_icon"
+            android:layout_alignParentRight="true"
+            style="@style/action_bar_icon"/>
+    </RelativeLayout>
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/flashcards_pager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+</LinearLayout>

@@ -8,33 +8,38 @@ import com.randomappsinc.simpleflashcards.fragments.FlashcardFragment;
 import com.randomappsinc.simpleflashcards.persistence.DatabaseManager;
 import com.randomappsinc.simpleflashcards.persistence.models.Flashcard;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 public class FlashcardsBrowsingAdapter extends FragmentStatePagerAdapter {
 
-    private List<Flashcard> flashcards;
+    private List<Integer> flashcardIds;
 
     public FlashcardsBrowsingAdapter(FragmentManager fragmentManager, int setId) {
         super(fragmentManager);
-        this.flashcards = DatabaseManager.get().getAllFlashcards(setId);
+        List<Flashcard> flashcards = DatabaseManager.get().getAllFlashcards(setId);
+        flashcardIds = new ArrayList<>();
+        for (Flashcard flashcard : flashcards) {
+            flashcardIds.add(flashcard.getId());
+        }
     }
 
     public void shuffle() {
-        Collections.shuffle(flashcards);
+        Collections.shuffle(flashcardIds);
         notifyDataSetChanged();
     }
 
     @Override
     public Fragment getItem(int position) {
         return FlashcardFragment.create(
-                flashcards.get(position).getId(),
+                flashcardIds.get(position),
                 position + 1,
-                flashcards.size());
+                flashcardIds.size());
     }
 
     @Override
     public int getCount() {
-        return flashcards.size();
+        return flashcardIds.size();
     }
 }

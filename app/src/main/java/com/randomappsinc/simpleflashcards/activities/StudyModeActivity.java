@@ -2,11 +2,7 @@ package com.randomappsinc.simpleflashcards.activities;
 
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
-import android.view.Menu;
-import android.view.MenuItem;
 
-import com.joanzapata.iconify.IconDrawable;
-import com.joanzapata.iconify.fonts.IoniconsIcons;
 import com.randomappsinc.simpleflashcards.R;
 import com.randomappsinc.simpleflashcards.adapters.FlashcardsBrowsingAdapter;
 import com.randomappsinc.simpleflashcards.persistence.DatabaseManager;
@@ -14,6 +10,7 @@ import com.randomappsinc.simpleflashcards.utils.Constants;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 public class StudyModeActivity extends StandardActivity {
 
@@ -25,7 +22,6 @@ public class StudyModeActivity extends StandardActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.study_mode);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         ButterKnife.bind(this);
 
         int setId = getIntent().getIntExtra(Constants.FLASHCARD_SET_ID_KEY, 0);
@@ -35,23 +31,13 @@ public class StudyModeActivity extends StandardActivity {
         flashcardsPager.setAdapter(flashcardsBrowsingAdapter);
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.study_mode_menu, menu);
-        menu.findItem(R.id.shuffle).setIcon(
-                new IconDrawable(this, IoniconsIcons.ion_shuffle)
-                        .colorRes(R.color.white)
-                        .actionBarSize());
-        return true;
+    @OnClick(R.id.shuffle)
+    public void shuffleFlashcards() {
+        flashcardsBrowsingAdapter.shuffle();
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.shuffle:
-                flashcardsBrowsingAdapter.shuffle();
-                return true;
-        }
-        return super.onOptionsItemSelected(item);
+    @OnClick(R.id.back)
+    public void back() {
+        finish();
     }
 }
