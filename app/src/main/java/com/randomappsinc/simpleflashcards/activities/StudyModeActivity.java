@@ -2,6 +2,7 @@ package com.randomappsinc.simpleflashcards.activities;
 
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
+import android.widget.SeekBar;
 
 import com.randomappsinc.simpleflashcards.R;
 import com.randomappsinc.simpleflashcards.adapters.FlashcardsBrowsingAdapter;
@@ -15,6 +16,7 @@ import butterknife.OnClick;
 public class StudyModeActivity extends StandardActivity {
 
     @BindView(R.id.flashcards_pager) ViewPager flashcardsPager;
+    @BindView(R.id.flashcards_slider) SeekBar flashcardsSlider;
 
     private FlashcardsBrowsingAdapter flashcardsBrowsingAdapter;
 
@@ -29,6 +31,8 @@ public class StudyModeActivity extends StandardActivity {
 
         flashcardsBrowsingAdapter = new FlashcardsBrowsingAdapter(getSupportFragmentManager(), setId);
         flashcardsPager.setAdapter(flashcardsBrowsingAdapter);
+
+        flashcardsSlider.setMax(100);
     }
 
     @OnClick(R.id.shuffle)

@@ -1,14 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     android:background="@color/theater_black"
     tools:ignore="RtlHardcoded">
 
     <RelativeLayout
+        android:id="@+id/toolbar"
+        android:layout_alignParentTop="true"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
@@ -25,8 +27,18 @@
             style="@style/action_bar_icon"/>
     </RelativeLayout>
 
+    <android.support.v7.widget.AppCompatSeekBar
+        android:id="@+id/flashcards_slider"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="12dp"
+        android:layout_alignParentBottom="true"
+        android:progressBackgroundTint="@color/white"/>
+
     <android.support.v4.view.ViewPager
         android:id="@+id/flashcards_pager"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
-</LinearLayout>
+        android:layout_height="match_parent"
+        android:layout_below="@id/toolbar"
+        android:layout_above="@id/flashcards_slider"/>
+</RelativeLayout>
