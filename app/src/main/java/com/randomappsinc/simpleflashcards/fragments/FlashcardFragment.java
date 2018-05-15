@@ -14,6 +14,7 @@ import com.randomappsinc.simpleflashcards.R;
 import com.randomappsinc.simpleflashcards.persistence.DatabaseManager;
 import com.randomappsinc.simpleflashcards.persistence.models.Flashcard;
 import com.randomappsinc.simpleflashcards.utils.Constants;
+import com.randomappsinc.simpleflashcards.utils.TextToSpeechManager;
 
 import java.util.Locale;
 
@@ -38,18 +39,22 @@ public class FlashcardFragment extends Fragment {
     @BindView(R.id.flashcard_container) View flashcardContainer;
     @BindView(R.id.position_info) TextView positionInfo;
     @BindView(R.id.side_header) TextView sideHeader;
+    @BindView(R.id.speak) View speak;
     @BindView(R.id.content) TextView content;
 
     @BindInt(R.integer.default_anim_length) int flipAnimLength;
 
     private Flashcard flashcard;
     private boolean isShowingTerm = true;
+    private TextToSpeechManager textToSpeechManager;
     private Unbinder unbinder;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         ViewGroup rootView = (ViewGroup) inflater.inflate(R.layout.flashcard, container, false);
         unbinder = ButterKnife.bind(this, rootView);
+
+        textToSpeechManager = TextToSpeechManager.get();
 
         int flashcardId = getArguments().getInt(Constants.FLASHCARD_ID_KEY);
         flashcard = DatabaseManager.get().getFlashcard(flashcardId);
@@ -81,6 +86,7 @@ public class FlashcardFragment extends Fragment {
                         isShowingTerm = !isShowingTerm;
                         positionInfo.setVisibility(View.GONE);
                         sideHeader.setVisibility(View.GONE);
+                        speak.setVisibility(View.GONE);
                         content.setVisibility(View.GONE);
                     }
 
@@ -90,6 +96,7 @@ public class FlashcardFragment extends Fragment {
                         positionInfo.setVisibility(View.VISIBLE);
                         loadFlashcardIntoView();
                         sideHeader.setVisibility(View.VISIBLE);
+                        speak.setVisibility(View.VISIBLE);
                         content.setVisibility(View.VISIBLE);
                         flashcardContainer.setEnabled(true);
                     }
@@ -107,6 +114,11 @@ public class FlashcardFragment extends Fragment {
     private void loadFlashcardIntoView() {
         sideHeader.setText(isShowingTerm ? R.string.term_underlined : R.string.definition_underlined);
         content.setText(isShowingTerm ? flashcard.getTerm() : flashcard.getDefinition());
+    }
+
+    @OnClick(R.id.speak)
+    public void speakFlashcard() {
+        textToSpeechManager.speak(isShowingTerm ? flashcard.getTerm() : flashcard.getDefinition());
     }
 
     @Override

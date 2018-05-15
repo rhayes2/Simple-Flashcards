@@ -9,4 +9,6 @@
     <string name="shuffle_icon">{ion-shuffle}</string>
 
     <string name="flashcard_set_shuffled">Flashcard set shuffled.</string>
+
+    <string name="text_to_speech_fail">We were unable to initialize your device\'s Text To Speech engine.</string>
 </resources>

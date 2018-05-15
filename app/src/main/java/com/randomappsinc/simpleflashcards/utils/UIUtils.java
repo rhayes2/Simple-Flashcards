@@ -40,6 +40,10 @@ public class UIUtils {
         showToast(stringId, Toast.LENGTH_SHORT);
     }
 
+    public static void showLongToast(@StringRes int stringId) {
+        showToast(stringId, Toast.LENGTH_LONG);
+    }
+
     private static void showToast(@StringRes int stringId, int duration) {
         Toast.makeText(MyApplication.getAppContext(), stringId, duration).show();
     }
