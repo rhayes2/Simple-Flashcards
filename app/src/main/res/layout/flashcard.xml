@@ -14,8 +14,7 @@
         android:id="@+id/flashcard_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/white"
-        android:orientation="vertical">
+        android:background="@drawable/rounded_white_rectangle">
 
         <TextView
             android:id="@+id/position_info"

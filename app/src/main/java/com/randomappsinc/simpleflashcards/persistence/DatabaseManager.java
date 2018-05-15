@@ -158,6 +158,7 @@ public class DatabaseManager {
             realm.beginTransaction();
             FlashcardSet set = realm.where(FlashcardSet.class).equalTo("id", setId).findFirst();
             Flashcard flashcard = new Flashcard();
+            flashcard.setId(getNextFlashcardId());
             flashcard.setTerm(question);
             flashcard.setDefinition(answer);
             set.getFlashcards().add(flashcard);

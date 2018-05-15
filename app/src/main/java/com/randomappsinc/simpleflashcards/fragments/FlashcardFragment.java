@@ -7,6 +7,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AccelerateDecelerateInterpolator;
 import android.widget.TextView;
 
 import com.randomappsinc.simpleflashcards.R;
@@ -74,6 +75,7 @@ public class FlashcardFragment extends Fragment {
                 .animate()
                 .rotationY(180)
                 .setDuration(flipAnimLength)
+                .setInterpolator(new AccelerateDecelerateInterpolator())
                 .setListener(new Animator.AnimatorListener() {
                     @Override
                     public void onAnimationStart(Animator animation) {
