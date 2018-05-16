@@ -45,16 +45,19 @@ public class MainActivity extends StandardActivity {
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
 
-        PreferencesManager.get().logAppOpen();
-        if (PreferencesManager.get().isFirstTimeUser()) {
-            PreferencesManager.get().rememberWelcome();
+        PreferencesManager preferencesManager = PreferencesManager.get();
+        preferencesManager.logAppOpen();
+        if (preferencesManager.isFirstTimeUser()) {
+            preferencesManager.rememberWelcome();
             new MaterialDialog.Builder(this)
                     .title(R.string.welcome)
                     .content(R.string.ask_for_help)
                     .positiveText(android.R.string.yes)
                     .show();
-        } else {
-            UIUtils.askForRatingIfAppropriate(this);
+        } else if (preferencesManager.shouldAskForRating()) {
+            UIUtils.askForRating(this);
+        } else if (preferencesManager.shouldAskForShare()) {
+            UIUtils.askToShare(this);
         }
 
         addFlashcardSet.setImageDrawable(new IconDrawable(this, IoniconsIcons.ion_android_add)

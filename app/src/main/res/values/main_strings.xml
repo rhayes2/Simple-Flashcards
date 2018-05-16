@@ -25,6 +25,14 @@
         If you have a couple seconds, please rate this app in the Play Store.
         Every rating goes a long way towards motivating us to continue improving this app!
     </string>
-    <string name="will_rate">Sure, I\'ll help</string>
+    <string name="sure_will_help">Sure, I\'ll help</string>
     <string name="no_im_good">No, I\'m good</string>
+
+    <string name="studying_best_done_in_groups">Studying Is Best Done In Groups!</string>
+    <string name="please_share">
+        If you have a friend who could use an awesome flashcards experience,
+        please share Simple Flashcards with them.
+        Our goal is to help as many people as possible with our work,
+        which is why all of our apps are free and every new user puts a smile on our faces.
+    </string>
 </resources>
