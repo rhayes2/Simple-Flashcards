@@ -8,21 +8,132 @@
     tools:ignore="SpUsage, RtlHardcoded">
 
     <com.joanzapata.iconify.widget.IconTextView
-        android:id="@+id/edit_icon"
-        android:text="@string/edit_icon"
-        android:textColor="@color/dark_gray"
+        android:id="@+id/card_icon"
         android:layout_alignParentRight="true"
+        android:layout_width="16dp"
+        android:layout_height="16dp"
+        android:layout_marginTop="1dp"
+        android:gravity="center"
+        android:text="@string/card_icon"
+        android:textSize="16dp"
+        android:textColor="@color/dark_gray"/>
+
+    <TextView
+        android:id="@+id/num_flashcards"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="32dp"
-        android:layout_centerVertical="true"/>
+        android:layout_height="16dp"
+        android:layout_toLeftOf="@id/card_icon"
+        android:layout_marginRight="2dp"
+        android:gravity="center_vertical"
+        android:textSize="13dp"
+        android:textColor="@color/dark_gray"/>
 
     <TextView
         android:id="@+id/set_name"
         android:textColor="@color/dark_gray"
-        android:layout_centerVertical="true"
-        android:textSize="28dp"
-        android:layout_toLeftOf="@+id/edit_icon"
+        android:textSize="27dp"
+        android:layout_toLeftOf="@+id/num_flashcards"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
+
+    <LinearLayout
+        android:id="@+id/first_row_buttons"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/set_name"
+        android:orientation="horizontal">
+
+        <android.support.v7.widget.CardView
+            android:id="@+id/browse_button"
+            android:layout_marginRight="3dp"
+            style="@style/set_action_card">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="32dp"
+                android:orientation="horizontal">
+
+                <com.joanzapata.iconify.widget.IconTextView
+                    android:text="@string/eye_icon"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="-2dp"
+                    style="@style/set_action_icon"/>
+
+                <TextView
+                    android:text="@string/browse"
+                    style="@style/set_action_text"/>
+            </LinearLayout>
+        </android.support.v7.widget.CardView>
+
+        <android.support.v7.widget.CardView
+            android:id="@+id/quiz_button"
+            android:layout_marginLeft="3dp"
+            style="@style/set_action_card">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="32dp"
+                android:orientation="horizontal">
+
+                <com.joanzapata.iconify.widget.IconTextView
+                    android:text="@string/list_icon"
+                    style="@style/set_action_icon"/>
+
+                <TextView
+                    android:text="@string/quiz"
+                    android:paddingBottom="4dp"
+                    style="@style/set_action_text"/>
+            </LinearLayout>
+        </android.support.v7.widget.CardView>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/first_row_buttons"
+        android:layout_marginTop="3dp"
+        android:orientation="horizontal">
+
+        <android.support.v7.widget.CardView
+            android:id="@+id/edit_button"
+            android:layout_marginRight="3dp"
+            style="@style/set_action_card">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="32dp"
+                android:orientation="horizontal">
+
+                <com.joanzapata.iconify.widget.IconTextView
+                    android:text="@string/edit_icon"
+                    android:layout_height="wrap_content"
+                    style="@style/set_action_icon"/>
+
+                <TextView
+                    android:text="@string/edit"
+                    style="@style/set_action_text"/>
+            </LinearLayout>
+        </android.support.v7.widget.CardView>
+
+        <android.support.v7.widget.CardView
+            android:id="@+id/delete_button"
+            android:layout_marginLeft="3dp"
+            style="@style/set_action_card">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="32dp"
+                android:orientation="horizontal">
+
+                <com.joanzapata.iconify.widget.IconTextView
+                    android:text="@string/delete_icon"
+                    style="@style/set_action_icon"/>
+
+                <TextView
+                    android:text="@string/delete"
+                    android:paddingBottom="4dp"
+                    style="@style/set_action_text"/>
+            </LinearLayout>
+        </android.support.v7.widget.CardView>
+    </LinearLayout>
 </RelativeLayout>

@@ -8,9 +8,9 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
-import com.joanzapata.iconify.widget.IconTextView;
 import com.randomappsinc.simpleflashcards.R;
 import com.randomappsinc.simpleflashcards.activities.EditFlashcardSetActivity;
+import com.randomappsinc.simpleflashcards.activities.StudyModeActivity;
 import com.randomappsinc.simpleflashcards.persistence.DatabaseManager;
 import com.randomappsinc.simpleflashcards.persistence.models.FlashcardSet;
 import com.randomappsinc.simpleflashcards.utils.Constants;
@@ -20,6 +20,7 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 public class FlashcardSetsAdapter extends BaseAdapter {
 
@@ -65,11 +66,44 @@ public class FlashcardSetsAdapter extends BaseAdapter {
     }
 
     public class FlashcardSetViewHolder {
-        @BindView(R.id.set_name) public TextView setName;
-        @BindView(R.id.edit_icon) public IconTextView edit;
+        @BindView(R.id.set_name) TextView setName;
+        @BindView(R.id.num_flashcards) TextView numFlashcards;
+
+        private int position;
 
         FlashcardSetViewHolder(View view) {
             ButterKnife.bind(this, view);
+        }
+
+        void loadFlashcardSet(int position) {
+            this.position = position;
+            FlashcardSet flashcardSet = flashcardSets.get(position);
+            setName.setText(flashcardSet.getName());
+            numFlashcards.setText(String.valueOf(flashcardSet.getFlashcards().size()));
+        }
+
+        @OnClick(R.id.browse_button)
+        public void browseFlashcards() {
+            Intent intent = new Intent(context, StudyModeActivity.class)
+                    .putExtra(Constants.FLASHCARD_SET_ID_KEY, getItem(position).getId());
+            context.startActivity(intent);
+        }
+
+        @OnClick(R.id.quiz_button)
+        public void takeQuiz() {
+
+        }
+
+        @OnClick(R.id.edit_button)
+        public void editFlashcardSet() {
+            Intent intent = new Intent(context, EditFlashcardSetActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+            intent.putExtra(Constants.FLASHCARD_SET_ID_KEY, getItem(position).getId());
+            context.startActivity(intent);
+        }
+
+        @OnClick(R.id.delete_button)
+        public void deleteFlashcardSet() {
         }
     }
 
@@ -81,21 +115,10 @@ public class FlashcardSetsAdapter extends BaseAdapter {
             view = vi.inflate(R.layout.flashcard_set_cell, parent, false);
             holder = new FlashcardSetViewHolder(view);
             view.setTag(holder);
-        }
-        else {
+        } else {
             holder = (FlashcardSetViewHolder) view.getTag();
         }
-
-        holder.setName.setText(flashcardSets.get(position).getName());
-        holder.edit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(final View view) {
-                Intent intent = new Intent(context, EditFlashcardSetActivity.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
-                intent.putExtra(Constants.FLASHCARD_SET_ID_KEY, getItem(position).getId());
-                context.startActivity(intent);
-            }
-        });
+        holder.loadFlashcardSet(position);
         return view;
     }
 }

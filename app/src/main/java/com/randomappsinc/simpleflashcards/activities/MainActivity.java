@@ -24,7 +24,6 @@ import com.randomappsinc.simpleflashcards.utils.UIUtils;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import butterknife.OnItemClick;
 import butterknife.OnTextChanged;
 
 public class MainActivity extends StandardActivity {
@@ -85,13 +84,6 @@ public class MainActivity extends StandardActivity {
     @OnClick(R.id.clear_search)
     public void clearSearch() {
         setSearch.setText("");
-    }
-
-    @OnItemClick(R.id.flashcard_sets)
-    public void onFlashcardSetClick(int position) {
-        Intent intent = new Intent(this, StudyModeActivity.class);
-        intent.putExtra(Constants.FLASHCARD_SET_ID_KEY, adapter.getItem(position).getId());
-        startActivity(intent);
     }
 
     @OnClick(R.id.add_flashcard_set)
