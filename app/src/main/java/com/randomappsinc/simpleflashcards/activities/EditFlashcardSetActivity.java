@@ -97,31 +97,11 @@ public class EditFlashcardSetActivity extends StandardActivity {
                 .show();
     }
 
-    private void showDeleteDialog() {
-        new MaterialDialog.Builder(this)
-                .title(R.string.flashcard_set_delete_title)
-                .content(R.string.flashcard_set_delete_message)
-                .positiveText(android.R.string.yes)
-                .negativeText(android.R.string.no)
-                .onPositive(new MaterialDialog.SingleButtonCallback() {
-                    @Override
-                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                        DatabaseManager.get().deleteFlashcardSet(setId);
-                        finish();
-                    }
-                })
-                .show();
-    }
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.flashcard_set_menu, menu);
         menu.findItem(R.id.rename_set).setIcon(
                 new IconDrawable(this, IoniconsIcons.ion_edit)
-                        .colorRes(R.color.white)
-                        .actionBarSize());
-        menu.findItem(R.id.delete_set).setIcon(
-                new IconDrawable(this, IoniconsIcons.ion_android_delete)
                         .colorRes(R.color.white)
                         .actionBarSize());
         return true;
@@ -132,9 +112,6 @@ public class EditFlashcardSetActivity extends StandardActivity {
         switch (item.getItemId()) {
             case R.id.rename_set:
                 showRenameDialog();
-                return true;
-            case R.id.delete_set:
-                showDeleteDialog();
                 return true;
         }
         return super.onOptionsItemSelected(item);

@@ -43,6 +43,7 @@
                 android:id="@+id/clear_search"
                 android:text="@string/clear_icon"
                 android:layout_gravity="end|center_vertical"
+                android:visibility="gone"
                 style="@style/search_icon"/>
         </FrameLayout>
 

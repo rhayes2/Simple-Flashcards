@@ -1,7 +1,7 @@
 package com.randomappsinc.simpleflashcards.adapters;
 
 import android.content.Context;
-import android.content.Intent;
+import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,11 +9,8 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import com.randomappsinc.simpleflashcards.R;
-import com.randomappsinc.simpleflashcards.activities.EditFlashcardSetActivity;
-import com.randomappsinc.simpleflashcards.activities.StudyModeActivity;
 import com.randomappsinc.simpleflashcards.persistence.DatabaseManager;
 import com.randomappsinc.simpleflashcards.persistence.models.FlashcardSet;
-import com.randomappsinc.simpleflashcards.utils.Constants;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,11 +21,23 @@ import butterknife.OnClick;
 
 public class FlashcardSetsAdapter extends BaseAdapter {
 
+    public interface Listener {
+        void browseFlashcardSet(FlashcardSet flashcardSet);
+
+        void takeQuiz(FlashcardSet flashcardSet);
+
+        void editFlashcardSet(FlashcardSet flashcardSet);
+
+        void deleteFlashcardSet(FlashcardSet flashcardSet);
+    }
+
+    @NonNull private Listener listener;
     private Context context;
     private List<FlashcardSet> flashcardSets;
     private TextView noSets;
 
-    public FlashcardSetsAdapter(Context context, TextView noSets) {
+    public FlashcardSetsAdapter(@NonNull Listener listener, Context context, TextView noSets) {
+        this.listener = listener;
         this.context = context;
         this.flashcardSets = new ArrayList<>();
         this.noSets = noSets;
@@ -84,26 +93,22 @@ public class FlashcardSetsAdapter extends BaseAdapter {
 
         @OnClick(R.id.browse_button)
         public void browseFlashcards() {
-            Intent intent = new Intent(context, StudyModeActivity.class)
-                    .putExtra(Constants.FLASHCARD_SET_ID_KEY, getItem(position).getId());
-            context.startActivity(intent);
+            listener.browseFlashcardSet(getItem(position));
         }
 
         @OnClick(R.id.quiz_button)
         public void takeQuiz() {
-
+            listener.takeQuiz(getItem(position));
         }
 
         @OnClick(R.id.edit_button)
         public void editFlashcardSet() {
-            Intent intent = new Intent(context, EditFlashcardSetActivity.class);
-            intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
-            intent.putExtra(Constants.FLASHCARD_SET_ID_KEY, getItem(position).getId());
-            context.startActivity(intent);
+            listener.editFlashcardSet(getItem(position));
         }
 
         @OnClick(R.id.delete_button)
         public void deleteFlashcardSet() {
+            listener.deleteFlashcardSet(getItem(position));
         }
     }
 

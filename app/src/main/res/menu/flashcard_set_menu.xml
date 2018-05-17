@@ -7,9 +7,4 @@
         android:id="@+id/rename_set"
         android:title="@string/rename_flashcard_set"
         app:showAsAction="ifRoom"/>
-
-    <item
-        android:id="@+id/delete_set"
-        android:title="@string/delete_flashcard_set"
-        app:showAsAction="always" />
 </menu>

@@ -15,12 +15,10 @@ public class FlashcardSetCreatorDialog {
         void onFlashcardSetCreated(int createdSetId);
     }
 
-    @NonNull private Listener mListener;
-    private MaterialDialog mAdderDialog;
+    private MaterialDialog adderDialog;
 
-    public FlashcardSetCreatorDialog(Context context, @NonNull Listener listener) {
-        mListener = listener;
-        mAdderDialog = new MaterialDialog.Builder(context)
+    public FlashcardSetCreatorDialog(Context context, @NonNull final Listener listener) {
+        adderDialog = new MaterialDialog.Builder(context)
                 .title(R.string.create_flashcard_set)
                 .alwaysCallInputCallback()
                 .inputType(InputType.TYPE_TEXT_FLAG_CAP_WORDS)
@@ -41,14 +39,14 @@ public class FlashcardSetCreatorDialog {
                     public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
                         String setName = dialog.getInputEditText().getText().toString().trim();
                         int newSetId = DatabaseManager.get().addFlashcardSet(setName);
-                        mListener.onFlashcardSetCreated(newSetId);
+                        listener.onFlashcardSetCreated(newSetId);
                     }
                 })
                 .build();
     }
 
     public void show() {
-        mAdderDialog.getInputEditText().setText("");
-        mAdderDialog.show();
+        adderDialog.getInputEditText().setText("");
+        adderDialog.show();
     }
 }

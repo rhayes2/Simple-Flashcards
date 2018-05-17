@@ -44,4 +44,11 @@
     <string name="list_icon">{ion-android-list}</string>
     <string name="edit_icon">{ion-edit}</string>
     <string name="delete_icon">{ion-android-delete}</string>
+
+    <string name="flashcard_set_deleted">Flashcard set deleted.</string>
+    <string name="no_flashcards_for_browsing">
+        This flashcard set currently has no flashcards to browse.
+        Use the edit button to add some!
+    </string>
+    <string name="coming_soon">This functionality is coming soon!</string>
 </resources>

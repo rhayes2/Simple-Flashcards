@@ -3,6 +3,7 @@ package com.randomappsinc.simpleflashcards.activities;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.text.Editable;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -16,8 +17,10 @@ import com.joanzapata.iconify.IconDrawable;
 import com.joanzapata.iconify.fonts.IoniconsIcons;
 import com.randomappsinc.simpleflashcards.R;
 import com.randomappsinc.simpleflashcards.adapters.FlashcardSetsAdapter;
+import com.randomappsinc.simpleflashcards.dialogs.DeleteFlashcardSetDialog;
 import com.randomappsinc.simpleflashcards.dialogs.FlashcardSetCreatorDialog;
 import com.randomappsinc.simpleflashcards.persistence.PreferencesManager;
+import com.randomappsinc.simpleflashcards.persistence.models.FlashcardSet;
 import com.randomappsinc.simpleflashcards.utils.Constants;
 import com.randomappsinc.simpleflashcards.utils.UIUtils;
 
@@ -26,7 +29,8 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.OnTextChanged;
 
-public class MainActivity extends StandardActivity {
+public class MainActivity extends StandardActivity
+        implements FlashcardSetsAdapter.Listener, DeleteFlashcardSetDialog.Listener {
 
     @BindView(R.id.parent) View parent;
     @BindView(R.id.flashcard_set_search) EditText setSearch;
@@ -37,6 +41,7 @@ public class MainActivity extends StandardActivity {
 
     private FlashcardSetsAdapter adapter;
     private FlashcardSetCreatorDialog flashcardSetCreatorDialog;
+    private DeleteFlashcardSetDialog deleteFlashcardSetDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,8 +69,9 @@ public class MainActivity extends StandardActivity {
                 .actionBarSize());
 
         flashcardSetCreatorDialog = new FlashcardSetCreatorDialog(this, setCreatedListener);
+        deleteFlashcardSetDialog = new DeleteFlashcardSetDialog(this, this);
 
-        adapter = new FlashcardSetsAdapter(this, noSets);
+        adapter = new FlashcardSetsAdapter(this, this, noSets);
         sets.setAdapter(adapter);
     }
 
@@ -100,6 +106,40 @@ public class MainActivity extends StandardActivity {
                     startActivity(intent);
                 }
             };
+
+    @Override
+    public void browseFlashcardSet(FlashcardSet flashcardSet) {
+        if (flashcardSet.getFlashcards().isEmpty()) {
+            UIUtils.showSnackbar(parent, getString(R.string.no_flashcards_for_browsing), Snackbar.LENGTH_LONG);
+        } else {
+            startActivity(new Intent(
+                    this, StudyModeActivity.class)
+                    .putExtra(Constants.FLASHCARD_SET_ID_KEY, flashcardSet.getId()));
+        }
+    }
+
+    @Override
+    public void takeQuiz(FlashcardSet flashcardSet) {
+        UIUtils.showSnackbar(parent, getString(R.string.coming_soon), Snackbar.LENGTH_LONG);
+    }
+
+    @Override
+    public void editFlashcardSet(FlashcardSet flashcardSet) {
+        startActivity(new Intent(
+                this, EditFlashcardSetActivity.class)
+                .putExtra(Constants.FLASHCARD_SET_ID_KEY, flashcardSet.getId()));
+    }
+
+    @Override
+    public void deleteFlashcardSet(FlashcardSet flashcardSet) {
+        deleteFlashcardSetDialog.show(flashcardSet.getId());
+    }
+
+    @Override
+    public void onFlashcardSetDeleted() {
+        adapter.refreshContent(setSearch.getText().toString());
+        UIUtils.showSnackbar(parent, getString(R.string.flashcard_set_deleted), Snackbar.LENGTH_LONG);
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
