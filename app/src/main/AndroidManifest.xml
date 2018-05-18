@@ -44,5 +44,10 @@
             android:theme="@style/AppTheme.StudyMode"
             android:configChanges="orientation|screenSize">
         </activity>
+
+        <activity
+            android:name=".activities.QuizActivity"
+            android:configChanges="orientation|screenSize">
+        </activity>
     </application>
 </manifest>

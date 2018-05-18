@@ -50,5 +50,8 @@
         This flashcard set currently has no flashcards to browse.
         Use the edit button to add some!
     </string>
-    <string name="coming_soon">This functionality is coming soon!</string>
+    <string name="not_enough_for_quiz">
+        You need at least 2 flashcards in a set to take a quiz for it.
+        Use the edit button to add more!
+    </string>
 </resources>

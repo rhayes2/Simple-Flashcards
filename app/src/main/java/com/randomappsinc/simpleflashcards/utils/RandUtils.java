@@ -11,10 +11,11 @@ public class RandUtils {
 
     public static List<Integer> getQuizChoicesIndexes(int numQuestions, int quantity, int excludedIndex) {
         List<Integer> numbers = new ArrayList<>();
-        Set<Integer> excludedNumsSet = new HashSet<>(excludedIndex);
+        Set<Integer> excludedNumsSet = new HashSet<>();
+        excludedNumsSet.add(excludedIndex);
         int numAdded = 0;
         Random random = new Random();
-        while (numAdded < quantity) {
+        while (numAdded < quantity - 1) {
             int attempt = random.nextInt(numQuestions);
             if (!excludedNumsSet.contains(attempt)) {
                 numbers.add(attempt);
@@ -22,6 +23,7 @@ public class RandUtils {
                 numAdded++;
             }
         }
+        // Add right answer back into mix
         numbers.add(excludedIndex);
         Collections.shuffle(numbers);
         return numbers;

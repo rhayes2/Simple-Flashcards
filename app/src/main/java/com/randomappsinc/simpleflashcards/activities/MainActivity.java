@@ -120,7 +120,13 @@ public class MainActivity extends StandardActivity
 
     @Override
     public void takeQuiz(FlashcardSet flashcardSet) {
-        UIUtils.showSnackbar(parent, getString(R.string.coming_soon), Snackbar.LENGTH_LONG);
+        if (flashcardSet.getFlashcards().size() < 2) {
+            UIUtils.showSnackbar(parent, getString(R.string.not_enough_for_quiz), Snackbar.LENGTH_LONG);
+        } else {
+            startActivity(new Intent(
+                    this, QuizActivity.class)
+                    .putExtra(Constants.FLASHCARD_SET_ID_KEY, flashcardSet.getId()));
+        }
     }
 
     @Override

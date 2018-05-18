@@ -11,9 +11,10 @@ public class Quiz {
 
     private static final int NUM_ANSWER_OPTIONS = 4;
 
-    private List<Question> questions;
+    private List<Problem> problems;
+    private int currentProblem = 0;
 
-    public class Question {
+    public class Problem {
         private String question;
         private String answer;
         private List<String> options;
@@ -23,7 +24,7 @@ public class Quiz {
             return question;
         }
 
-        public void setQuestion(String question) {
+        void setQuestion(String question) {
             this.question = question;
         }
 
@@ -31,7 +32,7 @@ public class Quiz {
             return answer;
         }
 
-        public void setAnswer(String answer) {
+        void setAnswer(String answer) {
             this.answer = answer;
         }
 
@@ -39,7 +40,7 @@ public class Quiz {
             return options;
         }
 
-        public void setOptions(List<String> options) {
+        void setOptions(List<String> options) {
             this.options = options;
         }
 
@@ -47,18 +48,18 @@ public class Quiz {
             return givenAnswer;
         }
 
-        public void setGivenAnswer(String givenAnswer) {
+        void setGivenAnswer(String givenAnswer) {
             this.givenAnswer = givenAnswer;
         }
     }
 
     public Quiz(FlashcardSet flashcardSet) {
-        questions = new ArrayList<>();
+        problems = new ArrayList<>();
         List<Flashcard> flashcards = flashcardSet.getFlashcards();
         for (int i = 0; i < flashcards.size(); i++) {
-            Question question = new Question();
-            question.setQuestion(flashcards.get(i).getTerm());
-            question.setAnswer(flashcards.get(i).getDefinition());
+            Problem problem = new Problem();
+            problem.setQuestion(flashcards.get(i).getTerm());
+            problem.setAnswer(flashcards.get(i).getDefinition());
 
             int numOptions = Math.min(NUM_ANSWER_OPTIONS, flashcards.size());
             List<Integer> optionIndexes = RandUtils.getQuizChoicesIndexes(flashcards.size(), numOptions, i);
@@ -66,8 +67,28 @@ public class Quiz {
             for (int j : optionIndexes) {
                 options.add(flashcards.get(j).getDefinition());
             }
-            question.setOptions(options);
-            questions.add(question);
+            problem.setOptions(options);
+            problems.add(problem);
         }
+    }
+
+    public void advanceToNextProblem() {
+        currentProblem++;
+    }
+
+    public void submitAnswer(String answer) {
+        problems.get(currentProblem).setGivenAnswer(answer);
+    }
+
+    public Problem getCurrentProblem() {
+        return problems.get(currentProblem);
+    }
+
+    public int getNumOptions() {
+        return problems.get(0).getOptions().size();
+    }
+
+    public boolean isQuizComplete() {
+        return currentProblem >= problems.size();
     }
 }
