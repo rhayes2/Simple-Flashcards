@@ -6,35 +6,31 @@ import android.support.annotation.NonNull;
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.randomappsinc.simpleflashcards.R;
-import com.randomappsinc.simpleflashcards.persistence.DatabaseManager;
 
-public class DeleteFlashcardSetDialog {
+public class QuitQuizDialog {
 
     public interface Listener {
-        void onFlashcardSetDeleted();
+        void onQuizQuizConfirmed();
     }
 
     private MaterialDialog dialog;
-    private int flashcardSetId;
 
-    public DeleteFlashcardSetDialog(Context context, @NonNull final Listener listener) {
+    public QuitQuizDialog(Context context, @NonNull final Listener listener) {
         dialog = new MaterialDialog.Builder(context)
-                .title(R.string.flashcard_set_delete_title)
-                .content(R.string.flashcard_set_delete_message)
+                .title(R.string.confirm_quiz_exit)
+                .content(R.string.confirm_quiz_exit_body)
                 .positiveText(R.string.yes)
                 .negativeText(R.string.cancel)
                 .onPositive(new MaterialDialog.SingleButtonCallback() {
                     @Override
                     public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                        DatabaseManager.get().deleteFlashcardSet(flashcardSetId);
-                        listener.onFlashcardSetDeleted();
+                        listener.onQuizQuizConfirmed();
                     }
                 })
                 .build();
     }
 
-    public void show(int flashcardSetId) {
-        this.flashcardSetId = flashcardSetId;
+    public void show() {
         dialog.show();
     }
 }

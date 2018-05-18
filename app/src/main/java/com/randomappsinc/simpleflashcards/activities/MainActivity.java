@@ -110,7 +110,10 @@ public class MainActivity extends StandardActivity
     @Override
     public void browseFlashcardSet(FlashcardSet flashcardSet) {
         if (flashcardSet.getFlashcards().isEmpty()) {
-            UIUtils.showSnackbar(parent, getString(R.string.no_flashcards_for_browsing), Snackbar.LENGTH_LONG);
+            UIUtils.showSnackbar(
+                    parent,
+                    getString(R.string.no_flashcards_for_browsing),
+                    Snackbar.LENGTH_LONG);
         } else {
             startActivity(new Intent(
                     this, StudyModeActivity.class)

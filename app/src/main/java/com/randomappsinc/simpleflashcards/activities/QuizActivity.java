@@ -1,6 +1,5 @@
 package com.randomappsinc.simpleflashcards.activities;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.MenuItem;
@@ -10,6 +9,7 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import com.randomappsinc.simpleflashcards.R;
+import com.randomappsinc.simpleflashcards.dialogs.QuitQuizDialog;
 import com.randomappsinc.simpleflashcards.models.Quiz;
 import com.randomappsinc.simpleflashcards.persistence.DatabaseManager;
 import com.randomappsinc.simpleflashcards.persistence.models.FlashcardSet;
@@ -23,7 +23,7 @@ import butterknife.BindViews;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class QuizActivity extends StandardActivity {
+public class QuizActivity extends StandardActivity implements QuitQuizDialog.Listener {
 
     @BindView(R.id.question) TextView questionText;
     @BindView(R.id.options) RadioGroup optionsContainer;
@@ -31,6 +31,7 @@ public class QuizActivity extends StandardActivity {
     @BindView(R.id.submit) View submitButton;
 
     private Quiz quiz;
+    private QuitQuizDialog quitQuizDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +43,8 @@ public class QuizActivity extends StandardActivity {
         int setId = getIntent().getIntExtra(Constants.FLASHCARD_SET_ID_KEY, 0);
         FlashcardSet flashcardSet = DatabaseManager.get().getFlashcardSet(setId);
         setTitle(flashcardSet.getName());
+
+        quitQuizDialog = new QuitQuizDialog(this, this);
 
         quiz = new Quiz(flashcardSet);
         int numOptions = quiz.getNumOptions();
@@ -95,19 +98,28 @@ public class QuizActivity extends StandardActivity {
         return null;
     }
 
-    private void confirmQuizExit() {
+    private void onQuizExit() {
+        if (!quiz.isQuizComplete()) {
+            quitQuizDialog.show();
+        } else {
+            finish();
+        }
+    }
 
+    @Override
+    public void onQuizQuizConfirmed() {
+        finish();
     }
 
     @Override
     public void onBackPressed() {
-
+        onQuizExit();
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
-            startActivity(new Intent(this, SettingsActivity.class));
+            onQuizExit();
             return true;
         }
         return super.onOptionsItemSelected(item);

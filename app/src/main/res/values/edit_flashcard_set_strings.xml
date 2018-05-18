@@ -7,6 +7,4 @@
 
     <string name="rename_flashcard_set">Rename flashcard set</string>
     <string name="new_flashcard_set_name">New flashcard set name</string>
-    <string name="flashcard_set_delete_title">Confirm Flashcard Set Deletion</string>
-    <string name="flashcard_set_delete_message">Are you sure you want to delete this flashcard set?</string>
 </resources>
