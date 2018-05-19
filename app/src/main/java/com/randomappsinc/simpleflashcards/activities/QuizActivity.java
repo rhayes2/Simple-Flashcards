@@ -10,11 +10,11 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import com.randomappsinc.simpleflashcards.R;
+import com.randomappsinc.simpleflashcards.constants.Constants;
 import com.randomappsinc.simpleflashcards.dialogs.QuitQuizDialog;
 import com.randomappsinc.simpleflashcards.models.Quiz;
 import com.randomappsinc.simpleflashcards.persistence.DatabaseManager;
 import com.randomappsinc.simpleflashcards.persistence.models.FlashcardSet;
-import com.randomappsinc.simpleflashcards.utils.Constants;
 import com.randomappsinc.simpleflashcards.utils.UIUtils;
 
 import java.util.List;
@@ -28,7 +28,7 @@ import butterknife.OnClick;
 
 public class QuizActivity extends StandardActivity implements QuitQuizDialog.Listener {
 
-    @BindView(R.id.quiz_problem_container) View problemContainer;
+    @BindView(R.id.problem_parent) View problemParent;
     @BindView(R.id.question_header) TextView questionHeader;
     @BindView(R.id.question) TextView questionText;
     @BindView(R.id.options) RadioGroup optionsContainer;
@@ -87,9 +87,9 @@ public class QuizActivity extends StandardActivity implements QuitQuizDialog.Lis
 
     private void animateQuestionOut() {
         submitButton.setEnabled(false);
-        problemContainer
+        problemParent
                 .animate()
-                .translationXBy(-1 * problemContainer.getWidth())
+                .translationXBy(-1 * problemParent.getWidth())
                 .alpha(0)
                 .setDuration(animationLength)
                 .setListener(new Animator.AnimatorListener() {
@@ -98,7 +98,7 @@ public class QuizActivity extends StandardActivity implements QuitQuizDialog.Lis
 
                     @Override
                     public void onAnimationEnd(Animator animation) {
-                        problemContainer.setTranslationX(0);
+                        problemParent.setTranslationX(0);
                         loadCurrentQuestionIntoView();
                         animationQuestionIn();
                     }
@@ -114,7 +114,7 @@ public class QuizActivity extends StandardActivity implements QuitQuizDialog.Lis
     }
 
     private void animationQuestionIn() {
-        problemContainer
+        problemParent
                 .animate()
                 .alpha(1)
                 .setDuration(animationLength)
@@ -138,8 +138,8 @@ public class QuizActivity extends StandardActivity implements QuitQuizDialog.Lis
     }
 
     private void makeQuestionViewSane() {
-        problemContainer.setTranslationX(0);
-        problemContainer.setAlpha(1);
+        problemParent.setTranslationX(0);
+        problemParent.setAlpha(1);
         loadCurrentQuestionIntoView();
         submitButton.setEnabled(true);
     }

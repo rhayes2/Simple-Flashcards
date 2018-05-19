@@ -5,12 +5,12 @@
     android:layout_height="match_parent">
 
     <ScrollView
+        android:id="@+id/problem_parent"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_above="@id/submit">
 
         <LinearLayout
-            android:id="@+id/quiz_problem_container"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
@@ -70,4 +70,15 @@
         android:layout_alignParentBottom="true"
         android:text="@string/submit"
         style="@style/button"/>
+
+    <LinearLayout
+        android:id="@+id/results_page"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:visibility="gone"
+        android:alpha="0">
+
+        
+    </LinearLayout>
 </RelativeLayout>

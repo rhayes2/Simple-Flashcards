@@ -1,4 +1,4 @@
-package com.randomappsinc.simpleflashcards.utils;
+package com.randomappsinc.simpleflashcards.constants;
 
 public class Constants {
 
