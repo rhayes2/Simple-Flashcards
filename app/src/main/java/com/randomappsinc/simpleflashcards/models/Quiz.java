@@ -16,39 +16,8 @@ public class Quiz {
     private static final float GOOD_PERCENTAGE_THRESHOLD = 80;
     private static final float OKAY_PERCENTAGE_THRESHOLD = 60;
 
-    private List<Problem> problems;
+    private ArrayList<Problem> problems;
     private int currentProblem = 0;
-
-    public class Problem {
-        private String question;
-        private String answer;
-        private List<String> options;
-        private String givenAnswer;
-
-        public String getQuestion() {
-            return question;
-        }
-
-        void setQuestion(String question) {
-            this.question = question;
-        }
-
-        void setAnswer(String answer) {
-            this.answer = answer;
-        }
-
-        public List<String> getOptions() {
-            return options;
-        }
-
-        void setOptions(List<String> options) {
-            this.options = options;
-        }
-
-        void setGivenAnswer(String givenAnswer) {
-            this.givenAnswer = givenAnswer;
-        }
-    }
 
     public class Grade {
         private @QuizScore int score = QuizScore.BAD;
@@ -67,7 +36,7 @@ public class Quiz {
             return fractionText;
         }
 
-        public void setFractionText(String fractionText) {
+        void setFractionText(String fractionText) {
             this.fractionText = fractionText;
         }
 
@@ -75,7 +44,7 @@ public class Quiz {
             return percentText;
         }
 
-        public void setPercentText(String percentText) {
+        void setPercentText(String percentText) {
             this.percentText = percentText;
         }
     }
@@ -136,7 +105,7 @@ public class Quiz {
         Grade grade = new Grade();
         int numCorrect = 0;
         for (Problem problem : problems) {
-            if (problem.answer.equals(problem.givenAnswer)) {
+            if (problem.getAnswer().equals(problem.getGivenAnswer())) {
                 numCorrect++;
             }
         }
@@ -152,7 +121,7 @@ public class Quiz {
         return grade;
     }
 
-    public List<Problem> getProblems() {
+    public ArrayList<Problem> getProblems() {
         return problems;
     }
 }

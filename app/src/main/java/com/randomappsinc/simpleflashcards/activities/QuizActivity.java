@@ -1,6 +1,7 @@
 package com.randomappsinc.simpleflashcards.activities;
 
 import android.animation.Animator;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.MenuItem;
@@ -13,6 +14,7 @@ import com.randomappsinc.simpleflashcards.R;
 import com.randomappsinc.simpleflashcards.constants.Constants;
 import com.randomappsinc.simpleflashcards.constants.QuizScore;
 import com.randomappsinc.simpleflashcards.dialogs.QuitQuizDialog;
+import com.randomappsinc.simpleflashcards.models.Problem;
 import com.randomappsinc.simpleflashcards.models.Quiz;
 import com.randomappsinc.simpleflashcards.persistence.DatabaseManager;
 import com.randomappsinc.simpleflashcards.persistence.models.FlashcardSet;
@@ -88,7 +90,7 @@ public class QuizActivity extends StandardActivity implements QuitQuizDialog.Lis
                 quiz.getCurrentProblemPosition() + 1,
                 quiz.getNumQuestions());
         questionHeader.setText(headerText);
-        Quiz.Problem problem = quiz.getCurrentProblem();
+        Problem problem = quiz.getCurrentProblem();
         questionText.setText(problem.getQuestion());
         List<String> options = problem.getOptions();
         for (int i = 0; i < options.size(); i++) {
@@ -323,6 +325,12 @@ public class QuizActivity extends StandardActivity implements QuitQuizDialog.Lis
     @OnClick(R.id.exit)
     public void exit() {
         finish();
+    }
+
+    @OnClick(R.id.view_results)
+    public void viewResults() {
+        startActivity(new Intent(this, QuizResultsActivity.class));
+        overridePendingTransition(R.anim.slide_in_bottom, R.anim.stay);
     }
 
     @Nullable

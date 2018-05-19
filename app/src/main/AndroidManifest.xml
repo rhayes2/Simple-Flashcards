@@ -49,5 +49,10 @@
             android:name=".activities.QuizActivity"
             android:configChanges="orientation|screenSize">
         </activity>
+
+        <activity
+            android:name=".activities.QuizResultsActivity"
+            android:configChanges="orientation|screenSize">
+        </activity>
     </application>
 </manifest>
