@@ -97,4 +97,12 @@ public class Quiz {
     public boolean isQuizComplete() {
         return currentProblem >= problems.size();
     }
+
+    public int getCurrentProblemPosition() {
+        return currentProblem;
+    }
+
+    public int getNumQuestions() {
+        return problems.size();
+    }
 }

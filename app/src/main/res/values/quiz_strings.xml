@@ -7,4 +7,5 @@
         Are you sure you want to quit your currently unfinished quiz?
         Your current progress will not be saved.
     </string>
+    <string name="quiz_question_header">Question %d of %d</string>
 </resources>

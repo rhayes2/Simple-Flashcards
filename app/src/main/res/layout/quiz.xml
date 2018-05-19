@@ -16,15 +16,25 @@
             android:orientation="vertical">
 
             <TextView
-                android:id="@+id/question"
+                android:id="@+id/question_header"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 android:layout_marginLeft="16dp"
                 android:layout_marginRight="16dp"
+                android:layout_marginBottom="8dp"
+                android:textSize="15sp"
+                android:textColor="@color/dark_gray"/>
+
+            <TextView
+                android:id="@+id/question"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
                 android:layout_marginBottom="6dp"
                 android:textSize="19sp"
-                android:textColor="@color/dark_gray"/>
+                android:textColor="@color/black"/>
 
             <RadioGroup
                 android:id="@+id/options"

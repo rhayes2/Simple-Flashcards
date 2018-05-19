@@ -10,7 +10,7 @@ import com.randomappsinc.simpleflashcards.R;
 public class QuitQuizDialog {
 
     public interface Listener {
-        void onQuizQuizConfirmed();
+        void onQuitQuizConfirmed();
     }
 
     private MaterialDialog dialog;
@@ -24,7 +24,7 @@ public class QuitQuizDialog {
                 .onPositive(new MaterialDialog.SingleButtonCallback() {
                     @Override
                     public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                        listener.onQuizQuizConfirmed();
+                        listener.onQuitQuizConfirmed();
                     }
                 })
                 .build();
