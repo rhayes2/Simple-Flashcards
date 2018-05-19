@@ -10,6 +10,7 @@
         android:layout_above="@id/submit">
 
         <LinearLayout
+            android:id="@+id/quiz_problem_container"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">

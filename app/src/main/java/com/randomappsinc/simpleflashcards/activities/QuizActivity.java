@@ -1,5 +1,6 @@
 package com.randomappsinc.simpleflashcards.activities;
 
+import android.animation.Animator;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.MenuItem;
@@ -18,6 +19,7 @@ import com.randomappsinc.simpleflashcards.utils.UIUtils;
 
 import java.util.List;
 
+import butterknife.BindInt;
 import butterknife.BindView;
 import butterknife.BindViews;
 import butterknife.ButterKnife;
@@ -25,10 +27,13 @@ import butterknife.OnClick;
 
 public class QuizActivity extends StandardActivity implements QuitQuizDialog.Listener {
 
+    @BindView(R.id.quiz_problem_container) View problemContainer;
     @BindView(R.id.question) TextView questionText;
     @BindView(R.id.options) RadioGroup optionsContainer;
     @BindViews({R.id.option_1, R.id.option_2, R.id.option_3, R.id.option_4}) List<RadioButton> optionButtons;
     @BindView(R.id.submit) View submitButton;
+
+    @BindInt(R.integer.shorter_anim_length) int animationLength;
 
     private Quiz quiz;
     private QuitQuizDialog quitQuizDialog;
@@ -72,18 +77,78 @@ public class QuizActivity extends StandardActivity implements QuitQuizDialog.Lis
         }
     }
 
+    private void animateQuestionOut() {
+        submitButton.setEnabled(false);
+        problemContainer
+                .animate()
+                .translationXBy(-1 * problemContainer.getWidth())
+                .alpha(0)
+                .setDuration(animationLength)
+                .setListener(new Animator.AnimatorListener() {
+                    @Override
+                    public void onAnimationStart(Animator animation) {}
+
+                    @Override
+                    public void onAnimationEnd(Animator animation) {
+                        problemContainer.setTranslationX(0);
+                        loadCurrentQuestionIntoView();
+                        animationQuestionIn();
+                    }
+
+                    @Override
+                    public void onAnimationCancel(Animator animation) {
+                        makeQuestionViewSane();
+                    }
+
+                    @Override
+                    public void onAnimationRepeat(Animator animation) {}
+                });
+    }
+
+    private void animationQuestionIn() {
+        problemContainer
+                .animate()
+                .alpha(1)
+                .setDuration(animationLength)
+                .setListener(new Animator.AnimatorListener() {
+                    @Override
+                    public void onAnimationStart(Animator animation) {}
+
+                    @Override
+                    public void onAnimationEnd(Animator animation) {
+                        submitButton.setEnabled(true);
+                    }
+
+                    @Override
+                    public void onAnimationCancel(Animator animation) {
+                        makeQuestionViewSane();
+                    }
+
+                    @Override
+                    public void onAnimationRepeat(Animator animation) {}
+                });
+    }
+
+    private void makeQuestionViewSane() {
+        problemContainer.setTranslationX(0);
+        problemContainer.setAlpha(1);
+        loadCurrentQuestionIntoView();
+        submitButton.setEnabled(true);
+    }
+
     @OnClick(R.id.submit)
     public void submitAnswer() {
         RadioButton chosenButton = getChosenButton();
         if (chosenButton == null) {
             UIUtils.showLongToast(R.string.please_check_something);
         } else {
+            quiz.submitAnswer(chosenButton.getText().toString());
             quiz.advanceToNextProblem();
             if (quiz.isQuizComplete()) {
                 // TODO: Show results page
                 submitButton.setVisibility(View.GONE);
             } else {
-                loadCurrentQuestionIntoView();
+                animateQuestionOut();
             }
         }
     }
