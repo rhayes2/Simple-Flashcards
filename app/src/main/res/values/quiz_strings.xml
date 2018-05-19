@@ -9,7 +9,8 @@
     </string>
     <string name="quiz_question_header">Question %d of %d</string>
     <string name="good_score_message">Congratulations!</string>
-    <string name="ok_score_message">Not bad!</string>
+    <string name="okay_score_message">Not bad!</string>
     <string name="bad_score_message">Better luck next time!</string>
-    <string name="your_score_was">Your score was:</string>
+    <string name="your_score_was">%s Your score was:</string>
+    <string name="quiz_score_template">%s for %s</string>
 </resources>

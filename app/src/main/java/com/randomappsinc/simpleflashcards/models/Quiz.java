@@ -141,8 +141,8 @@ public class Quiz {
             }
         }
         int totalQuestions = problems.size();
-        grade.setPercentText(String.format(Locale.getDefault(), "%d/%d", numCorrect, totalQuestions));
-        float percentage = (float) numCorrect / (float) totalQuestions;
+        grade.setFractionText(String.format(Locale.getDefault(), "%d/%d", numCorrect, totalQuestions));
+        float percentage = ((float) numCorrect / (float) totalQuestions) * 100.0f;
         grade.setPercentText(String.format(Locale.getDefault(), "%.2f", percentage) + "%");
         if (percentage >= GOOD_PERCENTAGE_THRESHOLD) {
             grade.setScore(QuizScore.GOOD);

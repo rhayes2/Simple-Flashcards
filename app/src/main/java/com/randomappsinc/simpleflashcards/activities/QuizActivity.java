@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import com.randomappsinc.simpleflashcards.R;
 import com.randomappsinc.simpleflashcards.constants.Constants;
+import com.randomappsinc.simpleflashcards.constants.QuizScore;
 import com.randomappsinc.simpleflashcards.dialogs.QuitQuizDialog;
 import com.randomappsinc.simpleflashcards.models.Quiz;
 import com.randomappsinc.simpleflashcards.persistence.DatabaseManager;
@@ -18,6 +19,7 @@ import com.randomappsinc.simpleflashcards.persistence.models.FlashcardSet;
 import com.randomappsinc.simpleflashcards.utils.UIUtils;
 
 import java.util.List;
+import java.util.Locale;
 
 import butterknife.BindInt;
 import butterknife.BindString;
@@ -34,8 +36,16 @@ public class QuizActivity extends StandardActivity implements QuitQuizDialog.Lis
     @BindView(R.id.options) RadioGroup optionsContainer;
     @BindViews({R.id.option_1, R.id.option_2, R.id.option_3, R.id.option_4}) List<RadioButton> optionButtons;
     @BindView(R.id.submit) View submitButton;
+    @BindView(R.id.results_page) View resultsPage;
+    @BindView(R.id.results_header) TextView resultsHeader;
+    @BindView(R.id.score) TextView score;
 
     @BindString(R.string.quiz_question_header) String headerTemplate;
+    @BindString(R.string.good_score_message) String goodScore;
+    @BindString(R.string.okay_score_message) String okayScore;
+    @BindString(R.string.bad_score_message) String badScore;
+    @BindString(R.string.your_score_was) String scoreHeaderTemplate;
+    @BindString(R.string.quiz_score_template) String scoreTemplate;
     @BindInt(R.integer.shorter_anim_length) int animationLength;
 
     private Quiz quiz;
@@ -99,7 +109,6 @@ public class QuizActivity extends StandardActivity implements QuitQuizDialog.Lis
                     @Override
                     public void onAnimationEnd(Animator animation) {
                         problemParent.setTranslationX(0);
-                        loadCurrentQuestionIntoView();
                         animationQuestionIn();
                     }
 
@@ -120,7 +129,9 @@ public class QuizActivity extends StandardActivity implements QuitQuizDialog.Lis
                 .setDuration(animationLength)
                 .setListener(new Animator.AnimatorListener() {
                     @Override
-                    public void onAnimationStart(Animator animation) {}
+                    public void onAnimationStart(Animator animation) {
+                        loadCurrentQuestionIntoView();
+                    }
 
                     @Override
                     public void onAnimationEnd(Animator animation) {
@@ -142,6 +153,17 @@ public class QuizActivity extends StandardActivity implements QuitQuizDialog.Lis
         problemParent.setAlpha(1);
         loadCurrentQuestionIntoView();
         submitButton.setEnabled(true);
+        resultsPage.setVisibility(View.GONE);
+        resultsPage.setAlpha(0);
+        problemParent.setVisibility(View.VISIBLE);
+        submitButton.setVisibility(View.VISIBLE);
+    }
+
+    private void makeResultsPageSane() {
+        resultsPage.setAlpha(1);
+        resultsPage.setVisibility(View.VISIBLE);
+        problemParent.setVisibility(View.GONE);
+        submitButton.setVisibility(View.GONE);
     }
 
     @OnClick(R.id.submit)
@@ -153,12 +175,90 @@ public class QuizActivity extends StandardActivity implements QuitQuizDialog.Lis
             quiz.submitAnswer(chosenButton.getText().toString());
             quiz.advanceToNextProblem();
             if (quiz.isQuizComplete()) {
-                // TODO: Show results page
-                submitButton.setVisibility(View.GONE);
+                fadeOutProblemPage();
             } else {
                 animateQuestionOut();
             }
         }
+    }
+
+    private void fadeOutProblemPage() {
+        problemParent
+                .animate()
+                .alpha(0)
+                .setDuration(animationLength)
+                .setListener(new Animator.AnimatorListener() {
+                    @Override
+                    public void onAnimationStart(Animator animation) {}
+
+                    @Override
+                    public void onAnimationEnd(Animator animation) {
+                        problemParent.setVisibility(View.GONE);
+                        submitButton.setVisibility(View.GONE);
+                        fadeInResultsPage();
+                    }
+
+                    @Override
+                    public void onAnimationCancel(Animator animation) {
+                        makeResultsPageSane();
+                    }
+
+                    @Override
+                    public void onAnimationRepeat(Animator animation) {}
+                });
+        submitButton.animate().alpha(0).setDuration(animationLength);
+    }
+
+    private void loadResultsIntoView() {
+        Quiz.Grade grade = quiz.getGrade();
+        String quizScore = "";
+        switch (grade.getScore()) {
+            case QuizScore.GOOD:
+                quizScore = goodScore;
+                break;
+            case QuizScore.OKAY:
+                quizScore = okayScore;
+                break;
+            case QuizScore.BAD:
+                quizScore = badScore;
+                break;
+        }
+        String scoreHeaderText = String.format(
+                Locale.getDefault(),
+                scoreHeaderTemplate,
+                quizScore);
+        resultsHeader.setText(scoreHeaderText);
+        String scoreText = String.format(
+                Locale.getDefault(),
+                scoreTemplate,
+                grade.getFractionText(),
+                grade.getPercentText());
+        score.setText(scoreText);
+    }
+
+    private void fadeInResultsPage() {
+        resultsPage
+                .animate()
+                .alpha(1)
+                .setDuration(animationLength)
+                .setListener(new Animator.AnimatorListener() {
+                    @Override
+                    public void onAnimationStart(Animator animation) {
+                        loadResultsIntoView();
+                        resultsPage.setVisibility(View.VISIBLE);
+                    }
+
+                    @Override
+                    public void onAnimationEnd(Animator animation) {}
+
+                    @Override
+                    public void onAnimationCancel(Animator animation) {
+                        makeResultsPageSane();
+                    }
+
+                    @Override
+                    public void onAnimationRepeat(Animator animation) {}
+                });
     }
 
     @Nullable
