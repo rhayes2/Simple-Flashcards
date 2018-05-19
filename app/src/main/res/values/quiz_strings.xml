@@ -13,4 +13,6 @@
     <string name="bad_score_message">Better luck next time!</string>
     <string name="your_score_was">%s Your score was:</string>
     <string name="quiz_score_template">%s for %s</string>
+    <string name="retake">Retake</string>
+    <string name="exit">Exit</string>
 </resources>

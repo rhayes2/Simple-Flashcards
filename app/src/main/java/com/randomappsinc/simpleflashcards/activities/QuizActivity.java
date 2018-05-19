@@ -48,6 +48,7 @@ public class QuizActivity extends StandardActivity implements QuitQuizDialog.Lis
     @BindString(R.string.quiz_score_template) String scoreTemplate;
     @BindInt(R.integer.shorter_anim_length) int animationLength;
 
+    private FlashcardSet flashcardSet;
     private Quiz quiz;
     private QuitQuizDialog quitQuizDialog;
 
@@ -59,7 +60,7 @@ public class QuizActivity extends StandardActivity implements QuitQuizDialog.Lis
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         int setId = getIntent().getIntExtra(Constants.FLASHCARD_SET_ID_KEY, 0);
-        FlashcardSet flashcardSet = DatabaseManager.get().getFlashcardSet(setId);
+        flashcardSet = DatabaseManager.get().getFlashcardSet(setId);
         setTitle(flashcardSet.getName());
 
         quitQuizDialog = new QuitQuizDialog(this, this);
@@ -259,6 +260,69 @@ public class QuizActivity extends StandardActivity implements QuitQuizDialog.Lis
                     @Override
                     public void onAnimationRepeat(Animator animation) {}
                 });
+    }
+
+    private void fadeOutResultsPage() {
+        resultsPage
+                .animate()
+                .alpha(0)
+                .setDuration(animationLength)
+                .setListener(new Animator.AnimatorListener() {
+                    @Override
+                    public void onAnimationStart(Animator animation) {}
+
+                    @Override
+                    public void onAnimationEnd(Animator animation) {
+                        resultsPage.setVisibility(View.GONE);
+                        fadeInProblemPage();
+                    }
+
+                    @Override
+                    public void onAnimationCancel(Animator animation) {
+                        makeQuestionViewSane();
+                    }
+
+                    @Override
+                    public void onAnimationRepeat(Animator animation) {}
+                });
+    }
+
+    private void fadeInProblemPage() {
+        problemParent
+                .animate()
+                .alpha(1)
+                .setDuration(animationLength)
+                .setListener(new Animator.AnimatorListener() {
+                    @Override
+                    public void onAnimationStart(Animator animation) {
+                        loadCurrentQuestionIntoView();
+                        problemParent.setVisibility(View.VISIBLE);
+                        submitButton.setVisibility(View.VISIBLE);
+                    }
+
+                    @Override
+                    public void onAnimationEnd(Animator animation) {}
+
+                    @Override
+                    public void onAnimationCancel(Animator animation) {
+                        makeQuestionViewSane();
+                    }
+
+                    @Override
+                    public void onAnimationRepeat(Animator animation) {}
+                });
+        submitButton.animate().alpha(1).setDuration(animationLength);
+    }
+
+    @OnClick(R.id.retake)
+    public void retake() {
+        quiz = new Quiz(flashcardSet);
+        fadeOutResultsPage();
+    }
+
+    @OnClick(R.id.exit)
+    public void exit() {
+        finish();
     }
 
     @Nullable
