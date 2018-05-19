@@ -5,6 +5,7 @@ import com.randomappsinc.simpleflashcards.persistence.models.FlashcardSet;
 import com.randomappsinc.simpleflashcards.utils.RandUtils;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class Quiz {
@@ -56,13 +57,18 @@ public class Quiz {
     public Quiz(FlashcardSet flashcardSet) {
         problems = new ArrayList<>();
         List<Flashcard> flashcards = flashcardSet.getFlashcards();
+        List<Integer> indexes = new ArrayList<>();
         for (int i = 0; i < flashcards.size(); i++) {
+            indexes.add(i);
+        }
+        Collections.shuffle(indexes);
+        for (int index : indexes) {
             Problem problem = new Problem();
-            problem.setQuestion(flashcards.get(i).getTerm());
-            problem.setAnswer(flashcards.get(i).getDefinition());
+            problem.setQuestion(flashcards.get(index).getTerm());
+            problem.setAnswer(flashcards.get(index).getDefinition());
 
             int numOptions = Math.min(NUM_ANSWER_OPTIONS, flashcards.size());
-            List<Integer> optionIndexes = RandUtils.getQuizChoicesIndexes(flashcards.size(), numOptions, i);
+            List<Integer> optionIndexes = RandUtils.getQuizChoicesIndexes(flashcards.size(), numOptions, index);
             List<String> options = new ArrayList<>(optionIndexes.size());
             for (int j : optionIndexes) {
                 options.add(flashcards.get(j).getDefinition());
