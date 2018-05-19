@@ -171,6 +171,10 @@ public class QuizActivity extends StandardActivity implements QuitQuizDialog.Lis
 
     @OnClick(R.id.submit)
     public void submitAnswer() {
+        if (quiz.isQuizComplete()) {
+            return;
+        }
+
         RadioButton chosenButton = getChosenButton();
         if (chosenButton == null) {
             UIUtils.showLongToast(R.string.please_check_something);
@@ -329,7 +333,10 @@ public class QuizActivity extends StandardActivity implements QuitQuizDialog.Lis
 
     @OnClick(R.id.view_results)
     public void viewResults() {
-        startActivity(new Intent(this, QuizResultsActivity.class));
+        Intent intent = new Intent(this, QuizResultsActivity.class)
+                .putParcelableArrayListExtra(Constants.QUIZ_RESULTS_KEY, quiz.getProblems())
+                .putExtra(Constants.FLASHCARD_SET_NAME_KEY, flashcardSet.getName());
+        startActivity(intent);
         overridePendingTransition(R.anim.slide_in_bottom, R.anim.stay);
     }
 

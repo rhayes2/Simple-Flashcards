@@ -16,4 +16,5 @@
     <string name="retake">Retake</string>
     <string name="exit">Exit</string>
     <string name="view_results">View Results</string>
+    <string name="quiz_results">Quiz Results</string>
 </resources>
