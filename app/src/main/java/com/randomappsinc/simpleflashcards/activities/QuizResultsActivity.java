@@ -35,7 +35,8 @@ public class QuizResultsActivity extends StandardActivity {
         setTitle(setName);
 
         List<Problem> problems = getIntent().getParcelableArrayListExtra(Constants.QUIZ_RESULTS_KEY);
-        quizResults.setAdapter(new QuizResultsAdapter(this, problems));
+        int flashcardSetSize = getIntent().getIntExtra(Constants.FLASHCARD_SET_SIZE_KEY, 0);
+        quizResults.setAdapter(new QuizResultsAdapter(this, problems, flashcardSetSize));
     }
 
     @Override

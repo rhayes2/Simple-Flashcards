@@ -17,4 +17,7 @@
     <string name="exit">Exit</string>
     <string name="view_results">View Results</string>
     <string name="quiz_results">Quiz Results</string>
+
+    <string name="your_answer">Your Answer</string>
+    <string name="correct_answer">Correct Answer</string>
 </resources>

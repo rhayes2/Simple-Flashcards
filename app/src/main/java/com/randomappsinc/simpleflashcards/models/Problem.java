@@ -39,7 +39,7 @@ public class Problem implements Parcelable {
         this.options = options;
     }
 
-    String getGivenAnswer() {
+    public String getGivenAnswer() {
         return givenAnswer;
     }
 

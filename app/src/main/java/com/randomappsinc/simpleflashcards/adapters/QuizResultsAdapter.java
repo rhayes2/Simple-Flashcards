@@ -6,22 +6,27 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.randomappsinc.simpleflashcards.R;
 import com.randomappsinc.simpleflashcards.models.Problem;
 
 import java.util.List;
 
+import butterknife.BindString;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class QuizResultsAdapter extends RecyclerView.Adapter<QuizResultsAdapter.QuizResultViewHolder> {
 
     private Context context;
     private List<Problem> problems;
+    private int flashcardSetSize;
 
-    public QuizResultsAdapter(Context context, List<Problem> problems) {
+    public QuizResultsAdapter(Context context, List<Problem> problems, int flashcardSetSize) {
         this.context = context;
         this.problems = problems;
+        this.flashcardSetSize = flashcardSetSize;
     }
 
     @NonNull
@@ -36,7 +41,7 @@ public class QuizResultsAdapter extends RecyclerView.Adapter<QuizResultsAdapter.
 
     @Override
     public void onBindViewHolder(@NonNull QuizResultViewHolder holder, int position) {
-        holder.loadSetting(position);
+        holder.loadResult(position);
     }
 
     @Override
@@ -46,12 +51,23 @@ public class QuizResultsAdapter extends RecyclerView.Adapter<QuizResultsAdapter.
 
     class QuizResultViewHolder extends RecyclerView.ViewHolder {
 
+        @BindView(R.id.question_header) TextView questionHeader;
+        @BindView(R.id.question) TextView question;
+        @BindView(R.id.your_answer) TextView yourAnswer;
+
+        @BindString(R.string.quiz_question_header) String headerTemplate;
+
         QuizResultViewHolder(View view) {
             super(view);
             ButterKnife.bind(this, view);
         }
 
-        void loadSetting(int position) {
+        void loadResult(int position) {
+            Problem problem = problems.get(position);
+            String headerText = String.format(headerTemplate, position + 1, flashcardSetSize);
+            questionHeader.setText(headerText);
+            question.setText(problem.getQuestion());
+            yourAnswer.setText(problem.getGivenAnswer());
         }
     }
 }
