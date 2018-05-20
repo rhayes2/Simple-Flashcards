@@ -13,6 +13,7 @@ import com.randomappsinc.simpleflashcards.models.Problem;
 
 import java.util.List;
 
+import butterknife.BindColor;
 import butterknife.BindString;
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -53,8 +54,14 @@ public class QuizResultsAdapter extends RecyclerView.Adapter<QuizResultsAdapter.
 
         @BindView(R.id.question_header) TextView questionHeader;
         @BindView(R.id.question) TextView question;
+        @BindView(R.id.your_answer_icon) TextView yourAnswerIcon;
         @BindView(R.id.your_answer) TextView yourAnswer;
+        @BindView(R.id.correct_answer_header) View correctAnswerHeader;
+        @BindView(R.id.correct_answer_container) View correctAnswerContainer;
+        @BindView(R.id.correct_answer) TextView correctAnswer;
 
+        @BindColor(R.color.green) int green;
+        @BindColor(R.color.red) int red;
         @BindString(R.string.quiz_question_header) String headerTemplate;
 
         QuizResultViewHolder(View view) {
@@ -67,7 +74,20 @@ public class QuizResultsAdapter extends RecyclerView.Adapter<QuizResultsAdapter.
             String headerText = String.format(headerTemplate, position + 1, flashcardSetSize);
             questionHeader.setText(headerText);
             question.setText(problem.getQuestion());
+
+            boolean wasUserCorrect = problem.wasUserCorrect();
+            yourAnswerIcon.setText(wasUserCorrect ? R.string.check_icon : R.string.x_icon);
+            yourAnswerIcon.setTextColor(wasUserCorrect ? green : red);
             yourAnswer.setText(problem.getGivenAnswer());
+
+            if (wasUserCorrect) {
+                correctAnswerHeader.setVisibility(View.GONE);
+                correctAnswerContainer.setVisibility(View.GONE);
+            } else {
+                correctAnswer.setText(problem.getAnswer());
+                correctAnswerHeader.setVisibility(View.VISIBLE);
+                correctAnswerContainer.setVisibility(View.VISIBLE);
+            }
         }
     }
 }

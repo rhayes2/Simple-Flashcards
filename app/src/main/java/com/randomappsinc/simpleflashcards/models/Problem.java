@@ -23,7 +23,7 @@ public class Problem implements Parcelable {
         this.question = question;
     }
 
-    String getAnswer() {
+    public String getAnswer() {
         return answer;
     }
 
@@ -45,6 +45,10 @@ public class Problem implements Parcelable {
 
     void setGivenAnswer(String givenAnswer) {
         this.givenAnswer = givenAnswer;
+    }
+
+    public boolean wasUserCorrect() {
+        return answer.equals(givenAnswer);
     }
 
     protected Problem(Parcel in) {

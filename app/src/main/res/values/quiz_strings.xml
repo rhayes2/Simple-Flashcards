@@ -20,4 +20,7 @@
 
     <string name="your_answer">Your Answer</string>
     <string name="correct_answer">Correct Answer</string>
+
+    <string name="check_icon">{ion-checkmark-round}</string>
+    <string name="x_icon">{ion-close-round}</string>
 </resources>

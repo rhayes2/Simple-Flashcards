@@ -28,10 +28,47 @@
 
         <TextView
             android:text="@string/your_answer"
+            android:layout_marginTop="8dp"
             style="@style/quiz_result_header"/>
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
+
+            <com.joanzapata.iconify.widget.IconTextView
+                android:id="@+id/your_answer_icon"
+                style="@style/quiz_result_icon"/>
+
+            <TextView
+                android:id="@+id/your_answer"
+                android:layout_marginLeft="4dp"
+                style="@style/quiz_result_value"/>
+        </LinearLayout>
+
         <TextView
-            android:id="@+id/your_answer"
-            style="@style/quiz_result_value"/>
+            android:id="@+id/correct_answer_header"
+            android:text="@string/correct_answer"
+            android:layout_marginTop="8dp"
+            style="@style/quiz_result_header"/>
+
+        <LinearLayout
+            android:id="@+id/correct_answer_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
+
+            <com.joanzapata.iconify.widget.IconTextView
+                android:text="@string/check_icon"
+                android:textColor="@color/green"
+                style="@style/quiz_result_icon"/>
+
+            <TextView
+                android:id="@+id/correct_answer"
+                android:layout_marginLeft="4dp"
+                style="@style/quiz_result_value"/>
+        </LinearLayout>
     </LinearLayout>
 </android.support.v7.widget.CardView>
