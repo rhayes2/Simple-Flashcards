@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="edit_flashcard_set">Edit flashcard set</string>
-    <string name="no_flashcards">This set currently has no flashcards.</string>
+    <string name="edit_flashcard_set">Edit Flashcard Set</string>
+    <string name="no_flashcards">Use the {ion-android-add} button to start adding flashcards!</string>
     <string name="term_prefix">Term:&#160;</string>
     <string name="definition_prefix">Definition:&#160;</string>
-
-    <string name="rename_flashcard_set">Rename flashcard set</string>
-    <string name="new_flashcard_set_name">New flashcard set name</string>
+    <string name="one_flashcard">1 flashcard</string>
+    <string name="x_flashcards">%d flashcards</string>
 </resources>

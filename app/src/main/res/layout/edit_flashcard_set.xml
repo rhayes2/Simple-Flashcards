@@ -1,25 +1,47 @@
-<android.support.design.widget.CoordinatorLayout
+<FrameLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/parent"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
     android:background="@color/white"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
     <LinearLayout
-        android:orientation="vertical"
+        android:id="@+id/flashcards_info"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:paddingTop="8dp"
+        android:paddingLeft="8dp"
+        android:paddingRight="8dp"
+        android:orientation="vertical">
+
+        <android.support.v7.widget.CardView
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            card_view:contentPadding="8dp"
+            style="@style/flashcard_card">
+
+            <EditText
+                android:id="@+id/flashcard_set_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/flashcard_set_name"
+                android:inputType="text"
+                android:textSize="17sp"
+                android:textColor="@color/black"
+                android:background="@null"
+                android:imeOptions="actionDone"/>
+        </android.support.v7.widget.CardView>
 
         <TextView
-            android:id="@+id/no_flashcards"
-            android:layout_margin="36dp"
-            android:text="@string/no_flashcards"
-            android:textSize="24sp"
-            android:textColor="@color/dark_gray"
-            android:layout_gravity="center_horizontal"
+            android:id="@+id/num_flashcards"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="4dp"
             android:gravity="center_horizontal"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+            android:textSize="17sp"
+            android:textColor="@color/dark_gray"/>
 
         <ListView
             android:id="@+id/flashcards"
@@ -27,8 +49,17 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:clipToPadding="false"
-            android:paddingTop="4dp"
             android:paddingBottom="84dp"/>
+
+        <TextView
+            android:id="@+id/no_flashcards"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_margin="36dp"
+            android:text="@string/no_flashcards"
+            android:textSize="23sp"
+            android:textColor="@color/dark_gray" />
     </LinearLayout>
 
     <android.support.design.widget.FloatingActionButton
@@ -37,4 +68,4 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
         android:layout_margin="@dimen/fab_margin"/>
-</android.support.design.widget.CoordinatorLayout>
+</FrameLayout>
