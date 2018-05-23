@@ -1,11 +1,11 @@
 package com.randomappsinc.simpleflashcards.adapters;
 
 import android.content.Context;
-import android.text.Html;
+import android.support.annotation.NonNull;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import com.randomappsinc.simpleflashcards.R;
@@ -16,11 +16,12 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
-public class FlashcardsOverviewAdapter extends BaseAdapter {
+public class FlashcardsOverviewAdapter extends RecyclerView.Adapter<FlashcardsOverviewAdapter.FlashcardViewHolder> {
 
-    private Context context;
-    private List<Flashcard> flashcards;
+    protected Context context;
+    protected List<Flashcard> flashcards;
     private View noContent;
     private int setId;
 
@@ -43,48 +44,52 @@ public class FlashcardsOverviewAdapter extends BaseAdapter {
         notifyDataSetChanged();
     }
 
+    @NonNull
     @Override
-    public int getCount() {
+    public FlashcardViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View itemView = LayoutInflater.from(context).inflate(
+                R.layout.flashcard_cell,
+                parent,
+                false);
+        return new FlashcardViewHolder(itemView);
+    }
+
+    @Override
+    public void onBindViewHolder(@NonNull FlashcardViewHolder holder, int position) {
+        holder.loadFlashcard(position);
+    }
+
+    @Override
+    public int getItemCount() {
         return flashcards.size();
     }
 
-    @Override
-    public Flashcard getItem(int position) {
-        return flashcards.get(position);
-    }
+    public class FlashcardViewHolder extends RecyclerView.ViewHolder {
 
-    @Override
-    public long getItemId(int position) {
-        return 0;
-    }
-
-    public class FlashcardViewHolder {
+        @BindView(R.id.position_info) TextView positionInfo;
         @BindView(R.id.term) TextView term;
         @BindView(R.id.definition) TextView definition;
 
         FlashcardViewHolder(View view) {
+            super(view);
             ButterKnife.bind(this, view);
         }
-    }
 
-    @Override
-    public View getView(int position, View view, ViewGroup parent) {
-        FlashcardViewHolder holder;
-        if (view == null) {
-            LayoutInflater vi = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            view = vi.inflate(R.layout.flashcard_cell, parent, false);
-            holder = new FlashcardViewHolder(view);
-            view.setTag(holder);
-        }
-        else {
-            holder = (FlashcardViewHolder) view.getTag();
+        void loadFlashcard(int position) {
+            Flashcard flashcard = flashcards.get(position);
+
+            positionInfo.setText(context.getString(
+                    R.string.flashcard_x_of_y,
+                    position + 1,
+                    getItemCount()));
+
+            term.setText(flashcard.getTerm());
+            definition.setText(flashcard.getDefinition());
         }
 
-        String question = "<b>" + context.getString(R.string.term_prefix) + "</b>" + flashcards.get(position).getTerm();
-        holder.term.setText(Html.fromHtml(question));
-        String answer = "<b>" + context.getString(R.string.definition_prefix) + "</b>" + flashcards.get(position).getDefinition();
-        holder.definition.setText(Html.fromHtml(answer));
+        @OnClick(R.id.delete_flashcard)
+        public void deleteFlashcard() {
 
-        return view;
+        }
     }
 }

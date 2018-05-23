@@ -2,8 +2,7 @@
 <resources>
     <string name="edit_flashcard_set">Edit Flashcard Set</string>
     <string name="no_flashcards">Use the {ion-android-add} button to start adding flashcards!</string>
-    <string name="term_prefix">Term:&#160;</string>
-    <string name="definition_prefix">Definition:&#160;</string>
     <string name="one_flashcard">1 flashcard</string>
     <string name="x_flashcards">%d flashcards</string>
+    <string name="flashcard_x_of_y">Flashcard %d of %d</string>
 </resources>

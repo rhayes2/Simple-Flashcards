@@ -3,10 +3,10 @@ package com.randomappsinc.simpleflashcards.activities;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
-import android.widget.ListView;
 import android.widget.TextView;
 
 import com.joanzapata.iconify.IconDrawable;
@@ -24,7 +24,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.OnEditorAction;
-import butterknife.OnItemClick;
 
 public class EditFlashcardSetActivity extends StandardActivity {
 
@@ -32,7 +31,7 @@ public class EditFlashcardSetActivity extends StandardActivity {
     @BindView(R.id.flashcard_set_name) EditText flashcardSetName;
     @BindView(R.id.num_flashcards) TextView numFlashcards;
     @BindView(R.id.no_flashcards) TextView noFlashcards;
-    @BindView(R.id.flashcards) ListView flashcards;
+    @BindView(R.id.flashcards) RecyclerView flashcards;
     @BindView(R.id.add_flashcard) FloatingActionButton addFlashcard;
 
     @BindString(R.string.one_flashcard) String oneFlashcard;
@@ -56,18 +55,21 @@ public class EditFlashcardSetActivity extends StandardActivity {
                         .colorRes(R.color.white));
         adapter = new FlashcardsOverviewAdapter(this, setId, noFlashcards);
         flashcards.setAdapter(adapter);
-
-        int flashcardsCount = adapter.getCount();
-        String numFlashcardsText = flashcardsCount == 1
-                ? oneFlashcard
-                : String.format(Locale.getDefault(), xFlashcards, flashcardsCount);
-        numFlashcards.setText(numFlashcardsText);
+        refreshCount();
     }
 
     @Override
     public void onSaveInstanceState(Bundle savedInstanceState) {
         super.onSaveInstanceState(savedInstanceState);
         saveFlashcardSetName();
+    }
+
+    private void refreshCount() {
+        int flashcardsCount = adapter.getItemCount();
+        String numFlashcardsText = flashcardsCount == 1
+                ? oneFlashcard
+                : String.format(Locale.getDefault(), xFlashcards, flashcardsCount);
+        numFlashcards.setText(numFlashcardsText);
     }
 
     private void saveFlashcardSetName() {
@@ -97,14 +99,6 @@ public class EditFlashcardSetActivity extends StandardActivity {
     protected void onPause() {
         super.onPause();
         saveFlashcardSetName();
-    }
-
-    @OnItemClick(R.id.flashcards)
-    public void onFlashcardClick(int position) {
-        Intent intent = new Intent(this, FlashcardFormActivity.class);
-        intent.putExtra(FlashcardFormActivity.FLASHCARD_ID_KEY, adapter.getItem(position).getId());
-        intent.putExtra(FlashcardFormActivity.UPDATE_MODE_KEY, true);
-        startActivity(intent);
     }
 
     @OnClick(R.id.add_flashcard)

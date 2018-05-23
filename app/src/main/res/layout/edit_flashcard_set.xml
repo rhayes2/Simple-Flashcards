@@ -1,5 +1,6 @@
 <FrameLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
     android:background="@color/white"
     android:layout_width="match_parent"
@@ -44,14 +45,6 @@
             android:textSize="17sp"
             android:textColor="@color/dark_gray"/>
 
-        <ListView
-            android:id="@+id/flashcards"
-            android:divider="@null"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:clipToPadding="false"
-            android:paddingBottom="84dp"/>
-
         <TextView
             android:id="@+id/no_flashcards"
             android:layout_width="wrap_content"
@@ -60,7 +53,15 @@
             android:layout_margin="36dp"
             android:text="@string/no_flashcards"
             android:textSize="23sp"
-            android:textColor="@color/dark_gray" />
+            android:textColor="@color/dark_gray"/>
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/flashcards"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:clipToPadding="false"
+            android:paddingBottom="84dp"
+            app:layoutManager="android.support.v7.widget.LinearLayoutManager"/>
     </LinearLayout>
 
     <android.support.design.widget.FloatingActionButton
