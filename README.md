@@ -1,3 +1,14 @@
+## Simple Flashcards Plus
+
+![logo](Logo/horizontal.png)
+
+**Features:**
+- Create as many custom flashcard sets as you want. You can rename or delete them whenever
+- Add however many custom flashcards to whichever flashcard set you want. You can update or delete any flashcard whenever
+- When studying a flashcard set, you can go through them forwards, backwards, or at random
+- Simple, sleek, intuitive user interface
+- Backported Material Design so the app looks nice no matter how old your Android phone is
+
 ## Download
 
 <a href="https://play.google.com/store/apps/details?id=com.randomappsinc.simpleflashcards" target="_blank">
