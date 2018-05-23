@@ -8,4 +8,8 @@
 
     <string name="flashcard_delete_title">Confirm Flashcard Deletion</string>
     <string name="flashcard_delete_message">Are you sure that you want to delete this flashcard?</string>
+
+    <string name="save">Save</string>
+    <string name="flashcard_edit_term_title">Edit Flashcard Term</string>
+    <string name="flashcard_edit_definition_title">Edit Flashcard Definition</string>
 </resources>

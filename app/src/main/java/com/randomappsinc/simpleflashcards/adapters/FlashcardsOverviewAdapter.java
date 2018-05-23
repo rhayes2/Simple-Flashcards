@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import com.randomappsinc.simpleflashcards.R;
 import com.randomappsinc.simpleflashcards.dialogs.DeleteFlashcardDialog;
+import com.randomappsinc.simpleflashcards.dialogs.EditFlashcardTermDialog;
 import com.randomappsinc.simpleflashcards.persistence.DatabaseManager;
 import com.randomappsinc.simpleflashcards.persistence.models.Flashcard;
 
@@ -26,6 +27,7 @@ public class FlashcardsOverviewAdapter extends RecyclerView.Adapter<FlashcardsOv
     private View noContent;
     private int setId;
     protected DeleteFlashcardDialog deleteFlashcardDialog;
+    protected EditFlashcardTermDialog editFlashcardTermDialog;
 
     public FlashcardsOverviewAdapter(Context context, int setId, View noContent) {
         this.context = context;
@@ -33,6 +35,7 @@ public class FlashcardsOverviewAdapter extends RecyclerView.Adapter<FlashcardsOv
         this.flashcards = DatabaseManager.get().getAllFlashcards(setId);
         this.noContent = noContent;
         this.deleteFlashcardDialog = new DeleteFlashcardDialog(context, flashcardDeleteListener);
+        this.editFlashcardTermDialog = new EditFlashcardTermDialog(context, flashcardTermEditListener);
         setNoContent();
     }
 
@@ -40,6 +43,14 @@ public class FlashcardsOverviewAdapter extends RecyclerView.Adapter<FlashcardsOv
             new DeleteFlashcardDialog.Listener() {
                 @Override
                 public void onFlashcardSetDeleted() {
+                    refreshSet();
+                }
+            };
+
+    private final EditFlashcardTermDialog.Listener flashcardTermEditListener =
+            new EditFlashcardTermDialog.Listener() {
+                @Override
+                public void onFlashcardTermEdited() {
                     refreshSet();
                 }
             };
@@ -100,12 +111,11 @@ public class FlashcardsOverviewAdapter extends RecyclerView.Adapter<FlashcardsOv
 
         @OnClick(R.id.term)
         public void editTerm() {
-
+            editFlashcardTermDialog.show(flashcards.get(getAdapterPosition()));
         }
 
         @OnClick(R.id.definition)
         public void editDefinition() {
-
         }
 
         @OnClick(R.id.delete_flashcard)
