@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import com.randomappsinc.simpleflashcards.R;
 import com.randomappsinc.simpleflashcards.dialogs.DeleteFlashcardDialog;
+import com.randomappsinc.simpleflashcards.dialogs.EditFlashcardDefinitionDialog;
 import com.randomappsinc.simpleflashcards.dialogs.EditFlashcardTermDialog;
 import com.randomappsinc.simpleflashcards.persistence.DatabaseManager;
 import com.randomappsinc.simpleflashcards.persistence.models.Flashcard;
@@ -28,6 +29,7 @@ public class FlashcardsOverviewAdapter extends RecyclerView.Adapter<FlashcardsOv
     private int setId;
     protected DeleteFlashcardDialog deleteFlashcardDialog;
     protected EditFlashcardTermDialog editFlashcardTermDialog;
+    protected EditFlashcardDefinitionDialog editFlashcardDefinitionDialog;
 
     public FlashcardsOverviewAdapter(Context context, int setId, View noContent) {
         this.context = context;
@@ -36,6 +38,7 @@ public class FlashcardsOverviewAdapter extends RecyclerView.Adapter<FlashcardsOv
         this.noContent = noContent;
         this.deleteFlashcardDialog = new DeleteFlashcardDialog(context, flashcardDeleteListener);
         this.editFlashcardTermDialog = new EditFlashcardTermDialog(context, flashcardTermEditListener);
+        this.editFlashcardDefinitionDialog = new EditFlashcardDefinitionDialog(context, flashcardDefinitionEditListener);
         setNoContent();
     }
 
@@ -51,6 +54,14 @@ public class FlashcardsOverviewAdapter extends RecyclerView.Adapter<FlashcardsOv
             new EditFlashcardTermDialog.Listener() {
                 @Override
                 public void onFlashcardTermEdited() {
+                    refreshSet();
+                }
+            };
+
+    private final EditFlashcardDefinitionDialog.Listener flashcardDefinitionEditListener =
+            new EditFlashcardDefinitionDialog.Listener() {
+                @Override
+                public void onFlashcardDefinitionEdited() {
                     refreshSet();
                 }
             };
@@ -116,6 +127,7 @@ public class FlashcardsOverviewAdapter extends RecyclerView.Adapter<FlashcardsOv
 
         @OnClick(R.id.definition)
         public void editDefinition() {
+            editFlashcardDefinitionDialog.show(flashcards.get(getAdapterPosition()));
         }
 
         @OnClick(R.id.delete_flashcard)

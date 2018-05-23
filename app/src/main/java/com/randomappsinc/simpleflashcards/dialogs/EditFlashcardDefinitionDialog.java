@@ -2,7 +2,6 @@ package com.randomappsinc.simpleflashcards.dialogs;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
-import android.text.InputType;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -10,20 +9,20 @@ import com.randomappsinc.simpleflashcards.R;
 import com.randomappsinc.simpleflashcards.persistence.DatabaseManager;
 import com.randomappsinc.simpleflashcards.persistence.models.Flashcard;
 
-public class EditFlashcardTermDialog {
+public class EditFlashcardDefinitionDialog {
 
     public interface Listener {
-        void onFlashcardTermEdited();
+        void onFlashcardDefinitionEdited();
     }
 
     private MaterialDialog dialog;
     protected Flashcard flashcard;
 
-    public EditFlashcardTermDialog(Context context, @NonNull final Listener listener) {
+    public EditFlashcardDefinitionDialog(Context context, @NonNull final Listener listener) {
         dialog = new MaterialDialog.Builder(context)
-                .title(R.string.flashcard_edit_term_title)
+                .title(R.string.flashcard_edit_definition_title)
                 .alwaysCallInputCallback()
-                .input(context.getString(R.string.term),
+                .input(context.getString(R.string.definition),
                         "",
                         new MaterialDialog.InputCallback() {
                             @Override
@@ -33,15 +32,14 @@ public class EditFlashcardTermDialog {
                                 dialog.getActionButton(DialogAction.POSITIVE).setEnabled(notEmpty);
                             }
                         })
-                .inputType(InputType.TYPE_TEXT_FLAG_MULTI_LINE)
                 .positiveText(R.string.save)
                 .negativeText(android.R.string.cancel)
                 .onPositive(new MaterialDialog.SingleButtonCallback() {
                     @Override
                     public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                        String newTerm = dialog.getInputEditText().getText().toString().trim();
-                        DatabaseManager.get().updateFlashcardTerm(flashcard.getId(), newTerm);
-                        listener.onFlashcardTermEdited();
+                        String newDefinition = dialog.getInputEditText().getText().toString().trim();
+                        DatabaseManager.get().updateFlashcardDefinition(flashcard.getId(), newDefinition);
+                        listener.onFlashcardDefinitionEdited();
                     }
                 })
                 .build();
@@ -50,7 +48,7 @@ public class EditFlashcardTermDialog {
 
     public void show(Flashcard flashcard) {
         this.flashcard = flashcard;
-        dialog.getInputEditText().setText(flashcard.getTerm());
+        dialog.getInputEditText().setText(flashcard.getDefinition());
         dialog.show();
     }
 }
