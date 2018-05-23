@@ -1,6 +1,5 @@
 package com.randomappsinc.simpleflashcards.activities;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.RecyclerView;
@@ -22,7 +21,6 @@ import java.util.Locale;
 import butterknife.BindString;
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
 import butterknife.OnEditorAction;
 
 public class EditFlashcardSetActivity extends StandardActivity {
@@ -99,12 +97,5 @@ public class EditFlashcardSetActivity extends StandardActivity {
     protected void onPause() {
         super.onPause();
         saveFlashcardSetName();
-    }
-
-    @OnClick(R.id.add_flashcard)
-    public void addFlashcard() {
-        Intent intent = new Intent(this, FlashcardFormActivity.class);
-        intent.putExtra(Constants.FLASHCARD_SET_ID_KEY, setId);
-        startActivity(intent);
     }
 }

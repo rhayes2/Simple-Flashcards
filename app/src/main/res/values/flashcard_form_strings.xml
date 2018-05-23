@@ -9,8 +9,4 @@
 
     <string name="blank_term">Terms cannot be blank.</string>
     <string name="blank_definition">Definitions cannot be blank.</string>
-
-    <string name="delete_flashcard">Delete flashcard</string>
-    <string name="flashcard_delete_title">Confirm flashcard deletion</string>
-    <string name="flashcard_delete_message">Are you sure that you want to delete this flashcard?</string>
 </resources>

@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.randomappsinc.simpleflashcards.R;
+import com.randomappsinc.simpleflashcards.dialogs.DeleteFlashcardDialog;
 import com.randomappsinc.simpleflashcards.persistence.DatabaseManager;
 import com.randomappsinc.simpleflashcards.persistence.models.Flashcard;
 
@@ -24,14 +25,24 @@ public class FlashcardsOverviewAdapter extends RecyclerView.Adapter<FlashcardsOv
     protected List<Flashcard> flashcards;
     private View noContent;
     private int setId;
+    protected DeleteFlashcardDialog deleteFlashcardDialog;
 
     public FlashcardsOverviewAdapter(Context context, int setId, View noContent) {
         this.context = context;
         this.setId = setId;
         this.flashcards = DatabaseManager.get().getAllFlashcards(setId);
         this.noContent = noContent;
+        this.deleteFlashcardDialog = new DeleteFlashcardDialog(context, flashcardDeleteListener);
         setNoContent();
     }
+
+    private final DeleteFlashcardDialog.Listener flashcardDeleteListener =
+            new DeleteFlashcardDialog.Listener() {
+                @Override
+                public void onFlashcardSetDeleted() {
+                    refreshSet();
+                }
+            };
 
     private void setNoContent() {
         int visibility = flashcards.size() == 0 ? View.VISIBLE : View.GONE;
@@ -87,9 +98,19 @@ public class FlashcardsOverviewAdapter extends RecyclerView.Adapter<FlashcardsOv
             definition.setText(flashcard.getDefinition());
         }
 
+        @OnClick(R.id.term)
+        public void editTerm() {
+
+        }
+
+        @OnClick(R.id.definition)
+        public void editDefinition() {
+
+        }
+
         @OnClick(R.id.delete_flashcard)
         public void deleteFlashcard() {
-
+            deleteFlashcardDialog.show(flashcards.get(getAdapterPosition()).getId());
         }
     }
 }
