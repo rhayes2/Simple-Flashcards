@@ -3,6 +3,8 @@ package com.randomappsinc.simpleflashcards.activities;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -13,6 +15,7 @@ import com.randomappsinc.simpleflashcards.R;
 import com.randomappsinc.simpleflashcards.adapters.FlashcardsOverviewAdapter;
 import com.randomappsinc.simpleflashcards.constants.Constants;
 import com.randomappsinc.simpleflashcards.persistence.DatabaseManager;
+import com.randomappsinc.simpleflashcards.utils.UIUtils;
 
 import java.util.Locale;
 
@@ -20,10 +23,12 @@ import butterknife.BindString;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import butterknife.OnEditorAction;
 import butterknife.OnItemClick;
 
 public class EditFlashcardSetActivity extends StandardActivity {
 
+    @BindView(R.id.set_name_card) View setNameCard;
     @BindView(R.id.flashcard_set_name) EditText flashcardSetName;
     @BindView(R.id.num_flashcards) TextView numFlashcards;
     @BindView(R.id.no_flashcards) TextView noFlashcards;
@@ -60,9 +65,38 @@ public class EditFlashcardSetActivity extends StandardActivity {
     }
 
     @Override
+    public void onSaveInstanceState(Bundle savedInstanceState) {
+        super.onSaveInstanceState(savedInstanceState);
+        saveFlashcardSetName();
+    }
+
+    private void saveFlashcardSetName() {
+        String newSetName = flashcardSetName.getText().toString().trim();
+        if (!newSetName.isEmpty()) {
+            DatabaseManager.get().renameSet(setId, newSetName);
+        }
+    }
+
+    @OnEditorAction(R.id.flashcard_set_name)
+    public boolean onEditorAction(int actionId) {
+        if (actionId == EditorInfo.IME_ACTION_DONE) {
+            setNameCard.requestFocus();
+            UIUtils.closeKeyboard(this);
+            return true;
+        }
+        return false;
+    }
+
+    @Override
     protected void onResume() {
         super.onResume();
         adapter.refreshSet();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        saveFlashcardSetName();
     }
 
     @OnItemClick(R.id.flashcards)
