@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="edit_flashcard_set">Edit Flashcard Set</string>
-    <string name="no_flashcards">Use the {ion-android-add} button to start adding flashcards!</string>
+    <string name="no_flashcards">Use the {ion-android-add-circle} button below to start adding flashcards!</string>
     <string name="one_flashcard">1 flashcard</string>
     <string name="x_flashcards">%d flashcards</string>
     <string name="flashcard_x_of_y">Flashcard %d of %d</string>

@@ -257,4 +257,10 @@ public class DatabaseManager {
                 .equalTo("id", setId)
                 .findFirst();
     }
+
+    public int getNumFlashcardSets() {
+        return realm.where(FlashcardSet.class)
+                .findAll()
+                .size();
+    }
 }

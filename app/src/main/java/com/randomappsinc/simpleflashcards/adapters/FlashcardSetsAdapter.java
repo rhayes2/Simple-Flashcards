@@ -31,9 +31,9 @@ public class FlashcardSetsAdapter extends BaseAdapter {
         void deleteFlashcardSet(FlashcardSet flashcardSet);
     }
 
-    @NonNull private Listener listener;
+    @NonNull protected Listener listener;
     private Context context;
-    private List<FlashcardSet> flashcardSets;
+    protected List<FlashcardSet> flashcardSets;
     private TextView noSets;
 
     public FlashcardSetsAdapter(@NonNull Listener listener, Context context, TextView noSets) {
@@ -46,13 +46,15 @@ public class FlashcardSetsAdapter extends BaseAdapter {
     public void refreshContent(String searchTerm) {
         flashcardSets.clear();
         flashcardSets.addAll(DatabaseManager.get().getFlashcardSets(searchTerm));
-        setNoContent();
+        if (flashcardSets.isEmpty()) {
+            noSets.setText(DatabaseManager.get().getNumFlashcardSets() == 0
+                    ? R.string.no_sets_at_all
+                    : R.string.no_sets_search);
+            noSets.setVisibility(View.VISIBLE);
+        } else {
+            noSets.setVisibility(View.GONE);
+        }
         notifyDataSetChanged();
-    }
-
-    private void setNoContent() {
-        int viewVisibility = flashcardSets.isEmpty() ? View.VISIBLE : View.GONE;
-        noSets.setVisibility(viewVisibility);
     }
 
     public int getCount() {

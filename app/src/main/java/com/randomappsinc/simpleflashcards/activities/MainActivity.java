@@ -39,7 +39,7 @@ public class MainActivity extends StandardActivity
     @BindView(R.id.no_sets) TextView noSets;
     @BindView(R.id.add_flashcard_set) FloatingActionButton addFlashcardSet;
 
-    private FlashcardSetsAdapter adapter;
+    protected FlashcardSetsAdapter adapter;
     private FlashcardSetCreatorDialog flashcardSetCreatorDialog;
     private DeleteFlashcardSetDialog deleteFlashcardSetDialog;
 
@@ -101,6 +101,7 @@ public class MainActivity extends StandardActivity
             new FlashcardSetCreatorDialog.Listener() {
                 @Override
                 public void onFlashcardSetCreated(int createdSetId) {
+                    adapter.refreshContent(setSearch.getText().toString());
                     Intent intent = new Intent(MainActivity.this, EditFlashcardSetActivity.class);
                     intent.putExtra(Constants.FLASHCARD_SET_ID_KEY, createdSetId);
                     startActivity(intent);

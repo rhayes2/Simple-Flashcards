@@ -47,15 +47,9 @@
                 style="@style/search_icon"/>
         </FrameLayout>
 
-        <TextView
+        <com.joanzapata.iconify.widget.IconTextView
             android:id="@+id/no_sets"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="25dp"
-            android:visibility="gone"
-            android:text="@string/no_sets"
-            android:textSize="23sp"/>
+            style="@style/empty_state_text"/>
 
         <ListView
             android:id="@+id/flashcard_sets"
