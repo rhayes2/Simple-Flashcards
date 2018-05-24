@@ -12,4 +12,9 @@
     <string name="save">Save</string>
     <string name="flashcard_edit_term_title">Edit Flashcard Term</string>
     <string name="flashcard_edit_definition_title">Edit Flashcard Definition</string>
+
+    <string name="set_flashcard_term">Set Flashcard Term</string>
+    <string name="set_flashcard_definition">Set Flashcard Definition</string>
+    <string name="next">Next</string>
+    <string name="back">Back</string>
 </resources>

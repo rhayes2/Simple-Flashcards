@@ -2,7 +2,6 @@ package com.randomappsinc.simpleflashcards.dialogs;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
-import android.text.InputType;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -33,7 +32,6 @@ public class EditFlashcardTermDialog {
                                 dialog.getActionButton(DialogAction.POSITIVE).setEnabled(notEmpty);
                             }
                         })
-                .inputType(InputType.TYPE_TEXT_FLAG_MULTI_LINE)
                 .positiveText(R.string.save)
                 .negativeText(android.R.string.cancel)
                 .onPositive(new MaterialDialog.SingleButtonCallback() {

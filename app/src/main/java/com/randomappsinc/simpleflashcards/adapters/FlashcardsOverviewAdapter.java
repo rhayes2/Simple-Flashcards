@@ -30,16 +30,17 @@ public class FlashcardsOverviewAdapter extends RecyclerView.Adapter<FlashcardsOv
     protected DeleteFlashcardDialog deleteFlashcardDialog;
     protected EditFlashcardTermDialog editFlashcardTermDialog;
     protected EditFlashcardDefinitionDialog editFlashcardDefinitionDialog;
+    private TextView numFlashcards;
 
-    public FlashcardsOverviewAdapter(Context context, int setId, View noContent) {
+    public FlashcardsOverviewAdapter(Context context, int setId, View noContent, TextView numFlashcards) {
         this.context = context;
         this.setId = setId;
-        this.flashcards = DatabaseManager.get().getAllFlashcards(setId);
         this.noContent = noContent;
         this.deleteFlashcardDialog = new DeleteFlashcardDialog(context, flashcardDeleteListener);
         this.editFlashcardTermDialog = new EditFlashcardTermDialog(context, flashcardTermEditListener);
         this.editFlashcardDefinitionDialog = new EditFlashcardDefinitionDialog(context, flashcardDefinitionEditListener);
-        setNoContent();
+        this.numFlashcards = numFlashcards;
+        refreshSet();
     }
 
     private final DeleteFlashcardDialog.Listener flashcardDeleteListener =
@@ -75,6 +76,15 @@ public class FlashcardsOverviewAdapter extends RecyclerView.Adapter<FlashcardsOv
         this.flashcards = DatabaseManager.get().getAllFlashcards(setId);
         setNoContent();
         notifyDataSetChanged();
+        refreshCount();
+    }
+
+    protected void refreshCount() {
+        int flashcardsCount = getItemCount();
+        String numFlashcardsText = flashcardsCount == 1
+                ? context.getString(R.string.one_flashcard)
+                : context.getString(R.string.x_flashcards, flashcardsCount);
+        numFlashcards.setText(numFlashcardsText);
     }
 
     @NonNull

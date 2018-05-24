@@ -13,14 +13,13 @@ import com.joanzapata.iconify.fonts.IoniconsIcons;
 import com.randomappsinc.simpleflashcards.R;
 import com.randomappsinc.simpleflashcards.adapters.FlashcardsOverviewAdapter;
 import com.randomappsinc.simpleflashcards.constants.Constants;
+import com.randomappsinc.simpleflashcards.dialogs.CreateFlashcardDialog;
 import com.randomappsinc.simpleflashcards.persistence.DatabaseManager;
 import com.randomappsinc.simpleflashcards.utils.UIUtils;
 
-import java.util.Locale;
-
-import butterknife.BindString;
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import butterknife.OnEditorAction;
 
 public class EditFlashcardSetActivity extends StandardActivity {
@@ -32,11 +31,9 @@ public class EditFlashcardSetActivity extends StandardActivity {
     @BindView(R.id.flashcards) RecyclerView flashcards;
     @BindView(R.id.add_flashcard) FloatingActionButton addFlashcard;
 
-    @BindString(R.string.one_flashcard) String oneFlashcard;
-    @BindString(R.string.x_flashcards) String xFlashcards;
-
-    private FlashcardsOverviewAdapter adapter;
+    protected FlashcardsOverviewAdapter adapter;
     private int setId;
+    private CreateFlashcardDialog createFlashcardDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,27 +44,18 @@ public class EditFlashcardSetActivity extends StandardActivity {
 
         setId = getIntent().getIntExtra(Constants.FLASHCARD_SET_ID_KEY, 0);
         flashcardSetName.setText(DatabaseManager.get().getSetName(setId));
-
         addFlashcard.setImageDrawable(
                 new IconDrawable(this, IoniconsIcons.ion_android_add)
                         .colorRes(R.color.white));
-        adapter = new FlashcardsOverviewAdapter(this, setId, noFlashcards);
+        createFlashcardDialog = new CreateFlashcardDialog(this, flashcardCreatedListener, setId);
+        adapter = new FlashcardsOverviewAdapter(this, setId, noFlashcards, numFlashcards);
         flashcards.setAdapter(adapter);
-        refreshCount();
     }
 
     @Override
     public void onSaveInstanceState(Bundle savedInstanceState) {
         super.onSaveInstanceState(savedInstanceState);
         saveFlashcardSetName();
-    }
-
-    private void refreshCount() {
-        int flashcardsCount = adapter.getItemCount();
-        String numFlashcardsText = flashcardsCount == 1
-                ? oneFlashcard
-                : String.format(Locale.getDefault(), xFlashcards, flashcardsCount);
-        numFlashcards.setText(numFlashcardsText);
     }
 
     private void saveFlashcardSetName() {
@@ -98,4 +86,18 @@ public class EditFlashcardSetActivity extends StandardActivity {
         super.onPause();
         saveFlashcardSetName();
     }
+
+    @OnClick(R.id.add_flashcard)
+    public void addFlashcard() {
+        createFlashcardDialog.show();
+    }
+
+    private final CreateFlashcardDialog.Listener flashcardCreatedListener =
+            new CreateFlashcardDialog.Listener() {
+                @Override
+                public void onFlashcardCreated() {
+                    adapter.refreshSet();
+                    flashcards.scrollToPosition(adapter.getItemCount() - 1);
+                }
+            };
 }

@@ -27,8 +27,8 @@ public class EditFlashcardDefinitionDialog {
                         new MaterialDialog.InputCallback() {
                             @Override
                             public void onInput(@NonNull MaterialDialog dialog, CharSequence input) {
-                                String setName = input.toString();
-                                boolean notEmpty = !setName.trim().isEmpty();
+                                String definition = input.toString();
+                                boolean notEmpty = !definition.trim().isEmpty();
                                 dialog.getActionButton(DialogAction.POSITIVE).setEnabled(notEmpty);
                             }
                         })

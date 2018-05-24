@@ -153,14 +153,14 @@ public class DatabaseManager {
         }
     }
 
-    public void addFlashcard(int setId, String question, String answer) {
+    public void addFlashcard(int setId, String term, String definition) {
         try {
             realm.beginTransaction();
             FlashcardSet set = realm.where(FlashcardSet.class).equalTo("id", setId).findFirst();
             Flashcard flashcard = new Flashcard();
             flashcard.setId(getNextFlashcardId());
-            flashcard.setTerm(question);
-            flashcard.setDefinition(answer);
+            flashcard.setTerm(term);
+            flashcard.setDefinition(definition);
             set.getFlashcards().add(flashcard);
             realm.commitTransaction();
         } catch (Exception e) {
