@@ -7,4 +7,4 @@
 /captures
 .idea/*
 app/release/*
-*QuizletConstants.java
+*QuizletAuthConstants.java
