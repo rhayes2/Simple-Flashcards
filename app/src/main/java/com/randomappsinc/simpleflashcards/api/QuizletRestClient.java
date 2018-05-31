@@ -3,7 +3,11 @@ package com.randomappsinc.simpleflashcards.api;
 import android.os.Handler;
 import android.os.HandlerThread;
 
+import com.randomappsinc.simpleflashcards.api.callbacks.FindFlashcardSetsCallback;
+import com.randomappsinc.simpleflashcards.api.models.QuizletSearchResults;
+
 import okhttp3.OkHttpClient;
+import retrofit2.Call;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
@@ -11,8 +15,9 @@ public class QuizletRestClient {
 
     private static QuizletRestClient instance;
 
-    private QuizletService quizletService;
+    protected QuizletService quizletService;
     private Handler handler;
+    protected Call<QuizletSearchResults> currentFindFlashcardSetsCall;
 
     public static QuizletRestClient getInstance() {
         if (instance == null) {
@@ -27,7 +32,7 @@ public class QuizletRestClient {
                 .build();
 
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(QuizletApiConstants.BASE_URL)
+                .baseUrl(ApiConstants.BASE_URL)
                 .client(client)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
@@ -37,5 +42,29 @@ public class QuizletRestClient {
         HandlerThread backgroundThread = new HandlerThread("");
         backgroundThread.start();
         handler = new Handler(backgroundThread.getLooper());
+    }
+
+    void findFlashcardSets(final String searchTerm) {
+        handler.post(new Runnable() {
+            @Override
+            public void run() {
+                if (currentFindFlashcardSetsCall != null) {
+                    currentFindFlashcardSetsCall.cancel();
+                }
+                currentFindFlashcardSetsCall = quizletService.findFlashcardSets(searchTerm);
+                currentFindFlashcardSetsCall.enqueue(new FindFlashcardSetsCallback());
+            }
+        });
+    }
+
+    void cancelFlashcardsSearch() {
+        handler.post(new Runnable() {
+            @Override
+            public void run() {
+                if (currentFindFlashcardSetsCall != null) {
+                    currentFindFlashcardSetsCall.cancel();
+                }
+            }
+        });
     }
 }

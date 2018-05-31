@@ -14,5 +14,5 @@ public interface QuizletService {
     Call<QuizletSearchResults> findFlashcardSets(@Query("q") String term);
 
     @GET("sets/{id}")
-    Call<QuizletFlashcardSet> getFlashcardSetInfo(@Path("id") String setId);
+    Call<QuizletFlashcardSet> getFlashcardSetInfo(@Path("id") long setId);
 }

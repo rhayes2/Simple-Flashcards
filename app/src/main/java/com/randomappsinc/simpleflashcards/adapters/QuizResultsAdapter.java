@@ -21,7 +21,7 @@ import butterknife.ButterKnife;
 public class QuizResultsAdapter extends RecyclerView.Adapter<QuizResultsAdapter.QuizResultViewHolder> {
 
     private Context context;
-    private List<Problem> problems;
+    protected List<Problem> problems;
     private int flashcardSetSize;
 
     public QuizResultsAdapter(Context context, List<Problem> problems, int flashcardSetSize) {
