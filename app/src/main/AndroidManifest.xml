@@ -52,6 +52,7 @@
 
         <activity
             android:name=".activities.QuizletSearchActivity"
+            android:windowSoftInputMode="stateAlwaysHidden"
             android:label="@string/download_flashcard_sets_title"
             android:configChanges="orientation|screenSize">
         </activity>

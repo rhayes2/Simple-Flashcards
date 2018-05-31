@@ -2,4 +2,9 @@
 <resources>
     <string name="download_flashcard_sets">Download flashcard sets</string>
     <string name="download_flashcard_sets_title">Download Flashcard Sets</string>
+
+    <string name="quizlet_search_empty_state">
+        Simply start typing to browse millions of flashcard sets from across the Internet!
+    </string>
+    <string name="this_uses_quizlet">This uses Quizlet.</string>
 </resources>

@@ -1,8 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:focusable="true"
+    android:focusableInTouchMode="true">
 
-</LinearLayout>
+    <include
+        android:id="@+id/search_bar"
+        layout="@layout/search_bar"/>
+
+    <com.joanzapata.iconify.widget.IconTextView
+        android:id="@+id/no_search_query_text"
+        android:text="@string/quizlet_search_empty_state"
+        android:layout_below="@id/search_bar"
+        style="@style/empty_state_text"/>
+
+    <ImageView
+        android:id="@+id/quizlet_attribution"
+        android:layout_width="134dp"
+        android:layout_height="40dp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_margin="16dp"
+        android:contentDescription="@string/this_uses_quizlet"
+        android:src="@drawable/quizlet_attribution"/>
+</RelativeLayout>
