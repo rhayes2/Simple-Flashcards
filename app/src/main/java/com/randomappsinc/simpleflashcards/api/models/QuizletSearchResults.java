@@ -7,7 +7,7 @@ import java.util.List;
 
 public class QuizletSearchResults {
 
-    @SerializedName("start")
+    @SerializedName("sets")
     @Expose
     private List<QuizletSetResult> results;
 

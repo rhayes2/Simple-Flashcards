@@ -4,7 +4,9 @@
     <string name="download_flashcard_sets_title">Download Flashcard Sets</string>
 
     <string name="quizlet_search_empty_state">
-        Simply start typing to browse millions of flashcard sets from across the Internet!
+        Start typing in the search bar to browse millions of flashcard sets from across the Internet!
     </string>
     <string name="this_uses_quizlet">This uses Quizlet.</string>
+    <string name="created_on_template">Created on %s</string>
+    <string name="last_updated_template">Last updated %s</string>
 </resources>

@@ -19,11 +19,11 @@ public class QuizletSetResult {
 
     @SerializedName("created_date")
     @Expose
-    private int createdDate;
+    private long createdDate;
 
     @SerializedName("modified_date")
     @Expose
-    private int modifiedDate;
+    private long modifiedDate;
 
     public long getQuizletSetId() {
         return quizletSetId;
@@ -49,16 +49,16 @@ public class QuizletSetResult {
         this.flashcardCount = flashcardCount;
     }
 
-    public int getCreatedDate() {
-        return createdDate;
+    public long getCreatedDate() {
+        return createdDate * 1000L;
     }
 
     public void setCreatedDate(int createdDate) {
         this.createdDate = createdDate;
     }
 
-    public int getModifiedDate() {
-        return modifiedDate;
+    public long getModifiedDate() {
+        return modifiedDate * 1000L;
     }
 
     public void setModifiedDate(int modifiedDate) {
