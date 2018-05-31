@@ -154,19 +154,22 @@ public class MainActivity extends StandardActivity
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_main, menu);
-        menu.findItem(R.id.settings).setIcon(
-                new IconDrawable(this, IoniconsIcons.ion_android_settings)
-                        .colorRes(R.color.white)
-                        .actionBarSize());
+        UIUtils.loadMenuIcon(menu, R.id.download_flashcard_sets, IoniconsIcons.ion_android_download, this);
+        UIUtils.loadMenuIcon(menu, R.id.settings, IoniconsIcons.ion_android_settings, this);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == R.id.settings) {
-            startActivity(new Intent(this, SettingsActivity.class));
-            return true;
+        switch (item.getItemId()) {
+            case R.id.download_flashcard_sets:
+                startActivity(new Intent(this, QuizletSearchActivity.class));
+                return true;
+            case R.id.settings:
+                startActivity(new Intent(this, SettingsActivity.class));
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
         }
-        return super.onOptionsItemSelected(item);
     }
 }

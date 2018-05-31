@@ -3,7 +3,12 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
+        android:id="@+id/download_flashcard_sets"
+        android:title="@string/download_flashcard_sets"
+        app:showAsAction="ifRoom"/>
+
+    <item
         android:id="@+id/settings"
         android:title="@string/settings"
-        app:showAsAction="always"/>
+        app:showAsAction="ifRoom"/>
 </menu>

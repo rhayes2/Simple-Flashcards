@@ -9,6 +9,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.StringRes;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ShareCompat;
+import android.view.Menu;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.TextView;
@@ -16,6 +17,8 @@ import android.widget.Toast;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.joanzapata.iconify.Icon;
+import com.joanzapata.iconify.IconDrawable;
 import com.randomappsinc.simpleflashcards.R;
 
 public class UIUtils {
@@ -96,5 +99,12 @@ public class UIUtils {
                     }
                 })
                 .show();
+    }
+
+    public static void loadMenuIcon(Menu menu, int itemId, Icon icon, Context context) {
+        menu.findItem(itemId).setIcon(
+                new IconDrawable(context, icon)
+                        .colorRes(R.color.white)
+                        .actionBarSize());
     }
 }
