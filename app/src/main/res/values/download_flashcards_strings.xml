@@ -9,4 +9,7 @@
     <string name="this_uses_quizlet">This uses Quizlet.</string>
     <string name="created_on_template">Created on %s</string>
     <string name="last_updated_template">Last updated %s</string>
+    <string name="no_quizlet_results">
+        We were unable to find any flashcard sets matching your criteria.
+    </string>
 </resources>

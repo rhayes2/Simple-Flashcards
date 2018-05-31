@@ -5,6 +5,7 @@ import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import com.randomappsinc.simpleflashcards.R;
 import com.randomappsinc.simpleflashcards.adapters.QuizletSearchResultsAdapter;
@@ -22,8 +23,9 @@ public class QuizletSearchActivity extends StandardActivity {
 
     @BindView(R.id.flashcard_set_search) EditText setSearch;
     @BindView(R.id.clear_search) View clearSearch;
-    @BindView(R.id.no_search_query_text) View noSearchQueryText;
+    @BindView(R.id.search_empty_text) TextView searchEmptyText;
     @BindView(R.id.quizlet_attribution) View quizletAttribution;
+    @BindView(R.id.skeleton_results) View skeletonResults;
     @BindView(R.id.search_results) RecyclerView searchResults;
 
     protected QuizletSearchResultsAdapter adapter;
@@ -49,7 +51,12 @@ public class QuizletSearchActivity extends StandardActivity {
             searchManager.performSearch(input.toString());
         }
         searchResults.setVisibility(View.GONE);
-        noSearchQueryText.setVisibility(input.length() == 0 ? View.VISIBLE : View.GONE);
+        skeletonResults.setVisibility(input.length() == 0 ? View.GONE : View.VISIBLE);
+
+        if (input.length() == 0) {
+            searchEmptyText.setText(R.string.quizlet_search_empty_state);
+        }
+        searchEmptyText.setVisibility(input.length() == 0 ? View.VISIBLE : View.GONE);
         quizletAttribution.setVisibility(input.length() == 0 ? View.VISIBLE : View.GONE);
         clearSearch.setVisibility(input.length() == 0 ? View.GONE : View.VISIBLE);
     }
@@ -62,9 +69,11 @@ public class QuizletSearchActivity extends StandardActivity {
     private final QuizletSearchManager.Listener searchListener = new QuizletSearchManager.Listener() {
         @Override
         public void onResultsFetched(List<QuizletSetResult> results) {
+            skeletonResults.setVisibility(View.GONE);
             adapter.setResults(results);
             if (results.isEmpty()) {
-
+                searchEmptyText.setText(R.string.no_quizlet_results);
+                searchEmptyText.setVisibility(View.VISIBLE);
             } else {
                 searchResults.setVisibility(View.VISIBLE);
             }

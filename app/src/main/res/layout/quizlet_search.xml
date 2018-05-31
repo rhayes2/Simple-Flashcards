@@ -13,7 +13,7 @@
         layout="@layout/search_bar"/>
 
     <TextView
-        android:id="@+id/no_search_query_text"
+        android:id="@+id/search_empty_text"
         android:text="@string/quizlet_search_empty_state"
         android:layout_below="@id/search_bar"
         style="@style/empty_state_text"/>
@@ -27,6 +27,29 @@
         android:layout_margin="16dp"
         android:contentDescription="@string/this_uses_quizlet"
         android:src="@drawable/quizlet_attribution"/>
+
+    <LinearLayout
+        android:id="@+id/skeleton_results"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/search_bar"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <include layout="@layout/quizlet_result_skeleton_cell"/>
+
+        <include layout="@layout/quizlet_result_skeleton_cell"/>
+
+        <include layout="@layout/quizlet_result_skeleton_cell"/>
+
+        <include layout="@layout/quizlet_result_skeleton_cell"/>
+
+        <include layout="@layout/quizlet_result_skeleton_cell"/>
+
+        <include layout="@layout/quizlet_result_skeleton_cell"/>
+
+        <include layout="@layout/quizlet_result_skeleton_cell"/>
+    </LinearLayout>
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/search_results"
