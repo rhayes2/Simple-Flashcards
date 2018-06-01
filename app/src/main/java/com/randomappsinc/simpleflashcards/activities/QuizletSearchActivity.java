@@ -13,6 +13,7 @@ import com.randomappsinc.simpleflashcards.adapters.QuizletSearchResultsAdapter;
 import com.randomappsinc.simpleflashcards.api.QuizletSearchManager;
 import com.randomappsinc.simpleflashcards.api.models.QuizletSetResult;
 import com.randomappsinc.simpleflashcards.constants.Constants;
+import com.randomappsinc.simpleflashcards.utils.UIUtils;
 
 import java.util.List;
 
@@ -23,6 +24,7 @@ import butterknife.OnTextChanged;
 
 public class QuizletSearchActivity extends StandardActivity {
 
+    @BindView(R.id.parent) View parent;
     @BindView(R.id.flashcard_set_search) EditText setSearch;
     @BindView(R.id.clear_search) View clearSearch;
     @BindView(R.id.search_empty_text) TextView searchEmptyText;
@@ -45,6 +47,16 @@ public class QuizletSearchActivity extends StandardActivity {
 
         adapter = new QuizletSearchResultsAdapter(this, resultClickListener);
         searchResults.setAdapter(adapter);
+        searchResults.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+                if (newState == RecyclerView.SCROLL_STATE_DRAGGING) {
+                    UIUtils.closeKeyboard(QuizletSearchActivity.this);
+                    parent.requestFocus();
+                }
+            }
+        });
     }
 
     @OnTextChanged(value = R.id.flashcard_set_search, callback = OnTextChanged.Callback.AFTER_TEXT_CHANGED)
