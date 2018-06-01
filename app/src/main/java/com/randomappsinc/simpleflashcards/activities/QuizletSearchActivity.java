@@ -1,5 +1,6 @@
 package com.randomappsinc.simpleflashcards.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
@@ -11,6 +12,7 @@ import com.randomappsinc.simpleflashcards.R;
 import com.randomappsinc.simpleflashcards.adapters.QuizletSearchResultsAdapter;
 import com.randomappsinc.simpleflashcards.api.QuizletSearchManager;
 import com.randomappsinc.simpleflashcards.api.models.QuizletSetResult;
+import com.randomappsinc.simpleflashcards.constants.Constants;
 
 import java.util.List;
 
@@ -83,7 +85,10 @@ public class QuizletSearchActivity extends StandardActivity {
     private final QuizletSearchResultsAdapter.Listener resultClickListener = new QuizletSearchResultsAdapter.Listener() {
         @Override
         public void onResultClicked(QuizletSetResult result) {
-
+            Intent intent = new Intent(QuizletSearchActivity.this, ViewQuizletSetActivity.class)
+                    .putExtra(Constants.QUIZLET_SET_ID, result.getQuizletSetId())
+                    .putExtra(Constants.QUIZLET_SET_TITLE, result.getTitle());
+            startActivity(intent);
         }
     };
 
