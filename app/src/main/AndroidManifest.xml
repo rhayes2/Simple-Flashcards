@@ -58,5 +58,10 @@
             android:label="@string/download_flashcard_sets_title"
             android:configChanges="orientation|screenSize">
         </activity>
+
+        <activity
+            android:name=".activities.ViewQuizletSetActivity"
+            android:configChanges="orientation|screenSize">
+        </activity>
     </application>
 </manifest>
