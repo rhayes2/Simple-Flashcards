@@ -4,10 +4,12 @@ import android.animation.Animator;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AccelerateDecelerateInterpolator;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.randomappsinc.simpleflashcards.R;
@@ -15,6 +17,7 @@ import com.randomappsinc.simpleflashcards.constants.Constants;
 import com.randomappsinc.simpleflashcards.persistence.DatabaseManager;
 import com.randomappsinc.simpleflashcards.persistence.models.Flashcard;
 import com.randomappsinc.simpleflashcards.utils.TextToSpeechManager;
+import com.squareup.picasso.Picasso;
 
 import java.util.Locale;
 
@@ -40,18 +43,19 @@ public class FlashcardFragment extends Fragment {
     @BindView(R.id.position_info) TextView positionInfo;
     @BindView(R.id.side_header) TextView sideHeader;
     @BindView(R.id.speak) View speak;
+    @BindView(R.id.term_image) ImageView termImage;
     @BindView(R.id.content) TextView content;
 
     @BindInt(R.integer.default_anim_length) int flipAnimLength;
 
     private Flashcard flashcard;
-    private boolean isShowingTerm = true;
+    protected boolean isShowingTerm = true;
     private TextToSpeechManager textToSpeechManager;
     private Unbinder unbinder;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        ViewGroup rootView = (ViewGroup) inflater.inflate(R.layout.flashcard, container, false);
+        ViewGroup rootView = (ViewGroup) inflater.inflate(R.layout.flashcard_for_browsing, container, false);
         unbinder = ButterKnife.bind(this, rootView);
 
         textToSpeechManager = TextToSpeechManager.get();
@@ -88,6 +92,7 @@ public class FlashcardFragment extends Fragment {
                         sideHeader.setVisibility(View.GONE);
                         speak.setVisibility(View.GONE);
                         content.setVisibility(View.GONE);
+                        termImage.setVisibility(View.GONE);
                     }
 
                     @Override
@@ -111,9 +116,16 @@ public class FlashcardFragment extends Fragment {
                 });
     }
 
-    private void loadFlashcardIntoView() {
+    protected void loadFlashcardIntoView() {
         sideHeader.setText(isShowingTerm ? R.string.term_underlined : R.string.definition_underlined);
         content.setText(isShowingTerm ? flashcard.getTerm() : flashcard.getDefinition());
+        String termImageUrl = flashcard.getTermImageUrl();
+        if (isShowingTerm && !TextUtils.isEmpty(termImageUrl)) {
+            Picasso.get().load(termImageUrl).into(termImage);
+            termImage.setVisibility(View.VISIBLE);
+        } else {
+            termImage.setVisibility(View.GONE);
+        }
     }
 
     @OnClick(R.id.speak)
