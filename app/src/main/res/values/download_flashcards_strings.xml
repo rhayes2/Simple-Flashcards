@@ -15,4 +15,6 @@
 
     <string name="images_icon">{ion-images}</string>
     <string name="has_images">Has Images</string>
+    <string name="download">Download</string>
+    <string name="saved_to_library">Saved To Library</string>
 </resources>

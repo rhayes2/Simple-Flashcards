@@ -11,6 +11,7 @@ import com.randomappsinc.simpleflashcards.constants.Constants;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 public class ViewQuizletSetActivity extends StandardActivity {
 
@@ -47,6 +48,11 @@ public class ViewQuizletSetActivity extends StandardActivity {
             adapter.loadFlashcards(flashcardSet.getFlashcards());
         }
     };
+
+    @OnClick(R.id.download)
+    public void download() {
+
+    }
 
     @Override
     public void onDestroy() {

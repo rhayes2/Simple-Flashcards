@@ -21,8 +21,8 @@
 
     <ImageView
         android:id="@+id/quizlet_attribution"
-        android:layout_width="134dp"
-        android:layout_height="40dp"
+        android:layout_width="67dp"
+        android:layout_height="20dp"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:layout_margin="16dp"
