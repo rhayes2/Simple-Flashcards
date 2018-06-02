@@ -7,6 +7,10 @@ import java.util.List;
 
 public class QuizletFlashcardSet {
 
+    @SerializedName("id")
+    @Expose
+    private long quizletSetId;
+
     @SerializedName("title")
     @Expose
     private String title;
@@ -14,6 +18,14 @@ public class QuizletFlashcardSet {
     @SerializedName("terms")
     @Expose
     private List<QuizletFlashcard> flashcards;
+
+    public long getQuizletSetId() {
+        return quizletSetId;
+    }
+
+    public String getTitle() {
+        return title;
+    }
 
     public List<QuizletFlashcard> getFlashcards() {
         return flashcards;

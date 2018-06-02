@@ -2,6 +2,8 @@ package com.randomappsinc.simpleflashcards.persistence;
 
 import android.support.annotation.NonNull;
 
+import com.randomappsinc.simpleflashcards.api.models.QuizletFlashcard;
+import com.randomappsinc.simpleflashcards.api.models.QuizletFlashcardSet;
 import com.randomappsinc.simpleflashcards.persistence.models.Flashcard;
 import com.randomappsinc.simpleflashcards.persistence.models.FlashcardSet;
 import com.randomappsinc.simpleflashcards.utils.MyApplication;
@@ -12,6 +14,7 @@ import io.realm.Case;
 import io.realm.DynamicRealm;
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
+import io.realm.RealmList;
 import io.realm.RealmMigration;
 import io.realm.RealmObjectSchema;
 import io.realm.RealmSchema;
@@ -279,5 +282,42 @@ public class DatabaseManager {
         return realm.where(FlashcardSet.class)
                 .findAll()
                 .size();
+    }
+
+    public void saveQuizletSet(QuizletFlashcardSet quizletFlashcardSet) {
+        try {
+            realm.beginTransaction();
+
+            FlashcardSet set = new FlashcardSet();
+            int newSetId = getNextSetId();
+            set.setId(newSetId);
+            set.setQuizletSetId(quizletFlashcardSet.getQuizletSetId());
+            set.setName(quizletFlashcardSet.getTitle());
+
+            RealmList<Flashcard> flashcards = new RealmList<>();
+            int flashcardId = getNextFlashcardId();
+            for (QuizletFlashcard quizletFlashcard : quizletFlashcardSet.getFlashcards()) {
+                Flashcard flashcard = new Flashcard();
+                flashcard.setId(flashcardId++);
+                flashcard.setTerm(quizletFlashcard.getTerm());
+                flashcard.setDefinition(quizletFlashcard.getDefinition());
+                flashcard.setTermImageUrl(quizletFlashcard.getImageUrl());
+                flashcards.add(flashcard);
+            }
+            set.setFlashcards(flashcards);
+
+            realm.copyToRealm(set);
+            realm.commitTransaction();
+        } catch (Exception e) {
+            realm.cancelTransaction();
+        }
+    }
+
+    public boolean alreadyHasQuizletSet(long quizletSetId) {
+        FlashcardSet set = realm
+                .where(FlashcardSet.class)
+                .equalTo("quizletSetId", quizletSetId)
+                .findFirst();
+        return set != null;
     }
 }
