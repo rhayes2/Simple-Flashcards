@@ -98,4 +98,9 @@
         <item name="android:foreground">?android:attr/selectableItemBackground</item>
         <item name="contentPadding">8dp</item>
     </style>
+
+    <style name="quizlet_search_result_skeleton_card" parent="flashcard_card">
+        <item name="android:layout_height">wrap_content</item>
+        <item name="contentPadding">8dp</item>
+    </style>
 </resources>

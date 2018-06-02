@@ -5,7 +5,7 @@
     android:layout_marginBottom="3dp"
     android:layout_marginLeft="8dp"
     android:layout_marginRight="8dp"
-    style="@style/quizlet_search_result_card">
+    style="@style/quizlet_search_result_skeleton_card">
 
     <LinearLayout
         android:layout_width="match_parent"

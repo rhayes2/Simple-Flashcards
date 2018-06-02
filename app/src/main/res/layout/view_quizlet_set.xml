@@ -5,6 +5,30 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <LinearLayout
+        android:id="@+id/skeleton_cards"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:paddingTop="8dp"
+        android:paddingLeft="8dp"
+        android:paddingRight="8dp">
+
+        <include layout="@layout/quizlet_flashcard_skeleton_cell"/>
+
+        <include layout="@layout/quizlet_flashcard_skeleton_cell"/>
+
+        <include layout="@layout/quizlet_flashcard_skeleton_cell"/>
+
+        <include layout="@layout/quizlet_flashcard_skeleton_cell"/>
+
+        <include layout="@layout/quizlet_flashcard_skeleton_cell"/>
+
+        <include layout="@layout/quizlet_flashcard_skeleton_cell"/>
+
+        <include layout="@layout/quizlet_flashcard_skeleton_cell"/>
+    </LinearLayout>
+
     <android.support.v7.widget.RecyclerView
         android:id="@+id/flashcards"
         android:layout_width="match_parent"
@@ -13,6 +37,7 @@
         android:paddingTop="4dp"
         android:paddingBottom="4dp"
         android:clipToPadding="false"
+        android:visibility="gone"
         app:layoutManager="android.support.v7.widget.LinearLayoutManager"/>
 
     <TextView
@@ -20,5 +45,6 @@
         android:layout_marginTop="0dp"
         android:layout_alignParentBottom="true"
         android:text="@string/download"
+        android:visibility="gone"
         style="@style/button"/>
 </RelativeLayout>

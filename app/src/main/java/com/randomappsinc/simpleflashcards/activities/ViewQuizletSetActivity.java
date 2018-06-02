@@ -3,6 +3,7 @@ package com.randomappsinc.simpleflashcards.activities;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
 import android.widget.TextView;
 
 import com.randomappsinc.simpleflashcards.R;
@@ -19,6 +20,7 @@ import butterknife.OnClick;
 
 public class ViewQuizletSetActivity extends StandardActivity {
 
+    @BindView(R.id.skeleton_cards) View skeletonCards;
     @BindView(R.id.flashcards) RecyclerView flashcards;
     @BindView(R.id.download) TextView button;
 
@@ -64,6 +66,9 @@ public class ViewQuizletSetActivity extends StandardActivity {
         public void onFlashcardSetFetched(QuizletFlashcardSet flashcardSet) {
             quizletSet = flashcardSet;
             adapter.loadFlashcards(flashcardSet.getFlashcards());
+            skeletonCards.setVisibility(View.GONE);
+            flashcards.setVisibility(View.VISIBLE);
+            button.setVisibility(View.VISIBLE);
         }
     };
 
