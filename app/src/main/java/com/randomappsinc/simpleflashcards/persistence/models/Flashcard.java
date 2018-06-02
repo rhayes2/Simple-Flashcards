@@ -7,6 +7,7 @@ public class Flashcard extends RealmObject {
     private int id;
     private String term;
     private String definition;
+    private String termImageUrl;
 
     public int getId() {
         return id;
@@ -30,5 +31,13 @@ public class Flashcard extends RealmObject {
 
     public void setDefinition(String definition) {
         this.definition = definition;
+    }
+
+    public String getTermImageUrl() {
+        return termImageUrl;
+    }
+
+    public void setTermImageUrl(String termImageUrl) {
+        this.termImageUrl = termImageUrl;
     }
 }

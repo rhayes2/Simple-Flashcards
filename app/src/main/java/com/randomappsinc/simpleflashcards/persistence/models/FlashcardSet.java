@@ -7,6 +7,7 @@ import io.realm.annotations.Required;
 public class FlashcardSet extends RealmObject {
 
     private int id;
+    private long quizletSetId;
 
     @Required
     private String name;
@@ -19,6 +20,14 @@ public class FlashcardSet extends RealmObject {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public long getQuizletSetId() {
+        return quizletSetId;
+    }
+
+    public void setQuizletSetId(long quizletSetId) {
+        this.quizletSetId = quizletSetId;
     }
 
     public String getName() {

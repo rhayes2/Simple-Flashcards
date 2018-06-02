@@ -18,7 +18,7 @@ import io.realm.RealmSchema;
 
 public class DatabaseManager {
 
-    private static final int CURRENT_REALM_VERSION = 3;
+    private static final int CURRENT_REALM_VERSION = 4;
 
     private static DatabaseManager instance;
 
@@ -37,7 +37,7 @@ public class DatabaseManager {
     }
 
     private Realm realm;
-    private boolean idMigrationNeeded;
+    protected boolean idMigrationNeeded;
 
     private DatabaseManager() {
         Realm.init(MyApplication.getAppContext());
@@ -95,6 +95,23 @@ public class DatabaseManager {
                 } else {
                     throw new IllegalStateException("Flashcard schema doesn't exist.");
                 }
+                oldVersion++;
+            }
+
+            // Rename "question" and "answer" to "term" and "definition"
+            if (oldVersion == 3) {
+                RealmObjectSchema setSchema = schema.get("FlashcardSet");
+                if (setSchema != null) {
+                    setSchema.addField("quizletSetId", long.class);
+                } else {
+                    throw new IllegalStateException("FlashcardSet schema doesn't exist.");
+                }
+                RealmObjectSchema cardSchema = schema.get("Flashcard");
+                if (cardSchema != null) {
+                    cardSchema.addField("termImageUrl", String.class);
+                } else {
+                    throw new IllegalStateException("Flashcard schema doesn't exist.");
+                }
             }
         }
     };
@@ -130,12 +147,12 @@ public class DatabaseManager {
         return 0;
     }
 
-    private int getNextSetId() {
+    protected int getNextSetId() {
         Number number = realm.where(FlashcardSet.class).findAll().max("id");
         return number == null ? 1 : number.intValue() + 1;
     }
 
-    private int getNextFlashcardId() {
+    protected int getNextFlashcardId() {
         Number number = realm.where(Flashcard.class).findAll().max("id");
         return number == null ? 1 : number.intValue() + 1;
     }
