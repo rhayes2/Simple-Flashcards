@@ -6,10 +6,12 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.randomappsinc.simpleflashcards.R;
 import com.randomappsinc.simpleflashcards.api.models.QuizletFlashcard;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -55,7 +57,8 @@ public class QuizletFlashcardsAdapter extends RecyclerView.Adapter<QuizletFlashc
     class FlashcardViewHolder extends RecyclerView.ViewHolder {
 
         @BindView(R.id.position_info) TextView positionInfo;
-        @BindView(R.id.term) TextView term;
+        @BindView(R.id.term_text) TextView termText;
+        @BindView(R.id.term_image) ImageView termImage;
         @BindView(R.id.definition) TextView definition;
 
         FlashcardViewHolder(View view) {
@@ -65,13 +68,18 @@ public class QuizletFlashcardsAdapter extends RecyclerView.Adapter<QuizletFlashc
 
         void loadFlashcard(int position) {
             QuizletFlashcard flashcard = flashcards.get(position);
-
             positionInfo.setText(context.getString(
                     R.string.flashcard_x_of_y,
                     position + 1,
                     getItemCount()));
-
-            term.setText(flashcard.getTerm());
+            termText.setText(flashcard.getTerm());
+            String imageUrl = flashcard.getImageUrl();
+            if (imageUrl == null) {
+                termImage.setVisibility(View.GONE);
+            } else {
+                Picasso.get().load(imageUrl).into(termImage);
+                termImage.setVisibility(View.VISIBLE);
+            }
             definition.setText(flashcard.getDefinition());
         }
     }

@@ -1,5 +1,7 @@
 package com.randomappsinc.simpleflashcards.api.models;
 
+import android.support.annotation.Nullable;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
@@ -36,7 +38,8 @@ public class QuizletFlashcard {
         return definition;
     }
 
+    @Nullable
     public String getImageUrl() {
-        return image.getUrl();
+        return image == null ? null : image.getUrl();
     }
 }
