@@ -12,4 +12,7 @@
     <string name="no_quizlet_results">
         We were unable to find any flashcard sets matching your criteria.
     </string>
+
+    <string name="images_icon">{ion-images}</string>
+    <string name="has_images">Has Images</string>
 </resources>

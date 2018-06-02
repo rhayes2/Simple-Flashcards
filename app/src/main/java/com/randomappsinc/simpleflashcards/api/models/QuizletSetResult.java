@@ -25,12 +25,12 @@ public class QuizletSetResult {
     @Expose
     private long modifiedDate;
 
+    @SerializedName("has_images")
+    @Expose
+    private boolean hasImages;
+
     public long getQuizletSetId() {
         return quizletSetId;
-    }
-
-    public void setQuizletSetId(long quizletSetId) {
-        this.quizletSetId = quizletSetId;
     }
 
     public String getTitle() {
@@ -45,23 +45,15 @@ public class QuizletSetResult {
         return flashcardCount;
     }
 
-    public void setFlashcardCount(int flashcardCount) {
-        this.flashcardCount = flashcardCount;
-    }
-
     public long getCreatedDate() {
         return createdDate * 1000L;
-    }
-
-    public void setCreatedDate(int createdDate) {
-        this.createdDate = createdDate;
     }
 
     public long getModifiedDate() {
         return modifiedDate * 1000L;
     }
 
-    public void setModifiedDate(int modifiedDate) {
-        this.modifiedDate = modifiedDate;
+    public boolean hasImages() {
+        return hasImages;
     }
 }

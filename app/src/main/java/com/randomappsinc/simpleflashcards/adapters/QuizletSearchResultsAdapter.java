@@ -67,6 +67,7 @@ public class QuizletSearchResultsAdapter extends RecyclerView.Adapter<QuizletSea
         @BindView(R.id.num_flashcards) TextView numFlashcardsText;
         @BindView(R.id.created_on) TextView createdOn;
         @BindView(R.id.last_updated) TextView lastUpdated;
+        @BindView(R.id.has_images) View hasImages;
 
         ResultViewHolder(View view) {
             super(view);
@@ -87,7 +88,8 @@ public class QuizletSearchResultsAdapter extends RecyclerView.Adapter<QuizletSea
                     TimeUtils.getFlashcardSetTime(result.getCreatedDate())));
             lastUpdated.setText(context.getString(
                     R.string.last_updated_template,
-                    TimeUtils.getFlashcardSetTime(result.getCreatedDate())));
+                    TimeUtils.getFlashcardSetTime(result.getModifiedDate())));
+            hasImages.setVisibility(result.hasImages() ? View.VISIBLE : View.GONE);
         }
 
         @OnClick(R.id.parent)
