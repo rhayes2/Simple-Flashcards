@@ -6,6 +6,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.randomappsinc.simpleflashcards.R;
@@ -14,6 +15,7 @@ import com.randomappsinc.simpleflashcards.dialogs.EditFlashcardDefinitionDialog;
 import com.randomappsinc.simpleflashcards.dialogs.EditFlashcardTermDialog;
 import com.randomappsinc.simpleflashcards.persistence.DatabaseManager;
 import com.randomappsinc.simpleflashcards.persistence.models.Flashcard;
+import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
@@ -21,7 +23,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class FlashcardsOverviewAdapter extends RecyclerView.Adapter<FlashcardsOverviewAdapter.FlashcardViewHolder> {
+public class EditFlashcardsAdapter extends RecyclerView.Adapter<EditFlashcardsAdapter.FlashcardViewHolder> {
 
     protected Context context;
     protected List<Flashcard> flashcards;
@@ -32,7 +34,7 @@ public class FlashcardsOverviewAdapter extends RecyclerView.Adapter<FlashcardsOv
     protected EditFlashcardDefinitionDialog editFlashcardDefinitionDialog;
     private TextView numFlashcards;
 
-    public FlashcardsOverviewAdapter(Context context, int setId, View noContent, TextView numFlashcards) {
+    public EditFlashcardsAdapter(Context context, int setId, View noContent, TextView numFlashcards) {
         this.context = context;
         this.setId = setId;
         this.noContent = noContent;
@@ -91,7 +93,7 @@ public class FlashcardsOverviewAdapter extends RecyclerView.Adapter<FlashcardsOv
     @Override
     public FlashcardViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(context).inflate(
-                R.layout.flashcard_cell,
+                R.layout.flashcard_editing_cell,
                 parent,
                 false);
         return new FlashcardViewHolder(itemView);
@@ -110,7 +112,8 @@ public class FlashcardsOverviewAdapter extends RecyclerView.Adapter<FlashcardsOv
     public class FlashcardViewHolder extends RecyclerView.ViewHolder {
 
         @BindView(R.id.position_info) TextView positionInfo;
-        @BindView(R.id.term) TextView term;
+        @BindView(R.id.term_text) TextView termText;
+        @BindView(R.id.term_image) ImageView termImage;
         @BindView(R.id.definition) TextView definition;
 
         FlashcardViewHolder(View view) {
@@ -120,13 +123,18 @@ public class FlashcardsOverviewAdapter extends RecyclerView.Adapter<FlashcardsOv
 
         void loadFlashcard(int position) {
             Flashcard flashcard = flashcards.get(position);
-
             positionInfo.setText(context.getString(
                     R.string.flashcard_x_of_y,
                     position + 1,
                     getItemCount()));
-
-            term.setText(flashcard.getTerm());
+            termText.setText(flashcard.getTerm());
+            String imageUrl = flashcard.getTermImageUrl();
+            if (imageUrl == null) {
+                termImage.setVisibility(View.GONE);
+            } else {
+                Picasso.get().load(imageUrl).into(termImage);
+                termImage.setVisibility(View.VISIBLE);
+            }
             definition.setText(flashcard.getDefinition());
         }
 

@@ -11,7 +11,7 @@ import android.widget.TextView;
 import com.joanzapata.iconify.IconDrawable;
 import com.joanzapata.iconify.fonts.IoniconsIcons;
 import com.randomappsinc.simpleflashcards.R;
-import com.randomappsinc.simpleflashcards.adapters.FlashcardsOverviewAdapter;
+import com.randomappsinc.simpleflashcards.adapters.EditFlashcardsAdapter;
 import com.randomappsinc.simpleflashcards.constants.Constants;
 import com.randomappsinc.simpleflashcards.dialogs.CreateFlashcardDialog;
 import com.randomappsinc.simpleflashcards.persistence.DatabaseManager;
@@ -31,7 +31,7 @@ public class EditFlashcardSetActivity extends StandardActivity {
     @BindView(R.id.flashcards) RecyclerView flashcards;
     @BindView(R.id.add_flashcard) FloatingActionButton addFlashcard;
 
-    protected FlashcardsOverviewAdapter adapter;
+    protected EditFlashcardsAdapter adapter;
     private int setId;
     private CreateFlashcardDialog createFlashcardDialog;
 
@@ -48,7 +48,7 @@ public class EditFlashcardSetActivity extends StandardActivity {
                 new IconDrawable(this, IoniconsIcons.ion_android_add)
                         .colorRes(R.color.white));
         createFlashcardDialog = new CreateFlashcardDialog(this, flashcardCreatedListener, setId);
-        adapter = new FlashcardsOverviewAdapter(this, setId, noFlashcards, numFlashcards);
+        adapter = new EditFlashcardsAdapter(this, setId, noFlashcards, numFlashcards);
         flashcards.setAdapter(adapter);
     }
 
