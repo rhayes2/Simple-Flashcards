@@ -58,9 +58,12 @@ public class Quiz {
         }
         Collections.shuffle(indexes);
         for (int index : indexes) {
+            Flashcard flashcard = flashcards.get(index);
+
             Problem problem = new Problem();
-            problem.setQuestion(flashcards.get(index).getTerm());
-            problem.setAnswer(flashcards.get(index).getDefinition());
+            problem.setQuestion(flashcard.getTerm());
+            problem.setQuestionImageUrl(flashcard.getTermImageUrl());
+            problem.setAnswer(flashcard.getDefinition());
 
             int numOptions = Math.min(NUM_ANSWER_OPTIONS, flashcards.size());
             List<Integer> optionIndexes = RandUtils.getQuizChoicesIndexes(flashcards.size(), numOptions, index);

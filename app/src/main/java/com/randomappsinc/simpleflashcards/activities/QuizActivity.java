@@ -4,8 +4,10 @@ import android.animation.Animator;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.text.TextUtils;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
@@ -19,6 +21,7 @@ import com.randomappsinc.simpleflashcards.models.Quiz;
 import com.randomappsinc.simpleflashcards.persistence.DatabaseManager;
 import com.randomappsinc.simpleflashcards.persistence.models.FlashcardSet;
 import com.randomappsinc.simpleflashcards.utils.UIUtils;
+import com.squareup.picasso.Picasso;
 
 import java.util.List;
 import java.util.Locale;
@@ -35,6 +38,7 @@ public class QuizActivity extends StandardActivity implements QuitQuizDialog.Lis
     @BindView(R.id.problem_parent) View problemParent;
     @BindView(R.id.question_header) TextView questionHeader;
     @BindView(R.id.question) TextView questionText;
+    @BindView(R.id.question_image) ImageView questionImage;
     @BindView(R.id.options) RadioGroup optionsContainer;
     @BindViews({R.id.option_1, R.id.option_2, R.id.option_3, R.id.option_4}) List<RadioButton> optionButtons;
     @BindView(R.id.submit) View submitButton;
@@ -78,7 +82,7 @@ public class QuizActivity extends StandardActivity implements QuitQuizDialog.Lis
         loadCurrentQuestionIntoView();
     }
 
-    private void loadCurrentQuestionIntoView() {
+    protected void loadCurrentQuestionIntoView() {
         // Uncheck currently chosen option if applicable
         RadioButton chosenButton = getChosenButton();
         if (chosenButton != null) {
@@ -92,6 +96,15 @@ public class QuizActivity extends StandardActivity implements QuitQuizDialog.Lis
         questionHeader.setText(headerText);
         Problem problem = quiz.getCurrentProblem();
         questionText.setText(problem.getQuestion());
+
+        String imageUrl = problem.getQuestionImageUrl();
+        if (!TextUtils.isEmpty(imageUrl)) {
+            questionImage.setVisibility(View.VISIBLE);
+            Picasso.get().load(imageUrl).into(questionImage);
+        } else {
+            questionImage.setVisibility(View.GONE);
+        }
+
         List<String> options = problem.getOptions();
         for (int i = 0; i < options.size(); i++) {
             optionButtons.get(i).setText(options.get(i));
@@ -125,7 +138,7 @@ public class QuizActivity extends StandardActivity implements QuitQuizDialog.Lis
                 });
     }
 
-    private void animationQuestionIn() {
+    protected void animationQuestionIn() {
         problemParent
                 .animate()
                 .alpha(1)
@@ -151,7 +164,7 @@ public class QuizActivity extends StandardActivity implements QuitQuizDialog.Lis
                 });
     }
 
-    private void makeQuestionViewSane() {
+    protected void makeQuestionViewSane() {
         problemParent.setTranslationX(0);
         problemParent.setAlpha(1);
         loadCurrentQuestionIntoView();
@@ -162,7 +175,7 @@ public class QuizActivity extends StandardActivity implements QuitQuizDialog.Lis
         submitButton.setVisibility(View.VISIBLE);
     }
 
-    private void makeResultsPageSane() {
+    protected void makeResultsPageSane() {
         resultsPage.setAlpha(1);
         resultsPage.setVisibility(View.VISIBLE);
         problemParent.setVisibility(View.GONE);
@@ -216,7 +229,7 @@ public class QuizActivity extends StandardActivity implements QuitQuizDialog.Lis
         submitButton.animate().alpha(0).setDuration(animationLength);
     }
 
-    private void loadResultsIntoView() {
+    protected void loadResultsIntoView() {
         Quiz.Grade grade = quiz.getGrade();
         String quizScore = "";
         switch (grade.getScore()) {
@@ -243,7 +256,7 @@ public class QuizActivity extends StandardActivity implements QuitQuizDialog.Lis
         score.setText(scoreText);
     }
 
-    private void fadeInResultsPage() {
+    protected void fadeInResultsPage() {
         resultsPage
                 .animate()
                 .alpha(1)
@@ -293,7 +306,7 @@ public class QuizActivity extends StandardActivity implements QuitQuizDialog.Lis
                 });
     }
 
-    private void fadeInProblemPage() {
+    protected void fadeInProblemPage() {
         problemParent
                 .animate()
                 .alpha(1)

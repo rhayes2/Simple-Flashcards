@@ -16,7 +16,6 @@ import android.widget.TextView;
 
 import com.randomappsinc.simpleflashcards.R;
 import com.randomappsinc.simpleflashcards.activities.PictureFullViewActivity;
-import com.randomappsinc.simpleflashcards.activities.ViewQuizletSetActivity;
 import com.randomappsinc.simpleflashcards.constants.Constants;
 import com.randomappsinc.simpleflashcards.persistence.DatabaseManager;
 import com.randomappsinc.simpleflashcards.persistence.models.Flashcard;

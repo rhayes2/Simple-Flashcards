@@ -2,6 +2,7 @@ package com.randomappsinc.simpleflashcards.models;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.support.annotation.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -9,6 +10,7 @@ import java.util.List;
 public class Problem implements Parcelable {
 
     private String question;
+    @Nullable private String questionImageUrl;
     private String answer;
     private List<String> options;
     private String givenAnswer;
@@ -21,6 +23,15 @@ public class Problem implements Parcelable {
 
     void setQuestion(String question) {
         this.question = question;
+    }
+
+    @Nullable
+    public String getQuestionImageUrl() {
+        return questionImageUrl;
+    }
+
+    void setQuestionImageUrl(@Nullable String questionImageUrl) {
+        this.questionImageUrl = questionImageUrl;
     }
 
     public String getAnswer() {
@@ -53,6 +64,7 @@ public class Problem implements Parcelable {
 
     protected Problem(Parcel in) {
         question = in.readString();
+        questionImageUrl = in.readString();
         answer = in.readString();
         if (in.readByte() == 0x01) {
             options = new ArrayList<>();
@@ -71,6 +83,7 @@ public class Problem implements Parcelable {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(question);
+        dest.writeString(questionImageUrl);
         dest.writeString(answer);
         if (options == null) {
             dest.writeByte((byte) (0x00));
