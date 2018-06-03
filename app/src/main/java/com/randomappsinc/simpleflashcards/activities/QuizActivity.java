@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.randomappsinc.simpleflashcards.R;
@@ -35,7 +36,7 @@ import butterknife.OnClick;
 
 public class QuizActivity extends StandardActivity implements QuitQuizDialog.Listener {
 
-    @BindView(R.id.problem_parent) View problemParent;
+    @BindView(R.id.problem_parent) ScrollView problemParent;
     @BindView(R.id.question_header) TextView questionHeader;
     @BindView(R.id.question) TextView questionText;
     @BindView(R.id.question_image) ImageView questionImage;
@@ -198,11 +199,11 @@ public class QuizActivity extends StandardActivity implements QuitQuizDialog.Lis
         if (quiz.isQuizComplete()) {
             return;
         }
-
         RadioButton chosenButton = getChosenButton();
         if (chosenButton == null) {
             UIUtils.showLongToast(R.string.please_check_something);
         } else {
+            problemParent.fullScroll(ScrollView.FOCUS_UP);
             quiz.submitAnswer(chosenButton.getText().toString());
             quiz.advanceToNextProblem();
             if (quiz.isQuizComplete()) {
