@@ -1,6 +1,8 @@
 package com.randomappsinc.simpleflashcards.fragments;
 
 import android.animation.Animator;
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
@@ -13,6 +15,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.randomappsinc.simpleflashcards.R;
+import com.randomappsinc.simpleflashcards.activities.PictureFullViewActivity;
+import com.randomappsinc.simpleflashcards.activities.ViewQuizletSetActivity;
 import com.randomappsinc.simpleflashcards.constants.Constants;
 import com.randomappsinc.simpleflashcards.persistence.DatabaseManager;
 import com.randomappsinc.simpleflashcards.persistence.models.Flashcard;
@@ -134,6 +138,18 @@ public class FlashcardFragment extends Fragment {
     @OnClick(R.id.speak)
     public void speakFlashcard() {
         textToSpeechManager.speak(isShowingTerm ? flashcard.getTerm() : flashcard.getDefinition());
+    }
+
+    @OnClick(R.id.term_image)
+    public void openImageInFullView() {
+        String imageUrl = flashcard.getTermImageUrl();
+        Activity activity = getActivity();
+        if (!TextUtils.isEmpty(imageUrl) && activity != null) {
+            Intent intent = new Intent(activity, PictureFullViewActivity.class)
+                    .putExtra(Constants.IMAGE_URL_KEY, imageUrl);
+            activity.startActivity(intent);
+            activity.overridePendingTransition(R.anim.fade_in, 0);
+        }
     }
 
     @Override
