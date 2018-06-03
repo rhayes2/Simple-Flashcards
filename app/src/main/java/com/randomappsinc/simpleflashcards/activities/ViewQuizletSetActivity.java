@@ -1,6 +1,8 @@
 package com.randomappsinc.simpleflashcards.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -42,7 +44,7 @@ public class ViewQuizletSetActivity extends StandardActivity {
         String title = getIntent().getStringExtra(Constants.QUIZLET_SET_TITLE);
         setTitle(title);
 
-        adapter = new QuizletFlashcardsAdapter(this);
+        adapter = new QuizletFlashcardsAdapter(this, flashcardClickListener);
         flashcards.setAdapter(adapter);
 
         setFetcher = QuizletFlashcardSetFetcher.getInstance();
@@ -61,16 +63,30 @@ public class ViewQuizletSetActivity extends StandardActivity {
         }
     }
 
-    private final QuizletFlashcardSetFetcher.Listener setFetchedListener = new QuizletFlashcardSetFetcher.Listener() {
-        @Override
-        public void onFlashcardSetFetched(QuizletFlashcardSet flashcardSet) {
-            quizletSet = flashcardSet;
-            adapter.loadFlashcards(flashcardSet.getFlashcards());
-            skeletonCards.setVisibility(View.GONE);
-            flashcards.setVisibility(View.VISIBLE);
-            button.setVisibility(View.VISIBLE);
-        }
-    };
+    private final QuizletFlashcardSetFetcher.Listener setFetchedListener =
+            new QuizletFlashcardSetFetcher.Listener() {
+                @Override
+                public void onFlashcardSetFetched(QuizletFlashcardSet flashcardSet) {
+                    quizletSet = flashcardSet;
+                    adapter.loadFlashcards(flashcardSet.getFlashcards());
+                    skeletonCards.setVisibility(View.GONE);
+                    flashcards.setVisibility(View.VISIBLE);
+                    button.setVisibility(View.VISIBLE);
+                }
+            };
+
+    private final QuizletFlashcardsAdapter.Listener flashcardClickListener =
+            new QuizletFlashcardsAdapter.Listener() {
+                @Override
+                public void onImageClicked(@NonNull String imageUrl) {
+                    Intent intent = new Intent(
+                            ViewQuizletSetActivity.this,
+                            PictureFullViewActivity.class)
+                            .putExtra(Constants.IMAGE_URL_KEY, imageUrl);
+                    startActivity(intent);
+                    overridePendingTransition(R.anim.fade_in, 0);
+                }
+            };
 
     @OnClick(R.id.download)
     public void download() {

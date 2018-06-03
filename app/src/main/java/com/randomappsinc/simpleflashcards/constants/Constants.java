@@ -10,4 +10,6 @@ public class Constants {
     public static final String FLASHCARD_SET_NAME_KEY = "flashcardSetName";
     public static final String QUIZLET_SET_ID = "quizletSetId";
     public static final String QUIZLET_SET_TITLE = "quizletSetTitle";
+    public static final String IMAGE_URL_KEY = "imageUrls";
+    public static final String POSITION_KEY = "position";
 }

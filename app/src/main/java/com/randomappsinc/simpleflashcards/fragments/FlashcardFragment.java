@@ -55,7 +55,10 @@ public class FlashcardFragment extends Fragment {
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        ViewGroup rootView = (ViewGroup) inflater.inflate(R.layout.flashcard_for_browsing, container, false);
+        ViewGroup rootView = (ViewGroup) inflater.inflate(
+                R.layout.flashcard_for_browsing,
+                container,
+                false);
         unbinder = ButterKnife.bind(this, rootView);
 
         textToSpeechManager = TextToSpeechManager.get();

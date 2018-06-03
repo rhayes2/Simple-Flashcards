@@ -63,5 +63,11 @@
             android:name=".activities.ViewQuizletSetActivity"
             android:configChanges="orientation|screenSize">
         </activity>
+
+        <activity
+            android:name=".activities.PictureFullViewActivity"
+            android:theme="@style/AppTheme.PictureFullView"
+            android:configChanges="orientation|screenSize">
+        </activity>
     </application>
 </manifest>

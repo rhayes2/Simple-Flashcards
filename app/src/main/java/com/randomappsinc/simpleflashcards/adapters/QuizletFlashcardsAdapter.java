@@ -3,6 +3,7 @@ package com.randomappsinc.simpleflashcards.adapters;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,14 +19,21 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 public class QuizletFlashcardsAdapter extends RecyclerView.Adapter<QuizletFlashcardsAdapter.FlashcardViewHolder> {
 
+    public interface Listener {
+        void onImageClicked(@NonNull String imageUrl);
+    }
+
     protected Context context;
+    @NonNull protected Listener listener;
     protected List<QuizletFlashcard> flashcards = new ArrayList<>();
 
-    public QuizletFlashcardsAdapter(Context context) {
+    public QuizletFlashcardsAdapter(Context context, @NonNull Listener listener) {
         this.context = context;
+        this.listener = listener;
     }
 
     public void loadFlashcards(List<QuizletFlashcard> flashcards) {
@@ -81,6 +89,14 @@ public class QuizletFlashcardsAdapter extends RecyclerView.Adapter<QuizletFlashc
                 termImage.setVisibility(View.VISIBLE);
             }
             definition.setText(flashcard.getDefinition());
+        }
+
+        @OnClick(R.id.term_image)
+        public void openImageInFullView() {
+            String imageUrl = flashcards.get(getAdapterPosition()).getImageUrl();
+            if (!TextUtils.isEmpty(imageUrl)) {
+                listener.onImageClicked(imageUrl);
+            }
         }
     }
 }
