@@ -111,6 +111,17 @@ public class QuizActivity extends StandardActivity implements QuitQuizDialog.Lis
         }
     }
 
+    @OnClick(R.id.question_image)
+    public void openImageInFullView() {
+        String imageUrl = quiz.getCurrentProblem().getQuestionImageUrl();
+        if (!TextUtils.isEmpty(imageUrl)) {
+            Intent intent = new Intent(this, PictureFullViewActivity.class)
+                    .putExtra(Constants.IMAGE_URL_KEY, imageUrl);
+            startActivity(intent);
+            overridePendingTransition(R.anim.fade_in, 0);
+        }
+    }
+
     private void animateQuestionOut() {
         submitButton.setEnabled(false);
         problemParent
