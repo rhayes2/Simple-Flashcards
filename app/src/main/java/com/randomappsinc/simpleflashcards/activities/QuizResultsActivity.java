@@ -1,5 +1,6 @@
 package com.randomappsinc.simpleflashcards.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 
@@ -36,8 +37,22 @@ public class QuizResultsActivity extends StandardActivity {
 
         List<Problem> problems = getIntent().getParcelableArrayListExtra(Constants.QUIZ_RESULTS_KEY);
         int flashcardSetSize = getIntent().getIntExtra(Constants.FLASHCARD_SET_SIZE_KEY, 0);
-        quizResults.setAdapter(new QuizResultsAdapter(this, problems, flashcardSetSize));
+        quizResults.setAdapter(new QuizResultsAdapter(
+                this,
+                problems,
+                flashcardSetSize,
+                resultClickListener));
     }
+
+    private final QuizResultsAdapter.Listener resultClickListener = new QuizResultsAdapter.Listener() {
+        @Override
+        public void onImageClicked(String imageUrl) {
+            Intent intent = new Intent(QuizResultsActivity.this, PictureFullViewActivity.class)
+                    .putExtra(Constants.IMAGE_URL_KEY, imageUrl);
+            startActivity(intent);
+            overridePendingTransition(R.anim.fade_in, 0);
+        }
+    };
 
     @Override
     public void finish() {
