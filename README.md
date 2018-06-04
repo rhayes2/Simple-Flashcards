@@ -3,16 +3,19 @@
 ![logo](Logo/horizontal.png)
 
 **Features:**
+- Browse millions of flashcard sets from Quizlet and download them with a single-tap
 - Create as many custom flashcard sets as you want. You can rename or delete them whenever
 - Add however many custom flashcards to whichever flashcard set you want. You can update or delete any flashcard whenever
-- When studying a flashcard set, you can go through them forwards, backwards, or at random
-- Simple, sleek, intuitive user interface
-- Backported Material Design so the app looks nice no matter how old your Android phone is
+- Learn any flashcard set's material with the app's browsing or quiz modes
 
 ## Download
 
 <a href="https://play.google.com/store/apps/details?id=com.randomappsinc.simpleflashcards" target="_blank">
 <img src="https://play.google.com/intl/en_us/badges/images/generic/en-play-badge.png" alt="Get it on Google Play" height="100"/></a>
+
+## Thanks
+
+**Huge** thanks to Zularizal for creating the app logo. You can check out his GitHub <a href="https://play.google.com/store/apps/details?id=com.randomappsinc.simpleflashcards">here</a>.
 
 License
 =======
