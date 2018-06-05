@@ -15,7 +15,7 @@
 
 ## Thanks
 
-**Huge** thanks to Zularizal for creating the app logo. You can check out his GitHub <a href="https://play.google.com/store/apps/details?id=com.randomappsinc.simpleflashcards">here</a>.
+**Huge** thanks to Zularizal for creating the app logo. You can check out his GitHub <a href="https://github.com/zularizal">here</a>.
 
 License
 =======
