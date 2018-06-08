@@ -7,6 +7,7 @@
     <string name="speak_icon">{ion-ios-volume-high}</string>
     <string name="back_arrow_icon">{ion-android-arrow-back}</string>
     <string name="shuffle_icon">{ion-shuffle}</string>
+    <string name="flip_icon">{ion-refresh}</string>
 
     <string name="flashcard_set_shuffled">Flashcard set shuffled.</string>
 

@@ -48,6 +48,7 @@ public class FlashcardFragment extends Fragment {
     @BindView(R.id.speak) View speak;
     @BindView(R.id.term_image) ImageView termImage;
     @BindView(R.id.content) TextView content;
+    @BindView(R.id.flip_icon) View flipIcon;
 
     @BindInt(R.integer.default_anim_length) int flipAnimLength;
 
@@ -100,6 +101,7 @@ public class FlashcardFragment extends Fragment {
                         speak.setVisibility(View.GONE);
                         content.setVisibility(View.GONE);
                         termImage.setVisibility(View.GONE);
+                        flipIcon.setVisibility(View.GONE);
                     }
 
                     @Override
@@ -110,6 +112,7 @@ public class FlashcardFragment extends Fragment {
                         sideHeader.setVisibility(View.VISIBLE);
                         speak.setVisibility(View.VISIBLE);
                         content.setVisibility(View.VISIBLE);
+                        flipIcon.setVisibility(View.VISIBLE);
                         flashcardContainer.setEnabled(true);
                     }
 
