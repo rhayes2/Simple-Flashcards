@@ -1,5 +1,6 @@
 package com.randomappsinc.simpleflashcards.activities;
 
+import android.media.AudioManager;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.widget.SeekBar;
@@ -9,6 +10,7 @@ import com.randomappsinc.simpleflashcards.adapters.FlashcardsBrowsingAdapter;
 import com.randomappsinc.simpleflashcards.constants.Constants;
 import com.randomappsinc.simpleflashcards.persistence.DatabaseManager;
 import com.randomappsinc.simpleflashcards.persistence.models.FlashcardSet;
+import com.randomappsinc.simpleflashcards.utils.TextToSpeechManager;
 import com.randomappsinc.simpleflashcards.utils.UIUtils;
 
 import butterknife.BindView;
@@ -22,12 +24,16 @@ public class StudyModeActivity extends StandardActivity {
     @BindView(R.id.flashcards_slider) SeekBar flashcardsSlider;
 
     private FlashcardsBrowsingAdapter flashcardsBrowsingAdapter;
+    private TextToSpeechManager textToSpeechManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.study_mode);
         ButterKnife.bind(this);
+
+        textToSpeechManager = TextToSpeechManager.get();
+        setVolumeControlStream(AudioManager.STREAM_MUSIC);
 
         int setId = getIntent().getIntExtra(Constants.FLASHCARD_SET_ID_KEY, 0);
         FlashcardSet flashcardSet = DatabaseManager.get().getFlashcardSet(setId);
@@ -58,6 +64,7 @@ public class StudyModeActivity extends StandardActivity {
 
     @OnPageChange(R.id.flashcards_pager)
     public void onFlashcardChanged(int position) {
+        textToSpeechManager.stopSpeaking();
         flashcardsSlider.setProgress(position);
     }
 
@@ -73,5 +80,11 @@ public class StudyModeActivity extends StandardActivity {
     @OnClick(R.id.back)
     public void back() {
         finish();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        textToSpeechManager.stopSpeaking();
     }
 }

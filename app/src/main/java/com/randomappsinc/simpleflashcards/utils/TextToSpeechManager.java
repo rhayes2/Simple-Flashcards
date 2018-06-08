@@ -64,4 +64,10 @@ public class TextToSpeechManager implements TextToSpeech.OnInitListener {
     public void onInit(int status) {
         enabled = (status == TextToSpeech.SUCCESS);
     }
+
+    public void stopSpeaking() {
+        if (textToSpeech.isSpeaking()) {
+            textToSpeech.stop();
+        }
+    }
 }

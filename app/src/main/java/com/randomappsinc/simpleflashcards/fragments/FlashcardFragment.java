@@ -83,6 +83,7 @@ public class FlashcardFragment extends Fragment {
 
     @OnClick(R.id.flashcard_container)
     public void flipFlashcard() {
+        textToSpeechManager.stopSpeaking();
         flashcardContainer.setEnabled(false);
         flashcardContainer.clearAnimation();
         flashcardContainer
