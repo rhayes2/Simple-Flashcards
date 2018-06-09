@@ -19,6 +19,7 @@ import com.randomappsinc.simpleflashcards.adapters.FlashcardSetsAdapter;
 import com.randomappsinc.simpleflashcards.constants.Constants;
 import com.randomappsinc.simpleflashcards.dialogs.DeleteFlashcardSetDialog;
 import com.randomappsinc.simpleflashcards.dialogs.FlashcardSetCreatorDialog;
+import com.randomappsinc.simpleflashcards.persistence.DatabaseManager;
 import com.randomappsinc.simpleflashcards.persistence.PreferencesManager;
 import com.randomappsinc.simpleflashcards.persistence.models.FlashcardSet;
 import com.randomappsinc.simpleflashcards.utils.UIUtils;
@@ -32,10 +33,12 @@ public class MainActivity extends StandardActivity
         implements FlashcardSetsAdapter.Listener, DeleteFlashcardSetDialog.Listener {
 
     @BindView(R.id.parent) View parent;
+    @BindView(R.id.search_bar) View searchBar;
     @BindView(R.id.flashcard_set_search) EditText setSearch;
     @BindView(R.id.clear_search) View clearSearch;
     @BindView(R.id.flashcard_sets) ListView sets;
-    @BindView(R.id.no_sets) View noSets;
+    @BindView(R.id.no_sets) View noSetsAtAll;
+    @BindView(R.id.no_sets_match) View noSetsMatch;
     @BindView(R.id.add_flashcard_set) FloatingActionButton addFlashcardSet;
 
     protected FlashcardSetsAdapter adapter;
@@ -79,7 +82,7 @@ public class MainActivity extends StandardActivity
         flashcardSetCreatorDialog = new FlashcardSetCreatorDialog(this, setCreatedListener);
         deleteFlashcardSetDialog = new DeleteFlashcardSetDialog(this, this);
 
-        adapter = new FlashcardSetsAdapter(this, this, noSets);
+        adapter = new FlashcardSetsAdapter(this, this);
         sets.setAdapter(adapter);
     }
 
@@ -167,6 +170,26 @@ public class MainActivity extends StandardActivity
     public void onFlashcardSetDeleted() {
         adapter.refreshContent(setSearch.getText().toString());
         UIUtils.showSnackbar(parent, getString(R.string.flashcard_set_deleted), Snackbar.LENGTH_LONG);
+    }
+
+    @Override
+    public void onContentUpdated(int numSets) {
+        if (DatabaseManager.get().getNumFlashcardSets() == 0) {
+            searchBar.setVisibility(View.GONE);
+            sets.setVisibility(View.GONE);
+            noSetsMatch.setVisibility(View.GONE);
+            noSetsAtAll.setVisibility(View.VISIBLE);
+        } else {
+            noSetsAtAll.setVisibility(View.GONE);
+            searchBar.setVisibility(View.VISIBLE);
+            if (numSets == 0) {
+                sets.setVisibility(View.GONE);
+                noSetsMatch.setVisibility(View.VISIBLE);
+            } else {
+                noSetsMatch.setVisibility(View.GONE);
+                sets.setVisibility(View.VISIBLE);
+            }
+        }
     }
 
     @Override

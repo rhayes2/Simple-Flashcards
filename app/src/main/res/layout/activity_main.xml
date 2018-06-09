@@ -14,7 +14,9 @@
         android:focusable="true"
         android:focusableInTouchMode="true">
 
-        <include layout="@layout/search_bar"/>
+        <include
+            android:id="@+id/search_bar"
+            layout="@layout/search_bar"/>
 
         <LinearLayout
             android:id="@+id/no_sets"
@@ -92,6 +94,7 @@
 
         <com.joanzapata.iconify.widget.IconTextView
             android:id="@+id/no_sets_match"
+            android:text="@string/no_sets_search"
             style="@style/empty_state_text"/>
 
         <ListView

@@ -29,29 +29,25 @@ public class FlashcardSetsAdapter extends BaseAdapter {
         void editFlashcardSet(FlashcardSet flashcardSet);
 
         void deleteFlashcardSet(FlashcardSet flashcardSet);
+
+        void onContentUpdated(int numSets);
     }
 
     @NonNull protected Listener listener;
     private Context context;
     protected List<FlashcardSet> flashcardSets;
-    private View noSets;
 
-    public FlashcardSetsAdapter(@NonNull Listener listener, Context context, View noSets) {
+    public FlashcardSetsAdapter(@NonNull Listener listener, Context context) {
         this.listener = listener;
         this.context = context;
         this.flashcardSets = new ArrayList<>();
-        this.noSets = noSets;
     }
 
     public void refreshContent(String searchTerm) {
         flashcardSets.clear();
         flashcardSets.addAll(DatabaseManager.get().getFlashcardSets(searchTerm));
-        if (flashcardSets.isEmpty()) {
-            noSets.setVisibility(View.VISIBLE);
-        } else {
-            noSets.setVisibility(View.GONE);
-        }
         notifyDataSetChanged();
+        listener.onContentUpdated(getCount());
     }
 
     public int getCount() {
