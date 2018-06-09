@@ -34,9 +34,9 @@ public class FlashcardSetsAdapter extends BaseAdapter {
     @NonNull protected Listener listener;
     private Context context;
     protected List<FlashcardSet> flashcardSets;
-    private TextView noSets;
+    private View noSets;
 
-    public FlashcardSetsAdapter(@NonNull Listener listener, Context context, TextView noSets) {
+    public FlashcardSetsAdapter(@NonNull Listener listener, Context context, View noSets) {
         this.listener = listener;
         this.context = context;
         this.flashcardSets = new ArrayList<>();
@@ -47,9 +47,6 @@ public class FlashcardSetsAdapter extends BaseAdapter {
         flashcardSets.clear();
         flashcardSets.addAll(DatabaseManager.get().getFlashcardSets(searchTerm));
         if (flashcardSets.isEmpty()) {
-            noSets.setText(DatabaseManager.get().getNumFlashcardSets() == 0
-                    ? R.string.no_sets_at_all
-                    : R.string.no_sets_search);
             noSets.setVisibility(View.VISIBLE);
         } else {
             noSets.setVisibility(View.GONE);

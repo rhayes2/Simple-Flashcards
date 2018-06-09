@@ -12,9 +12,9 @@
 
     <string name="no_sets_at_all">
         Welcome to your library!
-        To start adding flashcard sets, you can use the {ion-android-download} button above to download
-        flashcard sets from the Internet or use the {ion-android-add} button below to create your own.
+        To start adding flashcard sets, you can:
     </string>
+
     <string name="no_sets_search">You do not have any flashcard sets that match your criteria.</string>
 
     <string name="create_flashcard_set">Create Flashcard Set</string>
@@ -50,6 +50,11 @@
     <string name="edit_icon">{ion-edit}</string>
     <string name="delete_icon">{ion-android-delete}</string>
     <string name="close_icon">{ion-android-close}</string>
+    <string name="download_icon">{ion-android-download}</string>
+    <string name="add_circle_icon">{ion-android-add-circle}</string>
+
+    <string name="download_sets_button_text">Download them from the Internet</string>
+    <string name="create_your_own">Create your own</string>
 
     <string name="flashcard_set_delete_title">Confirm Flashcard Set Deletion</string>
     <string name="flashcard_set_delete_message">Are you sure you want to delete this flashcard set?</string>

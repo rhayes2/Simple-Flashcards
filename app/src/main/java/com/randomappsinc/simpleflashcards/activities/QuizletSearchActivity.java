@@ -62,9 +62,11 @@ public class QuizletSearchActivity extends StandardActivity {
     @OnTextChanged(value = R.id.flashcard_set_search, callback = OnTextChanged.Callback.AFTER_TEXT_CHANGED)
     public void afterTextChanged(Editable input) {
         if (input.length() > 0) {
+
             searchManager.performSearch(input.toString());
         }
         searchResults.setVisibility(View.GONE);
+        searchResults.scrollToPosition(0);
         skeletonResults.setVisibility(input.length() == 0 ? View.GONE : View.VISIBLE);
 
         if (input.length() == 0) {

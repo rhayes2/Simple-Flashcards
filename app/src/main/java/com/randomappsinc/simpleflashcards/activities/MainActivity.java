@@ -10,7 +10,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.TextView;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.joanzapata.iconify.IconDrawable;
@@ -36,7 +35,7 @@ public class MainActivity extends StandardActivity
     @BindView(R.id.flashcard_set_search) EditText setSearch;
     @BindView(R.id.clear_search) View clearSearch;
     @BindView(R.id.flashcard_sets) ListView sets;
-    @BindView(R.id.no_sets) TextView noSets;
+    @BindView(R.id.no_sets) View noSets;
     @BindView(R.id.add_flashcard_set) FloatingActionButton addFlashcardSet;
 
     protected FlashcardSetsAdapter adapter;
@@ -103,6 +102,16 @@ public class MainActivity extends StandardActivity
 
     @OnClick(R.id.add_flashcard_set)
     public void addSet() {
+        flashcardSetCreatorDialog.show();
+    }
+
+    @OnClick(R.id.download_sets_button)
+    public void downloadFlashcards() {
+        startActivity(new Intent(this, QuizletSearchActivity.class));
+    }
+
+    @OnClick(R.id.create_set_button)
+    public void createSet() {
         flashcardSetCreatorDialog.show();
     }
 
