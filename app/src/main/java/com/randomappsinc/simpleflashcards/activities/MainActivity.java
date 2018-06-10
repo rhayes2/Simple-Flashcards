@@ -164,7 +164,7 @@ public class MainActivity extends StandardActivity
 
     @Override
     public void onFlashcardSetDeleted() {
-        adapter.refreshContent(setSearch.getText().toString());
+        adapter.onFlashcardSetDeleted();
     }
 
     @Override
