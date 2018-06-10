@@ -4,12 +4,12 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.ListView;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.joanzapata.iconify.IconDrawable;
@@ -23,6 +23,7 @@ import com.randomappsinc.simpleflashcards.persistence.DatabaseManager;
 import com.randomappsinc.simpleflashcards.persistence.PreferencesManager;
 import com.randomappsinc.simpleflashcards.persistence.models.FlashcardSet;
 import com.randomappsinc.simpleflashcards.utils.UIUtils;
+import com.randomappsinc.simpleflashcards.views.SimpleDividerItemDecoration;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -36,7 +37,7 @@ public class MainActivity extends StandardActivity
     @BindView(R.id.search_bar) View searchBar;
     @BindView(R.id.flashcard_set_search) EditText setSearch;
     @BindView(R.id.clear_search) View clearSearch;
-    @BindView(R.id.flashcard_sets) ListView sets;
+    @BindView(R.id.flashcard_sets) RecyclerView sets;
     @BindView(R.id.no_sets) View noSetsAtAll;
     @BindView(R.id.no_sets_match) View noSetsMatch;
     @BindView(R.id.add_flashcard_set) FloatingActionButton addFlashcardSet;
@@ -74,6 +75,7 @@ public class MainActivity extends StandardActivity
         deleteFlashcardSetDialog = new DeleteFlashcardSetDialog(this, this);
 
         adapter = new FlashcardSetsAdapter(this, this);
+        sets.addItemDecoration(new SimpleDividerItemDecoration(this));
         sets.setAdapter(adapter);
     }
 
@@ -137,7 +139,10 @@ public class MainActivity extends StandardActivity
     @Override
     public void takeQuiz(FlashcardSet flashcardSet) {
         if (flashcardSet.getFlashcards().size() < 2) {
-            UIUtils.showSnackbar(parent, getString(R.string.not_enough_for_quiz), Snackbar.LENGTH_LONG);
+            UIUtils.showSnackbar(
+                    parent,
+                    getString(R.string.not_enough_for_quiz),
+                    Snackbar.LENGTH_LONG);
         } else {
             startActivity(new Intent(
                     this, QuizActivity.class)
@@ -160,7 +165,6 @@ public class MainActivity extends StandardActivity
     @Override
     public void onFlashcardSetDeleted() {
         adapter.refreshContent(setSearch.getText().toString());
-        UIUtils.showSnackbar(parent, getString(R.string.flashcard_set_deleted), Snackbar.LENGTH_LONG);
     }
 
     @Override

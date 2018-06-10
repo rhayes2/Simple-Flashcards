@@ -2,10 +2,10 @@ package com.randomappsinc.simpleflashcards.adapters;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import com.randomappsinc.simpleflashcards.R;
@@ -19,7 +19,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class FlashcardSetsAdapter extends BaseAdapter {
+public class FlashcardSetsAdapter extends RecyclerView.Adapter<FlashcardSetsAdapter.FlashcardSetViewHolder> {
 
     public interface Listener {
         void browseFlashcardSet(FlashcardSet flashcardSet);
@@ -47,35 +47,37 @@ public class FlashcardSetsAdapter extends BaseAdapter {
         flashcardSets.clear();
         flashcardSets.addAll(DatabaseManager.get().getFlashcardSets(searchTerm));
         notifyDataSetChanged();
-        listener.onContentUpdated(getCount());
+        listener.onContentUpdated(getItemCount());
     }
 
-    public int getCount() {
+    @NonNull
+    @Override
+    public FlashcardSetViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View itemView = LayoutInflater.from(context).inflate(
+                R.layout.flashcard_set_cell,
+                parent,
+                false);
+        return new FlashcardSetViewHolder(itemView);
+    }
+
+    @Override
+    public void onBindViewHolder(@NonNull FlashcardSetViewHolder holder, int position) {
+        holder.loadFlashcardSet(position);
+    }
+
+    @Override
+    public int getItemCount() {
         return flashcardSets.size();
     }
 
-    @Override
-    public FlashcardSet getItem(int position) {
-        return flashcardSets.get(position);
-    }
-
-    @Override
-    public long getItemId(int position) {
-        return getItem(position).hashCode();
-    }
-
-    @Override
-    public boolean hasStableIds() {
-        return true;
-    }
-
-    public class FlashcardSetViewHolder {
+    public class FlashcardSetViewHolder extends RecyclerView.ViewHolder {
         @BindView(R.id.set_name) TextView setName;
         @BindView(R.id.num_flashcards) TextView numFlashcards;
 
         private int position;
 
         FlashcardSetViewHolder(View view) {
+            super(view);
             ButterKnife.bind(this, view);
         }
 
@@ -88,37 +90,22 @@ public class FlashcardSetsAdapter extends BaseAdapter {
 
         @OnClick(R.id.browse_button)
         public void browseFlashcards() {
-            listener.browseFlashcardSet(getItem(position));
+            listener.browseFlashcardSet(flashcardSets.get(position));
         }
 
         @OnClick(R.id.quiz_button)
         public void takeQuiz() {
-            listener.takeQuiz(getItem(position));
+            listener.takeQuiz(flashcardSets.get(position));
         }
 
         @OnClick(R.id.edit_button)
         public void editFlashcardSet() {
-            listener.editFlashcardSet(getItem(position));
+            listener.editFlashcardSet(flashcardSets.get(position));
         }
 
         @OnClick(R.id.delete_button)
         public void deleteFlashcardSet() {
-            listener.deleteFlashcardSet(getItem(position));
+            listener.deleteFlashcardSet(flashcardSets.get(position));
         }
-    }
-
-    // Renders the ListView item that the user has scrolled to or is about to scroll to
-    public View getView(final int position, View view, ViewGroup parent) {
-        FlashcardSetViewHolder holder;
-        if (view == null) {
-            LayoutInflater vi = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            view = vi.inflate(R.layout.flashcard_set_cell, parent, false);
-            holder = new FlashcardSetViewHolder(view);
-            view.setTag(holder);
-        } else {
-            holder = (FlashcardSetViewHolder) view.getTag();
-        }
-        holder.loadFlashcardSet(position);
-        return view;
     }
 }

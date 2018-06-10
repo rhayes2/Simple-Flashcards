@@ -1,5 +1,6 @@
 <android.support.design.widget.CoordinatorLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/parent"
     android:background="@color/white"
@@ -97,12 +98,13 @@
             android:text="@string/no_sets_search"
             style="@style/empty_state_text"/>
 
-        <ListView
+        <android.support.v7.widget.RecyclerView
             android:id="@+id/flashcard_sets"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:clipToPadding="false"
-            android:paddingBottom="88dp"/>
+            android:paddingBottom="88dp"
+            app:layoutManager="android.support.v7.widget.LinearLayoutManager"/>
     </LinearLayout>
 
     <android.support.design.widget.FloatingActionButton

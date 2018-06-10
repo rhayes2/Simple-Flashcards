@@ -58,7 +58,6 @@
 
     <string name="flashcard_set_delete_title">Confirm Flashcard Set Deletion</string>
     <string name="flashcard_set_delete_message">Are you sure you want to delete this flashcard set?</string>
-    <string name="flashcard_set_deleted">Flashcard set deleted.</string>
     <string name="no_flashcards_for_browsing">
         This flashcard set currently has no flashcards to browse.
         Use the edit button to add some!
