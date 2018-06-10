@@ -12,7 +12,7 @@ import com.randomappsinc.simpleflashcards.persistence.models.Flashcard;
 public class EditFlashcardTermDialog {
 
     public interface Listener {
-        void onFlashcardTermEdited();
+        void onFlashcardTermEdited(String newTerm);
     }
 
     private MaterialDialog dialog;
@@ -39,7 +39,7 @@ public class EditFlashcardTermDialog {
                     public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
                         String newTerm = dialog.getInputEditText().getText().toString().trim();
                         DatabaseManager.get().updateFlashcardTerm(flashcard.getId(), newTerm);
-                        listener.onFlashcardTermEdited();
+                        listener.onFlashcardTermEdited(newTerm);
                     }
                 })
                 .build();

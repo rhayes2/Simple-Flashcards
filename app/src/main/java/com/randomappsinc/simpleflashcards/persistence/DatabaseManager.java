@@ -8,6 +8,7 @@ import com.randomappsinc.simpleflashcards.persistence.models.Flashcard;
 import com.randomappsinc.simpleflashcards.persistence.models.FlashcardSet;
 import com.randomappsinc.simpleflashcards.utils.MyApplication;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import io.realm.Case;
@@ -253,10 +254,20 @@ public class DatabaseManager {
     }
 
     public List<Flashcard> getAllFlashcards(int setId) {
-        return realm.where(FlashcardSet.class)
+        RealmList<Flashcard> flashcards = realm.where(FlashcardSet.class)
                 .equalTo("id", setId)
                 .findFirst()
                 .getFlashcards();
+        List<Flashcard> copies = new ArrayList<>();
+        for (Flashcard flashcard : flashcards) {
+            Flashcard flashcardCopy = new Flashcard();
+            flashcardCopy.setId(flashcard.getId());
+            flashcardCopy.setTerm(flashcard.getTerm());
+            flashcardCopy.setTermImageUrl(flashcard.getTermImageUrl());
+            flashcardCopy.setDefinition(flashcard.getDefinition());
+            copies.add(flashcardCopy);
+        }
+        return copies;
     }
 
     public String getSetName(int setId) {

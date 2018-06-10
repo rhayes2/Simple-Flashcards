@@ -33,6 +33,7 @@ public class EditFlashcardsAdapter extends RecyclerView.Adapter<EditFlashcardsAd
     protected EditFlashcardTermDialog editFlashcardTermDialog;
     protected EditFlashcardDefinitionDialog editFlashcardDefinitionDialog;
     private TextView numFlashcards;
+    protected int selectedItemPosition = -1;
 
     public EditFlashcardsAdapter(Context context, int setId, View noContent, TextView numFlashcards) {
         this.context = context;
@@ -40,7 +41,9 @@ public class EditFlashcardsAdapter extends RecyclerView.Adapter<EditFlashcardsAd
         this.noContent = noContent;
         this.deleteFlashcardDialog = new DeleteFlashcardDialog(context, flashcardDeleteListener);
         this.editFlashcardTermDialog = new EditFlashcardTermDialog(context, flashcardTermEditListener);
-        this.editFlashcardDefinitionDialog = new EditFlashcardDefinitionDialog(context, flashcardDefinitionEditListener);
+        this.editFlashcardDefinitionDialog = new EditFlashcardDefinitionDialog(
+                context,
+                flashcardDefinitionEditListener);
         this.numFlashcards = numFlashcards;
         refreshSet();
     }
@@ -56,16 +59,26 @@ public class EditFlashcardsAdapter extends RecyclerView.Adapter<EditFlashcardsAd
     private final EditFlashcardTermDialog.Listener flashcardTermEditListener =
             new EditFlashcardTermDialog.Listener() {
                 @Override
-                public void onFlashcardTermEdited() {
-                    refreshSet();
+                public void onFlashcardTermEdited(String newTerm) {
+                    if (selectedItemPosition < 0) {
+                        return;
+                    }
+                    flashcards.get(selectedItemPosition).setTerm(newTerm);
+                    notifyItemChanged(selectedItemPosition);
+                    selectedItemPosition = -1;
                 }
             };
 
     private final EditFlashcardDefinitionDialog.Listener flashcardDefinitionEditListener =
             new EditFlashcardDefinitionDialog.Listener() {
                 @Override
-                public void onFlashcardDefinitionEdited() {
-                    refreshSet();
+                public void onFlashcardDefinitionEdited(String newDefinition) {
+                    if (selectedItemPosition < 0) {
+                        return;
+                    }
+                    flashcards.get(selectedItemPosition).setDefinition(newDefinition);
+                    notifyItemChanged(selectedItemPosition);
+                    selectedItemPosition = -1;
                 }
             };
 
@@ -140,11 +153,13 @@ public class EditFlashcardsAdapter extends RecyclerView.Adapter<EditFlashcardsAd
 
         @OnClick(R.id.term)
         public void editTerm() {
+            selectedItemPosition = getAdapterPosition();
             editFlashcardTermDialog.show(flashcards.get(getAdapterPosition()));
         }
 
         @OnClick(R.id.definition)
         public void editDefinition() {
+            selectedItemPosition = getAdapterPosition();
             editFlashcardDefinitionDialog.show(flashcards.get(getAdapterPosition()));
         }
 
