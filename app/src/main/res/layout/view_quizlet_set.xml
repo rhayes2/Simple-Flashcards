@@ -2,6 +2,7 @@
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/white"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -29,16 +30,26 @@
         <include layout="@layout/quizlet_flashcard_skeleton_cell"/>
     </LinearLayout>
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/flashcards"
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@id/download"
-        android:paddingTop="4dp"
-        android:paddingBottom="4dp"
-        android:clipToPadding="false"
-        android:visibility="gone"
-        app:layoutManager="android.support.v7.widget.LinearLayoutManager"/>
+        android:layout_above="@id/download">
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/flashcards"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingTop="4dp"
+            android:paddingBottom="4dp"
+            android:clipToPadding="false"
+            android:visibility="gone"
+            app:layoutManager="android.support.v7.widget.LinearLayoutManager"/>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="8dp"
+            android:background="@drawable/list_fade"/>
+    </FrameLayout>
 
     <TextView
         android:id="@+id/download"

@@ -50,13 +50,23 @@
             android:text="@string/no_flashcards"
             style="@style/empty_state_text"/>
 
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/flashcards"
+        <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:clipToPadding="false"
-            android:paddingBottom="84dp"
-            app:layoutManager="android.support.v7.widget.LinearLayoutManager"/>
+            android:layout_height="match_parent">
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/flashcards"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:clipToPadding="false"
+                android:paddingBottom="84dp"
+                app:layoutManager="android.support.v7.widget.LinearLayoutManager"/>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="8dp"
+                android:background="@drawable/list_fade"/>
+        </FrameLayout>
     </LinearLayout>
 
     <android.support.design.widget.FloatingActionButton

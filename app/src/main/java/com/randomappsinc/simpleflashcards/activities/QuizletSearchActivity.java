@@ -26,7 +26,7 @@ import butterknife.OnTextChanged;
 
 public class QuizletSearchActivity extends StandardActivity {
 
-    private static final long MILLIS_DELAY_FOR_KEYBOARD = 250;
+    private static final long MILLIS_DELAY_FOR_KEYBOARD = 150;
 
     @BindView(R.id.parent) View parent;
     @BindView(R.id.flashcard_set_search) EditText setSearch;
