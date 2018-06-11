@@ -17,4 +17,7 @@
     <string name="has_images">Has Images</string>
     <string name="download">Download</string>
     <string name="saved_to_library">Saved To Library</string>
+
+    <string name="library_icon">{ion-ios-bookmarks}</string>
+    <string name="in_library">In library</string>
 </resources>
