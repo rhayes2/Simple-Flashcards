@@ -25,49 +25,41 @@
         <activity
             android:name=".activities.MainActivity"
             android:windowSoftInputMode="stateAlwaysHidden"
-            android:label="@string/app_name">
-        </activity>
+            android:label="@string/app_name"/>
 
         <activity
             android:name=".activities.SettingsActivity"
             android:configChanges="orientation|screenSize"
-            android:label="@string/settings">
-        </activity>
+            android:label="@string/settings"/>
 
         <activity
             android:name=".activities.EditFlashcardSetActivity"
             android:windowSoftInputMode="stateAlwaysHidden"
             android:label="@string/edit_flashcard_set"
-            android:configChanges="orientation|screenSize">
-        </activity>
+            android:configChanges="orientation|screenSize"/>
 
         <activity
             android:name=".activities.StudyModeActivity"
             android:theme="@style/AppTheme.StudyMode"
-            android:configChanges="orientation|screenSize">
-        </activity>
+            android:configChanges="orientation|screenSize"/>
 
         <activity
             android:name=".activities.QuizActivity"
-            android:configChanges="orientation|screenSize">
-        </activity>
+            android:configChanges="orientation|screenSize"/>
 
         <activity
             android:name=".activities.QuizResultsActivity"
-            android:configChanges="orientation|screenSize">
-        </activity>
+            android:configChanges="orientation|screenSize"/>
 
         <activity
             android:name=".activities.QuizletSearchActivity"
             android:windowSoftInputMode="stateAlwaysHidden"
             android:label="@string/download_flashcard_sets_title"
-            android:configChanges="orientation|screenSize">
-        </activity>
+            android:configChanges="orientation|screenSize"/>
 
         <activity
             android:name=".activities.ViewQuizletSetActivity"
-            android:configChanges="orientation|screenSize">
-        </activity>
+            android:configChanges="orientation|screenSize"/>
 
         <activity
             android:name=".activities.PictureFullViewActivity"

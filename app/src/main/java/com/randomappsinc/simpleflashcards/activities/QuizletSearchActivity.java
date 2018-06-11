@@ -1,10 +1,12 @@
 package com.randomappsinc.simpleflashcards.activities;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -23,6 +25,8 @@ import butterknife.OnClick;
 import butterknife.OnTextChanged;
 
 public class QuizletSearchActivity extends StandardActivity {
+
+    private static final long MILLIS_DELAY_FOR_KEYBOARD = 250;
 
     @BindView(R.id.parent) View parent;
     @BindView(R.id.flashcard_set_search) EditText setSearch;
@@ -57,6 +61,19 @@ public class QuizletSearchActivity extends StandardActivity {
                 }
             }
         });
+
+        if (setSearch.requestFocus()) {
+            setSearch.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                    if (imm == null) {
+                        return;
+                    }
+                    imm.showSoftInput(setSearch, InputMethodManager.SHOW_IMPLICIT);
+                }
+            }, MILLIS_DELAY_FOR_KEYBOARD);
+        }
     }
 
     @OnTextChanged(value = R.id.flashcard_set_search, callback = OnTextChanged.Callback.AFTER_TEXT_CHANGED)
@@ -96,15 +113,18 @@ public class QuizletSearchActivity extends StandardActivity {
         }
     };
 
-    private final QuizletSearchResultsAdapter.Listener resultClickListener = new QuizletSearchResultsAdapter.Listener() {
-        @Override
-        public void onResultClicked(QuizletSetResult result) {
-            Intent intent = new Intent(QuizletSearchActivity.this, ViewQuizletSetActivity.class)
-                    .putExtra(Constants.QUIZLET_SET_ID, result.getQuizletSetId())
-                    .putExtra(Constants.QUIZLET_SET_TITLE, result.getTitle());
-            startActivity(intent);
-        }
-    };
+    private final QuizletSearchResultsAdapter.Listener resultClickListener =
+            new QuizletSearchResultsAdapter.Listener() {
+                @Override
+                public void onResultClicked(QuizletSetResult result) {
+                    Intent intent = new Intent(
+                            QuizletSearchActivity.this,
+                            ViewQuizletSetActivity.class)
+                            .putExtra(Constants.QUIZLET_SET_ID, result.getQuizletSetId())
+                            .putExtra(Constants.QUIZLET_SET_TITLE, result.getTitle());
+                    startActivity(intent);
+                }
+            };
 
     @Override
     public void onDestroy() {
