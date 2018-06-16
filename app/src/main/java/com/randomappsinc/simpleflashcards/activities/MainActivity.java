@@ -111,6 +111,11 @@ public class MainActivity extends StandardActivity
         flashcardSetCreatorDialog.show();
     }
 
+    @OnClick(R.id.share_with_nearby_button)
+    public void shareWithNearby() {
+        startActivity(new Intent(this, NearbySharingActivity.class));
+    }
+
     private final FlashcardSetCreatorDialog.Listener setCreatedListener =
             new FlashcardSetCreatorDialog.Listener() {
                 @Override
@@ -191,6 +196,7 @@ public class MainActivity extends StandardActivity
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_main, menu);
         UIUtils.loadMenuIcon(menu, R.id.download_flashcard_sets, IoniconsIcons.ion_android_download, this);
+        UIUtils.loadMenuIcon(menu, R.id.share_with_nearby, IoniconsIcons.ion_arrow_swap, this);
         UIUtils.loadMenuIcon(menu, R.id.settings, IoniconsIcons.ion_android_settings, this);
         return true;
     }
@@ -200,6 +206,9 @@ public class MainActivity extends StandardActivity
         switch (item.getItemId()) {
             case R.id.download_flashcard_sets:
                 startActivity(new Intent(this, QuizletSearchActivity.class));
+                return true;
+            case R.id.share_with_nearby:
+                startActivity(new Intent(this, NearbySharingActivity.class));
                 return true;
             case R.id.settings:
                 startActivity(new Intent(this, SettingsActivity.class));

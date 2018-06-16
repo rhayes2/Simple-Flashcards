@@ -8,6 +8,11 @@
         app:showAsAction="ifRoom"/>
 
     <item
+        android:id="@+id/share_with_nearby"
+        android:title="@string/share_with_nearby"
+        app:showAsAction="ifRoom"/>
+
+    <item
         android:id="@+id/settings"
         android:title="@string/settings"
         app:showAsAction="ifRoom"/>

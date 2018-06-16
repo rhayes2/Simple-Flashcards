@@ -66,6 +66,7 @@
 
             <android.support.v7.widget.CardView
                 android:id="@+id/create_set_button"
+                android:layout_marginBottom="4dp"
                 style="@style/clickable_card">
 
                 <LinearLayout
@@ -87,6 +88,34 @@
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="8dp"
                         android:text="@string/create_your_own"
+                        android:textColor="@color/dark_gray"
+                        android:textSize="17dp"/>
+                </LinearLayout>
+            </android.support.v7.widget.CardView>
+
+            <android.support.v7.widget.CardView
+                android:id="@+id/share_with_nearby_button"
+                style="@style/clickable_card">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical">
+
+                    <com.joanzapata.iconify.widget.IconTextView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:text="@string/share_nearby_icon"
+                        android:textColor="@color/app_blue"
+                        android:textSize="24dp"
+                        android:gravity="center"/>
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="8dp"
+                        android:text="@string/get_from_nearby"
                         android:textColor="@color/dark_gray"
                         android:textSize="17dp"/>
                 </LinearLayout>

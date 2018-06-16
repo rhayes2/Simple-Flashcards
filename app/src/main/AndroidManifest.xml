@@ -5,6 +5,13 @@
 
     <uses-permission android:name="android.permission.INTERNET"/>
 
+    <!-- Required for Nearby Connections -->
+    <uses-permission android:name="android.permission.BLUETOOTH"/>
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN"/>
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE"/>
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+
     <application
         android:allowBackup="true"
         android:name=".utils.MyApplication"
@@ -64,7 +71,11 @@
         <activity
             android:name=".activities.PictureFullViewActivity"
             android:theme="@style/AppTheme.PictureFullView"
-            android:configChanges="orientation|screenSize">
-        </activity>
+            android:configChanges="orientation|screenSize"/>
+
+        <activity
+            android:name=".activities.NearbySharingActivity"
+            android:label="@string/nearby_sharing"
+            android:configChanges="orientation|screenSize"/>
     </application>
 </manifest>

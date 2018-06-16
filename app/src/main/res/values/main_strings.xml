@@ -52,8 +52,10 @@
     <string name="close_icon">{ion-android-close}</string>
     <string name="download_icon">{ion-android-download}</string>
     <string name="add_circle_icon">{ion-android-add-circle}</string>
+    <string name="share_nearby_icon">{ion-arrow-swap}</string>
 
     <string name="download_sets_button_text">Download them from the Internet</string>
+    <string name="get_from_nearby">Get them from nearby study buddies</string>
     <string name="create_your_own">Create your own</string>
 
     <string name="flashcard_set_delete_title">Confirm Flashcard Set Deletion</string>
