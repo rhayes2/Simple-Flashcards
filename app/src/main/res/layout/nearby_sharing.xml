@@ -38,6 +38,36 @@
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/nearby_name_needed"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="40dp"
+        android:orientation="vertical"
+        android:gravity="center_horizontal"
+        android:visibility="gone">
+
+        <com.joanzapata.iconify.widget.IconTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:text="@string/person_icon"
+            android:textColor="@color/app_blue"
+            android:textSize="60dp"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/name_setting_needed"
+            android:textSize="17sp"
+            android:textColor="@color/dark_gray"/>
+
+        <TextView
+            android:id="@+id/set_nearby_name_button"
+            android:text="@string/set_nearby_name"
+            style="@style/rounded_button"/>
+    </LinearLayout>
+
+    <LinearLayout
         android:id="@+id/searching"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

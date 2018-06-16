@@ -8,4 +8,15 @@
         In order for Simple Flashcards Plus to find nearby users, we need access to your current location.
     </string>
     <string name="searching_for_nearby">Searching for nearby study buddies&#8230;</string>
+
+    <string name="set_nearby_name_title">Set Nearby Name</string>
+    <string name="nearby_name_explanation">
+        Your nearby name is how you appear to other Simple Flashcards Plus users when using the nearby sharing feature.
+    </string>
+    <string name="name_setting_needed">
+        You need to set a nearby name so other Simple Flashcards Plus users know who you are when you try connecting with them.
+    </string>
+    <string name="nearby_name">Nearby name</string>
+    <string name="set_nearby_name">Set nearby name</string>
+    <string name="person_icon">{ion-android-person}</string>
 </resources>

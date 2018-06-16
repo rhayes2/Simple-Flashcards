@@ -9,6 +9,7 @@ public class PreferencesManager {
 
     private static final String FIRST_TIME_USER = "firstTimeUser";
     private static final String NUM_OPENS_KEY = "numOpens";
+    private static final String NEARBY_NAME = "nearbyName";
 
     private static final int NUM_APP_OPENS_BEFORE_ASKING_FOR_RATING = 5;
     private static final int NUM_APP_OPENS_BEFORE_ASKING_FOR_SHARE = 10;
@@ -55,5 +56,13 @@ public class PreferencesManager {
     public boolean shouldAskForShare() {
         int currentOpens = prefs.getInt(NUM_OPENS_KEY, 0);
         return currentOpens == NUM_APP_OPENS_BEFORE_ASKING_FOR_SHARE;
+    }
+
+    public String getNearbyName() {
+        return prefs.getString(NEARBY_NAME, "");
+    }
+
+    public void setNearbyName(String newName) {
+        prefs.edit().putString(NEARBY_NAME, newName).apply();
     }
 }
