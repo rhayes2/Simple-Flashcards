@@ -13,7 +13,8 @@
         android:layout_height="wrap_content"
         android:layout_margin="40dp"
         android:orientation="vertical"
-        android:gravity="center_horizontal">
+        android:gravity="center_horizontal"
+        android:visibility="gone">
 
         <com.joanzapata.iconify.widget.IconTextView
             android:layout_width="wrap_content"
@@ -27,7 +28,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/location_explanation"
-            android:textSize="17sp"/>
+            android:textSize="17sp"
+            android:textColor="@color/dark_gray"/>
 
         <TextView
             android:id="@+id/grant_permission"
@@ -36,8 +38,25 @@
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/searching"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:gravity="center_horizontal"
+        android:orientation="vertical"
+        android:visibility="gone">
 
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="40dp"
+            android:text="@string/searching_for_nearby"
+            android:textSize="23sp"
+            android:textColor="@color/dark_gray"/>
+
+        <ProgressBar
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="?android:attr/progressBarStyleLarge"/>
     </LinearLayout>
 </LinearLayout>
