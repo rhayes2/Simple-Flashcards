@@ -2,4 +2,9 @@
 <resources>
     <string name="nearby_sharing">Nearby Sharing</string>
     <string name="share_with_nearby">Share flashcards with nearby users</string>
+    <string name="nearby_icon">{ion-android-locate}</string>
+    <string name="grant_location_permission">Grant Location Permission</string>
+    <string name="location_explanation">
+        In order for Simple Flashcards Plus to find nearby users, we need access to your current location.
+    </string>
 </resources>
