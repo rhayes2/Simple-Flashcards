@@ -8,7 +8,8 @@
         In order for Simple Flashcards Plus to find nearby users, we need access to your current location.
     </string>
     <string name="tap_to_connect">
-        Below are all the other Simple Flashcards Plus users we have found nearby.
+        Your device is now actively broadcasting its presence and looking for others.
+        Found nearby Simple Flashcards Plus users will show up below.
         Simply tap on any one of them to connect and start sharing!
     </string>
 
