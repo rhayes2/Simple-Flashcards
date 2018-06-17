@@ -1,4 +1,4 @@
-package com.randomappsinc.simpleflashcards.utils;
+package com.randomappsinc.simpleflashcards.managers;
 
 import android.content.Context;
 import android.support.annotation.NonNull;

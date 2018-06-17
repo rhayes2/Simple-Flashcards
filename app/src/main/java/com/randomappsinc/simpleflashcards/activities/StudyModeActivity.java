@@ -8,9 +8,9 @@ import android.widget.SeekBar;
 import com.randomappsinc.simpleflashcards.R;
 import com.randomappsinc.simpleflashcards.adapters.FlashcardsBrowsingAdapter;
 import com.randomappsinc.simpleflashcards.constants.Constants;
+import com.randomappsinc.simpleflashcards.managers.TextToSpeechManager;
 import com.randomappsinc.simpleflashcards.persistence.DatabaseManager;
 import com.randomappsinc.simpleflashcards.persistence.models.FlashcardSet;
-import com.randomappsinc.simpleflashcards.utils.TextToSpeechManager;
 import com.randomappsinc.simpleflashcards.utils.UIUtils;
 
 import butterknife.BindView;

@@ -10,7 +10,7 @@ import android.widget.ListView;
 
 import com.randomappsinc.simpleflashcards.R;
 import com.randomappsinc.simpleflashcards.adapters.SettingsAdapter;
-import com.randomappsinc.simpleflashcards.utils.NearbyNameManager;
+import com.randomappsinc.simpleflashcards.managers.NearbyNameManager;
 import com.randomappsinc.simpleflashcards.utils.UIUtils;
 
 import butterknife.BindString;

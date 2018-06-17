@@ -17,9 +17,9 @@ import android.widget.TextView;
 import com.randomappsinc.simpleflashcards.R;
 import com.randomappsinc.simpleflashcards.activities.PictureFullViewActivity;
 import com.randomappsinc.simpleflashcards.constants.Constants;
+import com.randomappsinc.simpleflashcards.managers.TextToSpeechManager;
 import com.randomappsinc.simpleflashcards.persistence.DatabaseManager;
 import com.randomappsinc.simpleflashcards.persistence.models.Flashcard;
-import com.randomappsinc.simpleflashcards.utils.TextToSpeechManager;
 import com.squareup.picasso.Picasso;
 
 import java.util.Locale;

@@ -1,10 +1,12 @@
-package com.randomappsinc.simpleflashcards.utils;
+package com.randomappsinc.simpleflashcards.managers;
 
 import android.annotation.TargetApi;
 import android.os.Build;
 import android.speech.tts.TextToSpeech;
 
 import com.randomappsinc.simpleflashcards.R;
+import com.randomappsinc.simpleflashcards.utils.MyApplication;
+import com.randomappsinc.simpleflashcards.utils.UIUtils;
 
 import java.util.HashMap;
 import java.util.Locale;

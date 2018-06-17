@@ -7,7 +7,10 @@
     <string name="location_explanation">
         In order for Simple Flashcards Plus to find nearby users, we need access to your current location.
     </string>
-    <string name="searching_for_nearby">Searching for nearby study buddies&#8230;</string>
+    <string name="tap_to_connect">
+        Below are all the other Simple Flashcards Plus users we have found nearby.
+        Simply tap on any one of them to connect and start sharing!
+    </string>
 
     <string name="set_nearby_name_title">Set Nearby Name</string>
     <string name="nearby_name_explanation">
