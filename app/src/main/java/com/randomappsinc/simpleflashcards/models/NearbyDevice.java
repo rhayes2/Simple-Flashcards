@@ -4,6 +4,7 @@ public class NearbyDevice {
 
     private String endpointId;
     private String nearbyName;
+    private String deviceType;
 
     public String getEndpointId() {
         return endpointId;
@@ -19,5 +20,13 @@ public class NearbyDevice {
 
     public void setNearbyName(String nearbyName) {
         this.nearbyName = nearbyName;
+    }
+
+    public String getDeviceType() {
+        return deviceType;
+    }
+
+    public void setDeviceType(String deviceType) {
+        this.deviceType = deviceType;
     }
 }

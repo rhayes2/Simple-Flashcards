@@ -2,6 +2,7 @@ package com.randomappsinc.simpleflashcards.adapters;
 
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,6 +10,7 @@ import android.widget.TextView;
 
 import com.randomappsinc.simpleflashcards.R;
 import com.randomappsinc.simpleflashcards.models.NearbyDevice;
+import com.randomappsinc.simpleflashcards.utils.StringUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -66,7 +68,8 @@ public class NearbyDevicesAdapter extends RecyclerView.Adapter<NearbyDevicesAdap
     }
 
     class NearbyDeviceViewHolder extends RecyclerView.ViewHolder {
-        @BindView(R.id.device_name) TextView deviceName;
+        @BindView(R.id.nearby_name) TextView nearbyName;
+        @BindView(R.id.device_type) TextView deviceType;
 
         NearbyDeviceViewHolder(View view) {
             super(view);
@@ -74,7 +77,11 @@ public class NearbyDevicesAdapter extends RecyclerView.Adapter<NearbyDevicesAdap
         }
 
         void loadDevice(int position) {
-            deviceName.setText(nearbyDevices.get(position).getNearbyName());
+            NearbyDevice device = nearbyDevices.get(position);
+            nearbyName.setText(device.getNearbyName());
+            deviceType.setText(TextUtils.isEmpty(device.getDeviceType())
+                    ? StringUtils.getString(R.string.unknown_device_type)
+                    : device.getDeviceType());
         }
 
         @OnClick(R.id.parent)

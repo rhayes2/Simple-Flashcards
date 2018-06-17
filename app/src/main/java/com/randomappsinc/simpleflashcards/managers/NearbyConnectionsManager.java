@@ -16,6 +16,7 @@ import com.google.android.gms.nearby.connection.EndpointDiscoveryCallback;
 import com.google.android.gms.nearby.connection.Strategy;
 import com.randomappsinc.simpleflashcards.models.NearbyDevice;
 import com.randomappsinc.simpleflashcards.persistence.PreferencesManager;
+import com.randomappsinc.simpleflashcards.utils.DeviceUtils;
 import com.randomappsinc.simpleflashcards.utils.MyApplication;
 
 public class NearbyConnectionsManager {
@@ -57,8 +58,10 @@ public class NearbyConnectionsManager {
         AdvertisingOptions advertisingOptions = new AdvertisingOptions.Builder()
                 .setStrategy(Strategy.P2P_POINT_TO_POINT)
                 .build();
+
+        String nearbyName = preferencesManager.getNearbyName() + "\n" + DeviceUtils.getDeviceName();
         connectionsClient.startAdvertising(
-                preferencesManager.getNearbyName(),
+                nearbyName,
                 context.getPackageName(),
                 connectionLifecycleCallback,
                 advertisingOptions);
@@ -101,7 +104,15 @@ public class NearbyConnectionsManager {
                     .equals(MyApplication.getAppContext().getPackageName()) && listener != null) {
                 NearbyDevice device = new NearbyDevice();
                 device.setEndpointId(endpointId);
-                device.setNearbyName(discoveredEndpointInfo.getEndpointName());
+
+                String endpointName = discoveredEndpointInfo.getEndpointName();
+                int newlinePos = endpointName.indexOf("\n");
+                if (newlinePos == -1 || newlinePos == endpointName.length() - 1) {
+                    device.setNearbyName(endpointName);
+                } else {
+                    device.setNearbyName(endpointName.substring(0, newlinePos));
+                    device.setDeviceType(endpointName.substring(newlinePos + 1));
+                }
                 listener.onNearbyDeviceFound(device);
             }
         }
