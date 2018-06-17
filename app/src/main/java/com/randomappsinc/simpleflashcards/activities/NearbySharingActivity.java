@@ -5,15 +5,11 @@ import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 
-import com.joanzapata.iconify.fonts.IoniconsIcons;
 import com.randomappsinc.simpleflashcards.R;
 import com.randomappsinc.simpleflashcards.utils.NearbyNameManager;
 import com.randomappsinc.simpleflashcards.utils.PermissionUtils;
-import com.randomappsinc.simpleflashcards.utils.UIUtils;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -79,22 +75,4 @@ public class NearbySharingActivity extends StandardActivity {
             nearbyName = nearbyNameManager.getCurrentName();
         }
     };
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_nearby_sharing, menu);
-        UIUtils.loadMenuIcon(menu, R.id.set_nearby_name, IoniconsIcons.ion_android_person, this);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.set_nearby_name:
-                nearbyNameManager.showNameSetter();
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
-    }
 }

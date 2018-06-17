@@ -17,6 +17,5 @@
         You need to set a nearby name so other Simple Flashcards Plus users know who you are when you try connecting with them.
     </string>
     <string name="nearby_name">Nearby name</string>
-    <string name="set_nearby_name">Set nearby name</string>
     <string name="person_icon">{ion-android-person}</string>
 </resources>

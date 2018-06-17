@@ -2,6 +2,7 @@ package com.randomappsinc.simpleflashcards.utils;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -15,11 +16,11 @@ public class NearbyNameManager {
     }
 
     protected PreferencesManager preferencesManager = PreferencesManager.get();
-    @NonNull protected Listener listener;
+    @Nullable protected Listener listener;
     protected String currentName;
     private MaterialDialog nameSettingDialog;
 
-    public NearbyNameManager(Context context, @NonNull final Listener listener) {
+    public NearbyNameManager(Context context, @Nullable final Listener listener) {
         this.currentName = preferencesManager.getNearbyName();
         this.listener = listener;
         String nearbyNameHint = context.getString(R.string.nearby_name);
@@ -42,7 +43,9 @@ public class NearbyNameManager {
                         String nearbyName = dialog.getInputEditText().getText().toString().trim();
                         currentName = nearbyName;
                         preferencesManager.setNearbyName(nearbyName);
-                        listener.onNameChanged();
+                        if (listener != null) {
+                            listener.onNameChanged();
+                        }
                     }
                 })
                 .negativeText(R.string.cancel)

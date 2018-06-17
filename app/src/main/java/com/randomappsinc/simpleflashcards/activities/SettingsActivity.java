@@ -10,6 +10,7 @@ import android.widget.ListView;
 
 import com.randomappsinc.simpleflashcards.R;
 import com.randomappsinc.simpleflashcards.adapters.SettingsAdapter;
+import com.randomappsinc.simpleflashcards.utils.NearbyNameManager;
 import com.randomappsinc.simpleflashcards.utils.UIUtils;
 
 import butterknife.BindString;
@@ -28,6 +29,8 @@ public class SettingsActivity extends StandardActivity {
     @BindString(R.string.feedback_subject) String feedbackSubject;
     @BindString(R.string.send_email) String sendEmail;
 
+    private NearbyNameManager nearbyNameManager;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -35,6 +38,7 @@ public class SettingsActivity extends StandardActivity {
         ButterKnife.bind(this);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+        nearbyNameManager = new NearbyNameManager(this, null);
         settingsOptions.setAdapter(new SettingsAdapter(this));
     }
 
@@ -43,12 +47,15 @@ public class SettingsActivity extends StandardActivity {
         Intent intent = null;
         switch (position) {
             case 0:
+                nearbyNameManager.showNameSetter();
+                return;
+            case 1:
                 String uriText = "mailto:" + SUPPORT_EMAIL + "?subject=" + Uri.encode(feedbackSubject);
                 Uri mailUri = Uri.parse(uriText);
                 Intent sendIntent = new Intent(Intent.ACTION_SENDTO, mailUri);
                 startActivity(Intent.createChooser(sendIntent, sendEmail));
                 return;
-            case 1:
+            case 2:
                 Intent shareIntent = ShareCompat.IntentBuilder.from(this)
                         .setType("text/plain")
                         .setText(getString(R.string.share_app_message))
@@ -57,10 +64,10 @@ public class SettingsActivity extends StandardActivity {
                     startActivity(shareIntent);
                 }
                 return;
-            case 2:
+            case 3:
                 intent = new Intent(Intent.ACTION_VIEW, Uri.parse(OTHER_APPS_URL));
                 break;
-            case 3:
+            case 4:
                 Uri uri =  Uri.parse("market://details?id=" + getApplicationContext().getPackageName());
                 intent = new Intent(Intent.ACTION_VIEW, uri);
                 if (!(getPackageManager().queryIntentActivities(intent, 0).size() > 0)) {
@@ -68,7 +75,7 @@ public class SettingsActivity extends StandardActivity {
                     return;
                 }
                 break;
-            case 4:
+            case 5:
                 intent = new Intent(Intent.ACTION_VIEW, Uri.parse(REPO_URL));
                 break;
         }
