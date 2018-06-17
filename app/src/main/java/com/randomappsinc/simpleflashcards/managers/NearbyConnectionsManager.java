@@ -14,12 +14,14 @@ import com.google.android.gms.nearby.connection.DiscoveredEndpointInfo;
 import com.google.android.gms.nearby.connection.DiscoveryOptions;
 import com.google.android.gms.nearby.connection.EndpointDiscoveryCallback;
 import com.google.android.gms.nearby.connection.Strategy;
+import com.randomappsinc.simpleflashcards.models.NearbyDevice;
 import com.randomappsinc.simpleflashcards.persistence.PreferencesManager;
+import com.randomappsinc.simpleflashcards.utils.MyApplication;
 
 public class NearbyConnectionsManager {
 
     public interface Listener {
-        void onNearbyDeviceFound(String endpointId, String endpointName);
+        void onNearbyDeviceFound(NearbyDevice device);
 
         void onNearbyDeviceLost(String endpointId);
     }
@@ -42,7 +44,7 @@ public class NearbyConnectionsManager {
 
     @Nullable protected Listener listener;
     private PreferencesManager preferencesManager = PreferencesManager.get();
-    protected Context context;
+    @Nullable protected ConnectionsClient connectionsClient;
 
     private NearbyConnectionsManager() {}
 
@@ -51,11 +53,11 @@ public class NearbyConnectionsManager {
     }
 
     public void startAdvertisingAndDiscovering(Context context) {
-        this.context = context;
+        ConnectionsClient connectionsClient = Nearby.getConnectionsClient(context);
         AdvertisingOptions advertisingOptions = new AdvertisingOptions.Builder()
                 .setStrategy(Strategy.P2P_POINT_TO_POINT)
                 .build();
-        Nearby.getConnectionsClient(context).startAdvertising(
+        connectionsClient.startAdvertising(
                 preferencesManager.getNearbyName(),
                 context.getPackageName(),
                 connectionLifecycleCallback,
@@ -64,7 +66,7 @@ public class NearbyConnectionsManager {
         DiscoveryOptions discoveryOptions = new DiscoveryOptions.Builder()
                 .setStrategy(Strategy.P2P_POINT_TO_POINT)
                 .build();
-        Nearby.getConnectionsClient(context).startDiscovery(
+        connectionsClient.startDiscovery(
                 context.getPackageName(),
                 endpointDiscoveryCallback,
                 discoveryOptions);
@@ -94,8 +96,13 @@ public class NearbyConnectionsManager {
         public void onEndpointFound(
                 @NonNull String endpointId,
                 @NonNull DiscoveredEndpointInfo discoveredEndpointInfo) {
-            if (discoveredEndpointInfo.getServiceId().equals(context.getPackageName()) && listener != null) {
-                listener.onNearbyDeviceFound(endpointId, discoveredEndpointInfo.getEndpointName());
+            if (discoveredEndpointInfo
+                    .getServiceId()
+                    .equals(MyApplication.getAppContext().getPackageName()) && listener != null) {
+                NearbyDevice device = new NearbyDevice();
+                device.setEndpointId(endpointId);
+                device.setNearbyName(discoveredEndpointInfo.getEndpointName());
+                listener.onNearbyDeviceFound(device);
             }
         }
 
@@ -108,12 +115,11 @@ public class NearbyConnectionsManager {
     };
 
     public void shutdown() {
-        if (context != null) {
-            ConnectionsClient connectionsClient = Nearby.getConnectionsClient(context);
+        if (connectionsClient != null) {
             connectionsClient.stopAdvertising();
             connectionsClient.stopDiscovery();
             connectionsClient.stopAllEndpoints();
-            context = null;
+            connectionsClient = null;
         }
         listener = null;
     }

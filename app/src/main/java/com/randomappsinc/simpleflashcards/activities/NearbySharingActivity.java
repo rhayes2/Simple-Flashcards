@@ -4,13 +4,15 @@ import android.Manifest;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.View;
-import android.widget.Toast;
 
 import com.randomappsinc.simpleflashcards.R;
+import com.randomappsinc.simpleflashcards.adapters.NearbyDevicesAdapter;
 import com.randomappsinc.simpleflashcards.managers.NearbyConnectionsManager;
 import com.randomappsinc.simpleflashcards.managers.NearbyNameManager;
+import com.randomappsinc.simpleflashcards.models.NearbyDevice;
 import com.randomappsinc.simpleflashcards.utils.PermissionUtils;
 
 import butterknife.BindView;
@@ -22,10 +24,12 @@ public class NearbySharingActivity extends StandardActivity {
     @BindView(R.id.location_permission_needed) View locationPrompt;
     @BindView(R.id.nearby_name_needed) View nearbyNameNeeded;
     @BindView(R.id.searching) View searching;
+    @BindView(R.id.devices_list) RecyclerView devicesList;
 
     protected String nearbyName;
     protected NearbyNameManager nearbyNameManager;
     private NearbyConnectionsManager nearbyConnectionsManager;
+    protected NearbyDevicesAdapter nearbyDevicesAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,6 +42,9 @@ public class NearbySharingActivity extends StandardActivity {
         nearbyName = nearbyNameManager.getCurrentName();
         nearbyConnectionsManager = NearbyConnectionsManager.get();
         nearbyConnectionsManager.setListener(connectionsListener);
+
+        nearbyDevicesAdapter = new NearbyDevicesAdapter(deviceChoiceListener);
+        devicesList.setAdapter(nearbyDevicesAdapter);
 
         if (PermissionUtils.isPermissionGranted(Manifest.permission.ACCESS_COARSE_LOCATION)) {
             startSearching();
@@ -95,21 +102,20 @@ public class NearbySharingActivity extends StandardActivity {
 
     private final NearbyConnectionsManager.Listener connectionsListener = new NearbyConnectionsManager.Listener() {
         @Override
-        public void onNearbyDeviceFound(String endpointId, String endpointName) {
-            Toast.makeText(
-                    NearbySharingActivity.this,
-                    "Found: " + endpointId + " || " + endpointName,
-                    Toast.LENGTH_LONG)
-                    .show();
+        public void onNearbyDeviceFound(NearbyDevice device) {
+            nearbyDevicesAdapter.addNearbyDevice(device);
         }
 
         @Override
         public void onNearbyDeviceLost(String endpointId) {
-            Toast.makeText(
-                    NearbySharingActivity.this,
-                    "Lost: " + endpointId,
-                    Toast.LENGTH_LONG)
-                    .show();
+            nearbyDevicesAdapter.removeNearbyDevice(endpointId);
+        }
+    };
+
+    private final NearbyDevicesAdapter.Listener deviceChoiceListener = new NearbyDevicesAdapter.Listener() {
+        @Override
+        public void onNearbyDeviceChosen(NearbyDevice device) {
+
         }
     };
 
