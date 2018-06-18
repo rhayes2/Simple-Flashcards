@@ -15,6 +15,9 @@ import com.google.android.gms.nearby.connection.ConnectionsStatusCodes;
 import com.google.android.gms.nearby.connection.DiscoveredEndpointInfo;
 import com.google.android.gms.nearby.connection.DiscoveryOptions;
 import com.google.android.gms.nearby.connection.EndpointDiscoveryCallback;
+import com.google.android.gms.nearby.connection.Payload;
+import com.google.android.gms.nearby.connection.PayloadCallback;
+import com.google.android.gms.nearby.connection.PayloadTransferUpdate;
 import com.google.android.gms.nearby.connection.Strategy;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.randomappsinc.simpleflashcards.R;
@@ -31,13 +34,17 @@ public class NearbyConnectionsManager {
 
         void onNearbyDeviceLost(String endpointId);
 
-        void onConnectionRequestFailed();
-
         void onConnectionRequest(ConnectionInfo connectionInfo);
 
-        void onConnectionRejected();
+        /**
+         * This is called when we fail to establish the connection. This happens when:
+         * 1. The other side rejects the connection.
+         * 2. We failed to make the connection request.
+         * 3. We failed to establish the connection during the confirmation step.
+         */
+        void onConnectionFailed();
 
-        void onConnectionError();
+        void onConnectionSuccessful();
     }
 
     private static NearbyConnectionsManager instance;
@@ -109,19 +116,22 @@ public class NearbyConnectionsManager {
             switch (connectionResolution.getStatus().getStatusCode()) {
                 case ConnectionsStatusCodes.STATUS_OK:
                     UIUtils.showLongToast(R.string.connection_successful);
+                    if (listener != null) {
+                        listener.onConnectionSuccessful();
+                    }
                     break;
                 case ConnectionsStatusCodes.STATUS_CONNECTION_REJECTED:
                     if (!isRejecter) {
                         UIUtils.showLongToast(R.string.connection_rejected);
                         if (listener != null) {
-                            listener.onConnectionRejected();
+                            listener.onConnectionFailed();
                         }
                     }
                     break;
                 case ConnectionsStatusCodes.STATUS_ERROR:
                     UIUtils.showLongToast(R.string.connection_confirmation_failed);
                     if (listener != null) {
-                        listener.onConnectionError();
+                        listener.onConnectionFailed();
                     }
                     break;
             }
@@ -174,6 +184,13 @@ public class NearbyConnectionsManager {
                 .addOnFailureListener(requestConnectionFailureListener);
     }
 
+    public void acceptConnection() {
+        if (connectionsClient == null || TextUtils.isEmpty(currentlyConnectedEndpoint)) {
+            return;
+        }
+        connectionsClient.acceptConnection(currentlyConnectedEndpoint, payloadCallback);
+    }
+
     public void rejectConnection() {
         if (connectionsClient == null || TextUtils.isEmpty(currentlyConnectedEndpoint)) {
             return;
@@ -181,6 +198,20 @@ public class NearbyConnectionsManager {
         isRejecter = true;
         connectionsClient.rejectConnection(currentlyConnectedEndpoint);
     }
+
+    private final PayloadCallback payloadCallback = new PayloadCallback() {
+        @Override
+        public void onPayloadReceived(@NonNull String s, @NonNull Payload payload) {
+
+        }
+
+        @Override
+        public void onPayloadTransferUpdate(
+                @NonNull String s,
+                @NonNull PayloadTransferUpdate payloadTransferUpdate) {
+
+        }
+    };
 
     private final OnFailureListener advertisingFailureListener = new OnFailureListener() {
         @Override
@@ -201,7 +232,7 @@ public class NearbyConnectionsManager {
         public void onFailure(@NonNull Exception e) {
             UIUtils.showLongToast(R.string.connection_request_fail);
             if (listener != null) {
-                listener.onConnectionRequestFailed();
+                listener.onConnectionFailed();
             }
         }
     };

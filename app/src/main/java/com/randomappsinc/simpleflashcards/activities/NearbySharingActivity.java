@@ -36,6 +36,7 @@ public class NearbySharingActivity extends StandardActivity {
     protected NearbyDevicesAdapter nearbyDevicesAdapter;
     protected MaterialDialog requestingConnectionDialog;
     protected ConfirmConnectionDialog confirmConnectionDialog;
+    protected MaterialDialog waitingForAcceptDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,6 +57,13 @@ public class NearbySharingActivity extends StandardActivity {
         requestingConnectionDialog = new MaterialDialog.Builder(this)
                 .content(R.string.requesting_connection)
                 .progress(true, 0)
+                .cancelable(false)
+                .build();
+
+        waitingForAcceptDialog = new MaterialDialog.Builder(this)
+                .content(R.string.waiting_for_accept)
+                .progress(true, 0)
+                .cancelable(false)
                 .build();
 
         if (PermissionUtils.isPermissionGranted(Manifest.permission.ACCESS_COARSE_LOCATION)) {
@@ -128,24 +136,21 @@ public class NearbySharingActivity extends StandardActivity {
         }
 
         @Override
-        public void onConnectionRequestFailed() {
-            requestingConnectionDialog.dismiss();
-        }
-
-        @Override
         public void onConnectionRequest(ConnectionInfo connectionInfo) {
             requestingConnectionDialog.dismiss();
             confirmConnectionDialog.show(connectionInfo);
         }
 
         @Override
-        public void onConnectionRejected() {
+        public void onConnectionFailed() {
+            requestingConnectionDialog.dismiss();
             confirmConnectionDialog.dismiss();
+            waitingForAcceptDialog.dismiss();
         }
 
         @Override
-        public void onConnectionError() {
-            confirmConnectionDialog.dismiss();
+        public void onConnectionSuccessful() {
+            waitingForAcceptDialog.dismiss();
         }
     };
 
@@ -161,7 +166,8 @@ public class NearbySharingActivity extends StandardActivity {
             new ConfirmConnectionDialog.Listener() {
                 @Override
                 public void onConnectionAccepted() {
-
+                    waitingForAcceptDialog.show();
+                    nearbyConnectionsManager.acceptConnection();
                 }
 
                 @Override
