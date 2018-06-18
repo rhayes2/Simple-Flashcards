@@ -8,8 +8,11 @@ import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.View;
 
+import com.afollestad.materialdialogs.MaterialDialog;
+import com.google.android.gms.nearby.connection.ConnectionInfo;
 import com.randomappsinc.simpleflashcards.R;
 import com.randomappsinc.simpleflashcards.adapters.NearbyDevicesAdapter;
+import com.randomappsinc.simpleflashcards.dialogs.ConfirmConnectionDialog;
 import com.randomappsinc.simpleflashcards.managers.NearbyConnectionsManager;
 import com.randomappsinc.simpleflashcards.managers.NearbyNameManager;
 import com.randomappsinc.simpleflashcards.models.NearbyDevice;
@@ -29,8 +32,10 @@ public class NearbySharingActivity extends StandardActivity {
 
     protected String nearbyName;
     protected NearbyNameManager nearbyNameManager;
-    private NearbyConnectionsManager nearbyConnectionsManager;
+    protected NearbyConnectionsManager nearbyConnectionsManager;
     protected NearbyDevicesAdapter nearbyDevicesAdapter;
+    protected MaterialDialog requestingConnectionDialog;
+    protected ConfirmConnectionDialog confirmConnectionDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,9 +48,15 @@ public class NearbySharingActivity extends StandardActivity {
         nearbyName = nearbyNameManager.getCurrentName();
         nearbyConnectionsManager = NearbyConnectionsManager.get();
         nearbyConnectionsManager.setListener(connectionsListener);
+        confirmConnectionDialog = new ConfirmConnectionDialog(this, connectionChoiceListener);
 
         nearbyDevicesAdapter = new NearbyDevicesAdapter(deviceChoiceListener);
         devicesList.setAdapter(nearbyDevicesAdapter);
+
+        requestingConnectionDialog = new MaterialDialog.Builder(this)
+                .content(R.string.requesting_connection)
+                .progress(true, 0)
+                .build();
 
         if (PermissionUtils.isPermissionGranted(Manifest.permission.ACCESS_COARSE_LOCATION)) {
             startSearching();
@@ -115,14 +126,49 @@ public class NearbySharingActivity extends StandardActivity {
                 skeletonDevicesList.setVisibility(View.VISIBLE);
             }
         }
+
+        @Override
+        public void onConnectionRequestFailed() {
+            requestingConnectionDialog.dismiss();
+        }
+
+        @Override
+        public void onConnectionRequest(ConnectionInfo connectionInfo) {
+            requestingConnectionDialog.dismiss();
+            confirmConnectionDialog.show(connectionInfo);
+        }
+
+        @Override
+        public void onConnectionRejected() {
+            confirmConnectionDialog.dismiss();
+        }
+
+        @Override
+        public void onConnectionError() {
+            confirmConnectionDialog.dismiss();
+        }
     };
 
     private final NearbyDevicesAdapter.Listener deviceChoiceListener = new NearbyDevicesAdapter.Listener() {
         @Override
         public void onNearbyDeviceChosen(NearbyDevice device) {
-
+            requestingConnectionDialog.show();
+            nearbyConnectionsManager.requestConnection(device.getEndpointId());
         }
     };
+
+    private final ConfirmConnectionDialog.Listener connectionChoiceListener =
+            new ConfirmConnectionDialog.Listener() {
+                @Override
+                public void onConnectionAccepted() {
+
+                }
+
+                @Override
+                public void onConnectionRejected() {
+                    nearbyConnectionsManager.rejectConnection();
+                }
+            };
 
     @Override
     public void onPause() {

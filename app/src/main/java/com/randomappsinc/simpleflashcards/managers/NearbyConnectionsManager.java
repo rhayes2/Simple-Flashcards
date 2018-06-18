@@ -3,6 +3,7 @@ package com.randomappsinc.simpleflashcards.managers;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.text.TextUtils;
 
 import com.google.android.gms.nearby.Nearby;
 import com.google.android.gms.nearby.connection.AdvertisingOptions;
@@ -10,6 +11,7 @@ import com.google.android.gms.nearby.connection.ConnectionInfo;
 import com.google.android.gms.nearby.connection.ConnectionLifecycleCallback;
 import com.google.android.gms.nearby.connection.ConnectionResolution;
 import com.google.android.gms.nearby.connection.ConnectionsClient;
+import com.google.android.gms.nearby.connection.ConnectionsStatusCodes;
 import com.google.android.gms.nearby.connection.DiscoveredEndpointInfo;
 import com.google.android.gms.nearby.connection.DiscoveryOptions;
 import com.google.android.gms.nearby.connection.EndpointDiscoveryCallback;
@@ -28,6 +30,14 @@ public class NearbyConnectionsManager {
         void onNearbyDeviceFound(NearbyDevice device);
 
         void onNearbyDeviceLost(String endpointId);
+
+        void onConnectionRequestFailed();
+
+        void onConnectionRequest(ConnectionInfo connectionInfo);
+
+        void onConnectionRejected();
+
+        void onConnectionError();
     }
 
     private static NearbyConnectionsManager instance;
@@ -49,6 +59,7 @@ public class NearbyConnectionsManager {
     @Nullable protected Listener listener;
     private PreferencesManager preferencesManager = PreferencesManager.get();
     @Nullable protected ConnectionsClient connectionsClient;
+    protected String currentlyConnectedEndpoint;
 
     private NearbyConnectionsManager() {}
 
@@ -86,14 +97,28 @@ public class NearbyConnectionsManager {
     private final ConnectionLifecycleCallback connectionLifecycleCallback = new ConnectionLifecycleCallback() {
         @Override
         public void onConnectionInitiated(@NonNull String endpointId, @NonNull ConnectionInfo connectionInfo) {
-
+            if (connectionsClient != null) {
+                connectionsClient.stopAllEndpoints();
+            }
+            currentlyConnectedEndpoint = endpointId;
+            listener.onConnectionRequest(connectionInfo);
         }
 
         @Override
         public void onConnectionResult(
                 @NonNull String endpointId,
                 @NonNull ConnectionResolution connectionResolution) {
-
+            switch (connectionResolution.getStatus().getStatusCode()) {
+                case ConnectionsStatusCodes.STATUS_OK:
+                    // We're connected! Can now start sending and receiving data.
+                    break;
+                case ConnectionsStatusCodes.STATUS_CONNECTION_REJECTED:
+                    listener.onConnectionRejected();
+                    break;
+                case ConnectionsStatusCodes.STATUS_ERROR:
+                    listener.onConnectionError();
+                    break;
+            }
         }
 
         @Override
@@ -133,6 +158,25 @@ public class NearbyConnectionsManager {
         }
     };
 
+    public void requestConnection(String endpointId) {
+        if (connectionsClient == null) {
+            return;
+        }
+        connectionsClient.stopAllEndpoints();
+        connectionsClient.requestConnection(
+                preferencesManager.getNearbyName() + "\n" + DeviceUtils.getDeviceName(),
+                endpointId,
+                connectionLifecycleCallback)
+                .addOnFailureListener(requestConnectionFailureListener);
+    }
+
+    public void rejectConnection() {
+        if (connectionsClient == null || TextUtils.isEmpty(currentlyConnectedEndpoint)) {
+            return;
+        }
+        connectionsClient.rejectConnection(currentlyConnectedEndpoint);
+    }
+
     private final OnFailureListener advertisingFailureListener = new OnFailureListener() {
         @Override
         public void onFailure(@NonNull Exception e) {
@@ -144,6 +188,16 @@ public class NearbyConnectionsManager {
         @Override
         public void onFailure(@NonNull Exception e) {
             UIUtils.showLongToast(R.string.discovery_fail);
+        }
+    };
+
+    private final OnFailureListener requestConnectionFailureListener = new OnFailureListener() {
+        @Override
+        public void onFailure(@NonNull Exception e) {
+            UIUtils.showLongToast(R.string.connection_request_fail);
+            if (listener != null) {
+                listener.onConnectionRequestFailed();
+            }
         }
     };
 
