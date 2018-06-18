@@ -60,6 +60,7 @@ public class NearbyConnectionsManager {
     private PreferencesManager preferencesManager = PreferencesManager.get();
     @Nullable protected ConnectionsClient connectionsClient;
     protected String currentlyConnectedEndpoint;
+    protected boolean isRejecter;
 
     private NearbyConnectionsManager() {}
 
@@ -97,9 +98,6 @@ public class NearbyConnectionsManager {
     private final ConnectionLifecycleCallback connectionLifecycleCallback = new ConnectionLifecycleCallback() {
         @Override
         public void onConnectionInitiated(@NonNull String endpointId, @NonNull ConnectionInfo connectionInfo) {
-            if (connectionsClient != null) {
-                connectionsClient.stopAllEndpoints();
-            }
             currentlyConnectedEndpoint = endpointId;
             listener.onConnectionRequest(connectionInfo);
         }
@@ -110,21 +108,28 @@ public class NearbyConnectionsManager {
                 @NonNull ConnectionResolution connectionResolution) {
             switch (connectionResolution.getStatus().getStatusCode()) {
                 case ConnectionsStatusCodes.STATUS_OK:
-                    // We're connected! Can now start sending and receiving data.
+                    UIUtils.showLongToast(R.string.connection_successful);
                     break;
                 case ConnectionsStatusCodes.STATUS_CONNECTION_REJECTED:
-                    listener.onConnectionRejected();
+                    if (!isRejecter) {
+                        UIUtils.showLongToast(R.string.connection_rejected);
+                        if (listener != null) {
+                            listener.onConnectionRejected();
+                        }
+                    }
                     break;
                 case ConnectionsStatusCodes.STATUS_ERROR:
-                    listener.onConnectionError();
+                    UIUtils.showLongToast(R.string.connection_confirmation_failed);
+                    if (listener != null) {
+                        listener.onConnectionError();
+                    }
                     break;
             }
+            isRejecter = false;
         }
 
         @Override
-        public void onDisconnected(@NonNull String endpointId) {
-
-        }
+        public void onDisconnected(@NonNull String endpointId) {}
     };
 
     private final EndpointDiscoveryCallback endpointDiscoveryCallback = new EndpointDiscoveryCallback() {
@@ -162,7 +167,6 @@ public class NearbyConnectionsManager {
         if (connectionsClient == null) {
             return;
         }
-        connectionsClient.stopAllEndpoints();
         connectionsClient.requestConnection(
                 preferencesManager.getNearbyName() + "\n" + DeviceUtils.getDeviceName(),
                 endpointId,
@@ -174,6 +178,7 @@ public class NearbyConnectionsManager {
         if (connectionsClient == null || TextUtils.isEmpty(currentlyConnectedEndpoint)) {
             return;
         }
+        isRejecter = true;
         connectionsClient.rejectConnection(currentlyConnectedEndpoint);
     }
 

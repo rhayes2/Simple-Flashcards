@@ -31,7 +31,7 @@
         We failed to start scanning for nearby users. Please reload this page.
     </string>
     <string name="connection_request_fail">
-        We failed to request a connection to that device. Please tap it again.
+        We failed to request a connection to that device. Please try again.
     </string>
 
     <string name="requesting_connection">Requesting connection&#8230;</string>
@@ -40,4 +40,15 @@
 
     <string name="x_would_like_to_connect">%s would like to connect</string>
     <string name="connecting_to_x">Connecting to %s</string>
+    <string name="connection_rejected">The other device rejected the connection request.</string>
+
+    <string name="auth_token_instructions">
+        Make sure the token below matches the one shown on the other device.
+    </string>
+    <string name="connection_successful">
+        Connection successful!
+    </string>
+    <string name="connection_confirmation_failed">
+        We failed to establish a connection between the 2 devices. Please try again.
+    </string>
 </resources>
