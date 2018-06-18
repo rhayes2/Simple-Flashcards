@@ -23,4 +23,11 @@
     <string name="person_icon">{ion-android-person}</string>
 
     <string name="unknown_device_type">Unknown device type</string>
+
+    <string name="advertising_fail">
+        We failed to broadcast your presence to nearby users. Please reload this page.
+    </string>
+    <string name="discovery_fail">
+        We failed to start scanning for nearby users. Please reload this page.
+    </string>
 </resources>

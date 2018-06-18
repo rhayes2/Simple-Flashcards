@@ -87,6 +87,20 @@
             android:textSize="21sp"
             android:textColor="@color/dark_gray"/>
 
+        <LinearLayout
+            android:id="@+id/skeleton_devices_list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="4dp"
+            android:orientation="vertical">
+
+            <include layout="@layout/nearby_device_skeleton_cell"/>
+
+            <include layout="@layout/nearby_device_skeleton_cell"/>
+
+            <include layout="@layout/nearby_device_skeleton_cell"/>
+        </LinearLayout>
+
         <android.support.v7.widget.RecyclerView
             android:id="@+id/devices_list"
             android:layout_width="match_parent"

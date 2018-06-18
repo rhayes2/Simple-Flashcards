@@ -14,10 +14,13 @@ import com.google.android.gms.nearby.connection.DiscoveredEndpointInfo;
 import com.google.android.gms.nearby.connection.DiscoveryOptions;
 import com.google.android.gms.nearby.connection.EndpointDiscoveryCallback;
 import com.google.android.gms.nearby.connection.Strategy;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.randomappsinc.simpleflashcards.R;
 import com.randomappsinc.simpleflashcards.models.NearbyDevice;
 import com.randomappsinc.simpleflashcards.persistence.PreferencesManager;
 import com.randomappsinc.simpleflashcards.utils.DeviceUtils;
 import com.randomappsinc.simpleflashcards.utils.MyApplication;
+import com.randomappsinc.simpleflashcards.utils.UIUtils;
 
 public class NearbyConnectionsManager {
 
@@ -54,7 +57,10 @@ public class NearbyConnectionsManager {
     }
 
     public void startAdvertisingAndDiscovering(Context context) {
-        ConnectionsClient connectionsClient = Nearby.getConnectionsClient(context);
+        connectionsClient = Nearby.getConnectionsClient(context);
+        connectionsClient.stopAdvertising();
+        connectionsClient.stopDiscovery();
+
         AdvertisingOptions advertisingOptions = new AdvertisingOptions.Builder()
                 .setStrategy(Strategy.P2P_POINT_TO_POINT)
                 .build();
@@ -64,7 +70,8 @@ public class NearbyConnectionsManager {
                 nearbyName,
                 context.getPackageName(),
                 connectionLifecycleCallback,
-                advertisingOptions);
+                advertisingOptions)
+                .addOnFailureListener(advertisingFailureListener);
 
         DiscoveryOptions discoveryOptions = new DiscoveryOptions.Builder()
                 .setStrategy(Strategy.P2P_POINT_TO_POINT)
@@ -72,7 +79,8 @@ public class NearbyConnectionsManager {
         connectionsClient.startDiscovery(
                 context.getPackageName(),
                 endpointDiscoveryCallback,
-                discoveryOptions);
+                discoveryOptions)
+                .addOnFailureListener(discoveryFailureListener);
     }
 
     private final ConnectionLifecycleCallback connectionLifecycleCallback = new ConnectionLifecycleCallback() {
@@ -125,13 +133,31 @@ public class NearbyConnectionsManager {
         }
     };
 
-    public void shutdown() {
+    private final OnFailureListener advertisingFailureListener = new OnFailureListener() {
+        @Override
+        public void onFailure(@NonNull Exception e) {
+            UIUtils.showLongToast(R.string.advertising_fail);
+        }
+    };
+
+    private final OnFailureListener discoveryFailureListener = new OnFailureListener() {
+        @Override
+        public void onFailure(@NonNull Exception e) {
+            UIUtils.showLongToast(R.string.discovery_fail);
+        }
+    };
+
+    public void stopAdvertisingAndDiscovery() {
         if (connectionsClient != null) {
             connectionsClient.stopAdvertising();
             connectionsClient.stopDiscovery();
             connectionsClient.stopAllEndpoints();
-            connectionsClient = null;
         }
+    }
+
+    public void shutdown() {
+        stopAdvertisingAndDiscovery();
+        connectionsClient = null;
         listener = null;
     }
 }

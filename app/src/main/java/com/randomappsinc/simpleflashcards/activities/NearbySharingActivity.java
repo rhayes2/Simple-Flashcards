@@ -24,6 +24,7 @@ public class NearbySharingActivity extends StandardActivity {
     @BindView(R.id.location_permission_needed) View locationPrompt;
     @BindView(R.id.nearby_name_needed) View nearbyNameNeeded;
     @BindView(R.id.searching) View searching;
+    @BindView(R.id.skeleton_devices_list) View skeletonDevicesList;
     @BindView(R.id.devices_list) RecyclerView devicesList;
 
     protected String nearbyName;
@@ -104,11 +105,15 @@ public class NearbySharingActivity extends StandardActivity {
         @Override
         public void onNearbyDeviceFound(NearbyDevice device) {
             nearbyDevicesAdapter.addNearbyDevice(device);
+            skeletonDevicesList.setVisibility(View.GONE);
         }
 
         @Override
         public void onNearbyDeviceLost(String endpointId) {
             nearbyDevicesAdapter.removeNearbyDevice(endpointId);
+            if (nearbyDevicesAdapter.getItemCount() == 0) {
+                skeletonDevicesList.setVisibility(View.VISIBLE);
+            }
         }
     };
 
@@ -118,6 +123,12 @@ public class NearbySharingActivity extends StandardActivity {
 
         }
     };
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        nearbyConnectionsManager.stopAdvertisingAndDiscovery();
+    }
 
     @Override
     public void onDestroy() {
