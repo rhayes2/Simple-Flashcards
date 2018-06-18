@@ -36,8 +36,8 @@
 
         <activity
             android:name=".activities.SettingsActivity"
-            android:configChanges="orientation|screenSize"
-            android:label="@string/settings"/>
+            android:label="@string/settings"
+            android:configChanges="orientation|screenSize"/>
 
         <activity
             android:name=".activities.EditFlashcardSetActivity"
@@ -80,7 +80,7 @@
 
         <activity
             android:name=".activities.NearbyFlashcardsTransferActivity"
-            android:label="@string/nearby_sharing"
+            android:theme="@style/AppTheme.NoActionBar"
             android:configChanges="orientation|screenSize"/>
     </application>
 </manifest>

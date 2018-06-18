@@ -57,4 +57,9 @@
 
     <string name="connected_to">Connected to %s</string>
     <string name="disconnected_from">Disconnected from %s</string>
+
+    <string-array name="nearby_flashcards_tabs">
+        <item>Send</item>
+        <item>Receive</item>
+    </string-array>
 </resources>
