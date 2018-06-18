@@ -39,8 +39,7 @@ public class NearbyConnectionsManager {
         /**
          * This is called when we fail to establish the connection. This happens when:
          * 1. The other side rejects the connection.
-         * 2. We failed to make the connection request.
-         * 3. We failed to establish the connection during the confirmation step.
+         * 2. We failed to establish the connection during the confirmation step.
          */
         void onConnectionFailed();
 
@@ -230,7 +229,6 @@ public class NearbyConnectionsManager {
     private final OnFailureListener requestConnectionFailureListener = new OnFailureListener() {
         @Override
         public void onFailure(@NonNull Exception e) {
-            UIUtils.showLongToast(R.string.connection_request_fail);
             if (listener != null) {
                 listener.onConnectionFailed();
             }

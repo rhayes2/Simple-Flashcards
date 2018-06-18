@@ -19,12 +19,13 @@
         android:visibility="gone">
 
         <com.joanzapata.iconify.widget.IconTextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="64dp"
+            android:layout_height="64dp"
             android:layout_marginBottom="16dp"
             android:text="@string/nearby_icon"
             android:textColor="@color/app_blue"
-            android:textSize="60dp"/>
+            android:textSize="60dp"
+            android:gravity="center"/>
 
         <TextView
             android:layout_width="match_parent"
@@ -49,12 +50,13 @@
         android:visibility="gone">
 
         <com.joanzapata.iconify.widget.IconTextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="64dp"
+            android:layout_height="64dp"
             android:layout_marginBottom="16dp"
             android:text="@string/person_icon"
             android:textColor="@color/app_blue"
-            android:textSize="60dp"/>
+            android:textSize="60dp"
+            android:gravity="center"/>
 
         <TextView
             android:layout_width="match_parent"
