@@ -25,11 +25,12 @@ import com.randomappsinc.simpleflashcards.models.NearbyDevice;
 import com.randomappsinc.simpleflashcards.persistence.PreferencesManager;
 import com.randomappsinc.simpleflashcards.utils.DeviceUtils;
 import com.randomappsinc.simpleflashcards.utils.MyApplication;
+import com.randomappsinc.simpleflashcards.utils.StringUtils;
 import com.randomappsinc.simpleflashcards.utils.UIUtils;
 
 public class NearbyConnectionsManager {
 
-    public interface Listener {
+    public interface PreConnectionListener {
         void onNearbyDeviceFound(NearbyDevice device);
 
         void onNearbyDeviceLost(String endpointId);
@@ -44,6 +45,10 @@ public class NearbyConnectionsManager {
         void onConnectionFailed();
 
         void onConnectionSuccessful();
+    }
+
+    public interface PostConnectionListener {
+        void onDisconnect();
     }
 
     private static NearbyConnectionsManager instance;
@@ -62,16 +67,19 @@ public class NearbyConnectionsManager {
         return instance;
     }
 
-    @Nullable protected Listener listener;
+    @Nullable protected PreConnectionListener preConnectionListener;
     private PreferencesManager preferencesManager = PreferencesManager.get();
     @Nullable protected ConnectionsClient connectionsClient;
     protected String currentlyConnectedEndpoint;
     protected boolean isRejecter;
+    protected String otherSideName;
+
+    @Nullable protected PostConnectionListener postConnectionListener;
 
     private NearbyConnectionsManager() {}
 
-    public void setListener(@Nullable Listener listener) {
-        this.listener = listener;
+    public void setPreConnectionListener(@NonNull PreConnectionListener preConnectionListener) {
+        this.preConnectionListener = preConnectionListener;
     }
 
     public void startAdvertisingAndDiscovering(Context context) {
@@ -105,7 +113,8 @@ public class NearbyConnectionsManager {
         @Override
         public void onConnectionInitiated(@NonNull String endpointId, @NonNull ConnectionInfo connectionInfo) {
             currentlyConnectedEndpoint = endpointId;
-            listener.onConnectionRequest(connectionInfo);
+            otherSideName = StringUtils.getSaneDeviceString(connectionInfo.getEndpointName());
+            preConnectionListener.onConnectionRequest(connectionInfo);
         }
 
         @Override
@@ -115,22 +124,22 @@ public class NearbyConnectionsManager {
             switch (connectionResolution.getStatus().getStatusCode()) {
                 case ConnectionsStatusCodes.STATUS_OK:
                     UIUtils.showLongToast(R.string.connection_successful);
-                    if (listener != null) {
-                        listener.onConnectionSuccessful();
+                    if (preConnectionListener != null) {
+                        preConnectionListener.onConnectionSuccessful();
                     }
                     break;
                 case ConnectionsStatusCodes.STATUS_CONNECTION_REJECTED:
                     if (!isRejecter) {
                         UIUtils.showLongToast(R.string.connection_rejected);
-                        if (listener != null) {
-                            listener.onConnectionFailed();
+                        if (preConnectionListener != null) {
+                            preConnectionListener.onConnectionFailed();
                         }
                     }
                     break;
                 case ConnectionsStatusCodes.STATUS_ERROR:
                     UIUtils.showLongToast(R.string.connection_confirmation_failed);
-                    if (listener != null) {
-                        listener.onConnectionFailed();
+                    if (preConnectionListener != null) {
+                        preConnectionListener.onConnectionFailed();
                     }
                     break;
             }
@@ -138,7 +147,14 @@ public class NearbyConnectionsManager {
         }
 
         @Override
-        public void onDisconnected(@NonNull String endpointId) {}
+        public void onDisconnected(@NonNull String endpointId) {
+            UIUtils.showLongToast(MyApplication
+                    .getAppContext()
+                    .getString(R.string.disconnected_from, otherSideName));
+            if (postConnectionListener != null) {
+                postConnectionListener.onDisconnect();
+            }
+        }
     };
 
     private final EndpointDiscoveryCallback endpointDiscoveryCallback = new EndpointDiscoveryCallback() {
@@ -148,7 +164,7 @@ public class NearbyConnectionsManager {
                 @NonNull DiscoveredEndpointInfo discoveredEndpointInfo) {
             if (discoveredEndpointInfo
                     .getServiceId()
-                    .equals(MyApplication.getAppContext().getPackageName()) && listener != null) {
+                    .equals(MyApplication.getAppContext().getPackageName()) && preConnectionListener != null) {
                 NearbyDevice device = new NearbyDevice();
                 device.setEndpointId(endpointId);
 
@@ -160,14 +176,14 @@ public class NearbyConnectionsManager {
                     device.setNearbyName(endpointName.substring(0, newlinePos));
                     device.setDeviceType(endpointName.substring(newlinePos + 1));
                 }
-                listener.onNearbyDeviceFound(device);
+                preConnectionListener.onNearbyDeviceFound(device);
             }
         }
 
         @Override
         public void onEndpointLost(@NonNull String endpointId) {
-            if (listener != null) {
-                listener.onNearbyDeviceLost(endpointId);
+            if (preConnectionListener != null) {
+                preConnectionListener.onNearbyDeviceLost(endpointId);
             }
         }
     };
@@ -229,23 +245,33 @@ public class NearbyConnectionsManager {
     private final OnFailureListener requestConnectionFailureListener = new OnFailureListener() {
         @Override
         public void onFailure(@NonNull Exception e) {
-            if (listener != null) {
-                listener.onConnectionFailed();
+            if (preConnectionListener != null) {
+                preConnectionListener.onConnectionFailed();
             }
         }
     };
 
-    public void stopAdvertisingAndDiscovery() {
+    public void setPostConnectionListener(@NonNull PostConnectionListener postConnectionListener) {
+        this.postConnectionListener = postConnectionListener;
+    }
+
+    public String getOtherSideName() {
+        return otherSideName;
+    }
+
+    public void disconnect() {
         if (connectionsClient != null) {
-            connectionsClient.stopAdvertising();
-            connectionsClient.stopDiscovery();
-            connectionsClient.stopAllEndpoints();
+            connectionsClient.disconnectFromEndpoint(currentlyConnectedEndpoint);
         }
     }
 
     public void shutdown() {
-        stopAdvertisingAndDiscovery();
-        connectionsClient = null;
-        listener = null;
+        if (connectionsClient != null) {
+            connectionsClient.stopAdvertising();
+            connectionsClient.stopDiscovery();
+            connectionsClient.stopAllEndpoints();
+            connectionsClient = null;
+        }
+        preConnectionListener = null;
     }
 }

@@ -1,6 +1,7 @@
 package com.randomappsinc.simpleflashcards.activities;
 
 import android.Manifest;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -48,7 +49,7 @@ public class NearbySharingActivity extends StandardActivity {
         nearbyNameManager = new NearbyNameManager(this, nameChangeListener);
         nearbyName = nearbyNameManager.getCurrentName();
         nearbyConnectionsManager = NearbyConnectionsManager.get();
-        nearbyConnectionsManager.setListener(connectionsListener);
+        nearbyConnectionsManager.setPreConnectionListener(preConnectionListener);
         confirmConnectionDialog = new ConfirmConnectionDialog(this, connectionChoiceListener);
 
         nearbyDevicesAdapter = new NearbyDevicesAdapter(deviceChoiceListener);
@@ -120,39 +121,41 @@ public class NearbySharingActivity extends StandardActivity {
         }
     };
 
-    private final NearbyConnectionsManager.Listener connectionsListener = new NearbyConnectionsManager.Listener() {
-        @Override
-        public void onNearbyDeviceFound(NearbyDevice device) {
-            nearbyDevicesAdapter.addNearbyDevice(device);
-            skeletonDevicesList.setVisibility(View.GONE);
-        }
+    private final NearbyConnectionsManager.PreConnectionListener preConnectionListener =
+            new NearbyConnectionsManager.PreConnectionListener() {
+                @Override
+                public void onNearbyDeviceFound(NearbyDevice device) {
+                    nearbyDevicesAdapter.addNearbyDevice(device);
+                    skeletonDevicesList.setVisibility(View.GONE);
+                }
 
-        @Override
-        public void onNearbyDeviceLost(String endpointId) {
-            nearbyDevicesAdapter.removeNearbyDevice(endpointId);
-            if (nearbyDevicesAdapter.getItemCount() == 0) {
-                skeletonDevicesList.setVisibility(View.VISIBLE);
-            }
-        }
+                @Override
+                public void onNearbyDeviceLost(String endpointId) {
+                    nearbyDevicesAdapter.removeNearbyDevice(endpointId);
+                    if (nearbyDevicesAdapter.getItemCount() == 0) {
+                        skeletonDevicesList.setVisibility(View.VISIBLE);
+                    }
+                }
 
-        @Override
-        public void onConnectionRequest(ConnectionInfo connectionInfo) {
-            requestingConnectionDialog.dismiss();
-            confirmConnectionDialog.show(connectionInfo);
-        }
+                @Override
+                public void onConnectionRequest(ConnectionInfo connectionInfo) {
+                    requestingConnectionDialog.dismiss();
+                    confirmConnectionDialog.show(connectionInfo);
+                }
 
-        @Override
-        public void onConnectionFailed() {
-            requestingConnectionDialog.dismiss();
-            confirmConnectionDialog.dismiss();
-            waitingForAcceptDialog.dismiss();
-        }
+                @Override
+                public void onConnectionFailed() {
+                    requestingConnectionDialog.dismiss();
+                    confirmConnectionDialog.dismiss();
+                    waitingForAcceptDialog.dismiss();
+                }
 
-        @Override
-        public void onConnectionSuccessful() {
-            waitingForAcceptDialog.dismiss();
-        }
-    };
+                @Override
+                public void onConnectionSuccessful() {
+                    waitingForAcceptDialog.dismiss();
+                    openNearbyFlashcardsTransferPage();
+                }
+            };
 
     private final NearbyDevicesAdapter.Listener deviceChoiceListener = new NearbyDevicesAdapter.Listener() {
         @Override
@@ -176,10 +179,10 @@ public class NearbySharingActivity extends StandardActivity {
                 }
             };
 
-    @Override
-    public void onPause() {
-        super.onPause();
-        nearbyConnectionsManager.stopAdvertisingAndDiscovery();
+    protected void openNearbyFlashcardsTransferPage() {
+        Intent intent = new Intent(this, NearbyFlashcardsTransferActivity.class);
+        startActivity(intent);
+        overridePendingTransition(R.anim.slide_in_bottom, R.anim.stay);
     }
 
     @Override

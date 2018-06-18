@@ -40,7 +40,7 @@
     <string name="accept">Accept</string>
     <string name="reject">Reject</string>
 
-    <string name="x_would_like_to_connect">%s would like to connect</string>
+    <string name="x_would_like_to_connect">%s would like to connect with you</string>
     <string name="connecting_to_x">Connecting to %s</string>
     <string name="connection_rejected">The other device rejected the connection request.</string>
 
@@ -54,4 +54,7 @@
         We failed to establish a connection between the 2 devices. Please try again.
     </string>
     <string name="waiting_for_accept">Waiting for the other user to accept the connection&#8230;</string>
+
+    <string name="connected_to">Connected to %s</string>
+    <string name="disconnected_from">Disconnected from %s</string>
 </resources>

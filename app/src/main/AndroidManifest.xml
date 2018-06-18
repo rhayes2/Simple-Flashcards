@@ -77,5 +77,10 @@
             android:name=".activities.NearbySharingActivity"
             android:label="@string/nearby_sharing"
             android:configChanges="orientation|screenSize"/>
+
+        <activity
+            android:name=".activities.NearbyFlashcardsTransferActivity"
+            android:label="@string/nearby_sharing"
+            android:configChanges="orientation|screenSize"/>
     </application>
 </manifest>

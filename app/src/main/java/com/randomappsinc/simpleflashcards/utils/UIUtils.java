@@ -58,6 +58,14 @@ public class UIUtils {
         Toast.makeText(MyApplication.getAppContext(), stringId, duration).show();
     }
 
+    public static void showLongToast(String text) {
+        showToast(text, Toast.LENGTH_LONG);
+    }
+
+    private static void showToast(String text, int duration) {
+        Toast.makeText(MyApplication.getAppContext(), text, duration).show();
+    }
+
     public static void askForRating(final Activity activity) {
         new MaterialDialog.Builder(activity)
                 .content(R.string.please_rate)
