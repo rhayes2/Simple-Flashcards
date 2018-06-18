@@ -33,6 +33,13 @@ public class NearbyDevicesAdapter extends RecyclerView.Adapter<NearbyDevicesAdap
     }
 
     public void addNearbyDevice(NearbyDevice device) {
+        // De-dupe because sometimes the API puts out 2 entities for you
+        for (NearbyDevice alreadyShown : nearbyDevices) {
+            if (alreadyShown.getNearbyName().equals(device.getNearbyName())
+                    && alreadyShown.getDeviceType().equals(device.getDeviceType())) {
+                return;
+            }
+        }
         nearbyDevices.add(device);
         notifyItemInserted(getItemCount() - 1);
     }
