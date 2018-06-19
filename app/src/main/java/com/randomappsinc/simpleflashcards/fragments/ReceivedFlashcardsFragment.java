@@ -18,7 +18,7 @@ import butterknife.Unbinder;
 
 public class ReceivedFlashcardsFragment extends Fragment {
 
-    @BindView(R.id.no_flashcards) TextView noFlashcards;
+    @BindView(R.id.no_flashcards_received) TextView noFlashcards;
 
     private Unbinder unbinder;
     private NearbyConnectionsManager nearbyConnectionsManager = NearbyConnectionsManager.get();

@@ -6,6 +6,6 @@
     android:background="@color/white">
 
     <TextView
-        android:id="@+id/no_flashcards"
+        android:id="@+id/no_flashcards_received"
         style="@style/empty_state_text"/>
 </FrameLayout>
