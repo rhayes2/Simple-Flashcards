@@ -6,13 +6,15 @@ import android.support.annotation.Nullable;
 import com.randomappsinc.simpleflashcards.persistence.models.FlashcardSet;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.util.Scanner;
 
 public class FileUtils {
 
     @Nullable
     public static File writeFlashcardSetToFile(FlashcardSet flashcardSet) {
-        String filename = String.valueOf(flashcardSet);
+        String filename = String.valueOf(flashcardSet.getId());
         Context context = MyApplication.getAppContext();
         File file = new File(context.getFilesDir(), filename);
         String fileContents = JSONUtils.serializeFlashcardSet(flashcardSet);
@@ -28,10 +30,26 @@ public class FileUtils {
         }
     }
 
-    public void deleteFileForFlashcardSet(FlashcardSet flashcardSet) {
+    public static void deleteFileForFlashcardSet(FlashcardSet flashcardSet) {
         File file = new File(
                 MyApplication.getAppContext().getFilesDir(),
                 String.valueOf(flashcardSet.getId()));
         file.delete();
+    }
+
+    public static String getFileContents(File file) {
+        Scanner scanner = null;
+        String contents = "";
+        try {
+            scanner = new Scanner(file);
+            contents = scanner.useDelimiter("\\A").next();
+        }
+        catch (FileNotFoundException ignored) {}
+        finally {
+            if (scanner != null) {
+                scanner.close();
+            }
+        }
+        return contents;
     }
 }

@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 
 import com.randomappsinc.simpleflashcards.R;
 import com.randomappsinc.simpleflashcards.adapters.SendFlashcardsAdapter;
+import com.randomappsinc.simpleflashcards.managers.NearbyConnectionsManager;
 import com.randomappsinc.simpleflashcards.persistence.DatabaseManager;
 import com.randomappsinc.simpleflashcards.persistence.models.FlashcardSet;
 import com.randomappsinc.simpleflashcards.views.SimpleDividerItemDecoration;
@@ -26,6 +27,7 @@ public class SendFlashcardsFragment extends Fragment {
     @BindView(R.id.flashcard_sets_to_send) RecyclerView flashcardSetList;
 
     private SendFlashcardsAdapter sendFlashcardsAdapter;
+    protected NearbyConnectionsManager nearbyConnectionsManager = NearbyConnectionsManager.get();
     private Unbinder unbinder;
 
     @Override
@@ -55,6 +57,7 @@ public class SendFlashcardsFragment extends Fragment {
     private final SendFlashcardsAdapter.Listener sendFlashcardsListener = new SendFlashcardsAdapter.Listener() {
         @Override
         public void onSendFlashcardSet(FlashcardSet flashcardSet) {
+            nearbyConnectionsManager.sendFlashcardSet(flashcardSet);
         }
     };
 

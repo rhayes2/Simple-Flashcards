@@ -23,10 +23,17 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.randomappsinc.simpleflashcards.R;
 import com.randomappsinc.simpleflashcards.models.NearbyDevice;
 import com.randomappsinc.simpleflashcards.persistence.PreferencesManager;
+import com.randomappsinc.simpleflashcards.persistence.models.FlashcardSet;
 import com.randomappsinc.simpleflashcards.utils.DeviceUtils;
+import com.randomappsinc.simpleflashcards.utils.FileUtils;
 import com.randomappsinc.simpleflashcards.utils.MyApplication;
 import com.randomappsinc.simpleflashcards.utils.StringUtils;
 import com.randomappsinc.simpleflashcards.utils.UIUtils;
+
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.HashMap;
+import java.util.Map;
 
 public class NearbyConnectionsManager {
 
@@ -75,6 +82,7 @@ public class NearbyConnectionsManager {
     protected String otherSideName;
 
     @Nullable protected PostConnectionListener postConnectionListener;
+    protected Map<Long, Payload> idToPayloadMap = new HashMap<>();
 
     private NearbyConnectionsManager() {}
 
@@ -216,15 +224,27 @@ public class NearbyConnectionsManager {
 
     private final PayloadCallback payloadCallback = new PayloadCallback() {
         @Override
-        public void onPayloadReceived(@NonNull String s, @NonNull Payload payload) {
-
+        public void onPayloadReceived(@NonNull String endpointId, @NonNull Payload payload) {
+            idToPayloadMap.put(payload.getId(), payload);
         }
 
         @Override
         public void onPayloadTransferUpdate(
-                @NonNull String s,
+                @NonNull String endpointId,
                 @NonNull PayloadTransferUpdate payloadTransferUpdate) {
-
+            switch (payloadTransferUpdate.getStatus()) {
+                case PayloadTransferUpdate.Status.SUCCESS:
+                    long payloadId = payloadTransferUpdate.getPayloadId();
+                    Payload payload = idToPayloadMap.get(payloadId);
+                    if (payload == null) {
+                        return;
+                    }
+                    File file = payload.asFile().asJavaFile();
+                    UIUtils.showLongToast(FileUtils.getFileContents(file));
+                    break;
+                case PayloadTransferUpdate.Status.FAILURE:
+                    break;
+            }
         }
     };
 
@@ -262,6 +282,22 @@ public class NearbyConnectionsManager {
     public void disconnect() {
         if (connectionsClient != null) {
             connectionsClient.disconnectFromEndpoint(currentlyConnectedEndpoint);
+        }
+    }
+
+    public void sendFlashcardSet(FlashcardSet flashcardSet) {
+        if (connectionsClient == null) {
+            return;
+        }
+
+        try {
+            File flashcardSetFile = FileUtils.writeFlashcardSetToFile(flashcardSet);
+            if (flashcardSetFile == null) {
+                return;
+            }
+            connectionsClient.sendPayload(currentlyConnectedEndpoint, Payload.fromFile(flashcardSetFile));
+        } catch (FileNotFoundException exception) {
+
         }
     }
 

@@ -76,6 +76,11 @@ public class NearbySharingActivity extends StandardActivity {
                     Manifest.permission.ACCESS_COARSE_LOCATION,
                     1);
         }
+
+        PermissionUtils.requestPermission(
+                this,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                1);
     }
 
     @OnClick(R.id.grant_permission)
