@@ -60,6 +60,9 @@
 
     <string-array name="nearby_flashcards_tabs">
         <item>Send</item>
-        <item>Receive</item>
+        <item>Received</item>
     </string-array>
+
+    <string name="no_flashcards_for_sharing">You have no flashcard sets to share.</string>
+    <string name="no_flashcards_received">You haven\'t received any flashcard sets yet from %s.</string>
 </resources>

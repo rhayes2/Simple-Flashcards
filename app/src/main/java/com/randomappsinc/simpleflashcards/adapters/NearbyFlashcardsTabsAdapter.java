@@ -5,6 +5,8 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
 import com.randomappsinc.simpleflashcards.R;
+import com.randomappsinc.simpleflashcards.fragments.ReceivedFlashcardsFragment;
+import com.randomappsinc.simpleflashcards.fragments.SendFlashcardsFragment;
 import com.randomappsinc.simpleflashcards.utils.StringUtils;
 
 public class NearbyFlashcardsTabsAdapter extends FragmentPagerAdapter {
@@ -20,9 +22,9 @@ public class NearbyFlashcardsTabsAdapter extends FragmentPagerAdapter {
     public Fragment getItem(int position) {
         switch (position) {
             case 0:
-                return new Fragment();
+                return new SendFlashcardsFragment();
             case 1:
-                return new Fragment();
+                return new ReceivedFlashcardsFragment();
             default:
                 return null;
         }
