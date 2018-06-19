@@ -55,7 +55,6 @@ public class SendFlashcardsFragment extends Fragment {
     private final SendFlashcardsAdapter.Listener sendFlashcardsListener = new SendFlashcardsAdapter.Listener() {
         @Override
         public void onSendFlashcardSet(FlashcardSet flashcardSet) {
-
         }
     };
 
