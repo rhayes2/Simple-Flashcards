@@ -9,10 +9,12 @@ import android.widget.TextView;
 
 import com.randomappsinc.simpleflashcards.R;
 import com.randomappsinc.simpleflashcards.constants.FlashcardSetTransferState;
+import com.randomappsinc.simpleflashcards.managers.NearbyConnectionsManager;
 import com.randomappsinc.simpleflashcards.models.FlashcardSetForTransfer;
 import com.randomappsinc.simpleflashcards.persistence.models.FlashcardSet;
 import com.randomappsinc.simpleflashcards.utils.MyApplication;
 import com.randomappsinc.simpleflashcards.utils.StringUtils;
+import com.randomappsinc.simpleflashcards.utils.UIUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,6 +38,42 @@ public class SendFlashcardsAdapter extends RecyclerView.Adapter<SendFlashcardsAd
             flashcardSets.add(new FlashcardSetForTransfer(original));
         }
         this.listener = listener;
+        NearbyConnectionsManager.get().setFlashcardSetTransferStatusListener(flashcardSetTransferStatusListener);
+    }
+
+    private final NearbyConnectionsManager.FlashcardSetTransferStatusListener flashcardSetTransferStatusListener =
+            new NearbyConnectionsManager.FlashcardSetTransferStatusListener() {
+                @Override
+                public void onFlashcardSetSent(int flashcardSetId) {
+                    for (int i = 0; i < flashcardSets.size(); i++) {
+                        FlashcardSetForTransfer set = flashcardSets.get(i);
+                        if (set.getFlashcardSet().getId() == flashcardSetId) {
+                            set.setTransferState(FlashcardSetTransferState.SENT);
+                            notifyItemChanged(i);
+                            break;
+                        }
+                    }
+                }
+
+                @Override
+                public void onFlashcardSetTransferFailure(int flashcardSetId) {
+                    for (int i = 0; i < flashcardSets.size(); i++) {
+                        FlashcardSetForTransfer set = flashcardSets.get(i);
+                        if (set.getFlashcardSet().getId() == flashcardSetId) {
+                            set.setTransferState(FlashcardSetTransferState.NOT_YET_SENT);
+                            notifyItemChanged(i);
+                            UIUtils.showLongToast(MyApplication.getAppContext().getString(
+                                    R.string.failed_to_send_set,
+                                    set.getFlashcardSet().getName()));
+                            break;
+                        }
+                    }
+                }
+            };
+
+    protected void setItemToSendingState(int position) {
+        flashcardSets.get(position).setTransferState(FlashcardSetTransferState.SENDING);
+        notifyItemChanged(position);
     }
 
     @NonNull
@@ -100,6 +138,7 @@ public class SendFlashcardsAdapter extends RecyclerView.Adapter<SendFlashcardsAd
 
         @OnClick(R.id.send)
         public void sendFlashcardSet() {
+            setItemToSendingState(getAdapterPosition());
             listener.onSendFlashcardSet(flashcardSets.get(getAdapterPosition()).getFlashcardSet());
         }
     }

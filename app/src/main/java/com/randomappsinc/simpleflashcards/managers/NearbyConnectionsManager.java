@@ -58,6 +58,12 @@ public class NearbyConnectionsManager {
         void onDisconnect();
     }
 
+    public interface FlashcardSetTransferStatusListener {
+        void onFlashcardSetSent(int flashcardSetId);
+
+        void onFlashcardSetTransferFailure(int flashcardSetId);
+    }
+
     private static NearbyConnectionsManager instance;
 
     public static NearbyConnectionsManager get() {
@@ -82,7 +88,13 @@ public class NearbyConnectionsManager {
     protected String otherSideName;
 
     @Nullable protected PostConnectionListener postConnectionListener;
-    protected Map<Long, Payload> idToPayloadMap = new HashMap<>();
+    @Nullable protected FlashcardSetTransferStatusListener flashcardSetTransferStatusListener;
+
+    // For incoming payloads
+    protected Map<Long, Payload> payloadIdToPayload = new HashMap<>();
+
+    // For outgoing payloads
+    protected Map<Long, Integer> payloadIdToFlashcardSetId = new HashMap<>();
 
     private NearbyConnectionsManager() {}
 
@@ -225,24 +237,40 @@ public class NearbyConnectionsManager {
     private final PayloadCallback payloadCallback = new PayloadCallback() {
         @Override
         public void onPayloadReceived(@NonNull String endpointId, @NonNull Payload payload) {
-            idToPayloadMap.put(payload.getId(), payload);
+            payloadIdToPayload.put(payload.getId(), payload);
         }
 
         @Override
         public void onPayloadTransferUpdate(
                 @NonNull String endpointId,
                 @NonNull PayloadTransferUpdate payloadTransferUpdate) {
+            long payloadId = payloadTransferUpdate.getPayloadId();
             switch (payloadTransferUpdate.getStatus()) {
                 case PayloadTransferUpdate.Status.SUCCESS:
-                    long payloadId = payloadTransferUpdate.getPayloadId();
-                    Payload payload = idToPayloadMap.get(payloadId);
-                    if (payload == null) {
-                        return;
+                    if (payloadIdToFlashcardSetId.containsKey(payloadId)) {
+                        if (flashcardSetTransferStatusListener != null) {
+                            flashcardSetTransferStatusListener
+                                    .onFlashcardSetSent(payloadIdToFlashcardSetId.get(payloadId));
+                            payloadIdToFlashcardSetId.remove(payloadId);
+                        }
+                    } else {
+                        Payload payload = payloadIdToPayload.get(payloadId);
+                        if (payload == null) {
+                            return;
+                        }
+                        File file = payload.asFile().asJavaFile();
+                        UIUtils.showLongToast(FileUtils.getFileContents(file));
                     }
-                    File file = payload.asFile().asJavaFile();
-                    UIUtils.showLongToast(FileUtils.getFileContents(file));
                     break;
                 case PayloadTransferUpdate.Status.FAILURE:
+                    if (!payloadIdToFlashcardSetId.containsKey(payloadId)) {
+                        return;
+                    }
+                    if (flashcardSetTransferStatusListener != null) {
+                        flashcardSetTransferStatusListener
+                                .onFlashcardSetTransferFailure(payloadIdToFlashcardSetId.get(payloadId));
+                    }
+                    payloadIdToFlashcardSetId.remove(payloadId);
                     break;
             }
         }
@@ -285,6 +313,10 @@ public class NearbyConnectionsManager {
         }
     }
 
+    public void setFlashcardSetTransferStatusListener(@NonNull FlashcardSetTransferStatusListener listener) {
+        flashcardSetTransferStatusListener = listener;
+    }
+
     public void sendFlashcardSet(FlashcardSet flashcardSet) {
         if (connectionsClient == null) {
             return;
@@ -295,9 +327,13 @@ public class NearbyConnectionsManager {
             if (flashcardSetFile == null) {
                 return;
             }
-            connectionsClient.sendPayload(currentlyConnectedEndpoint, Payload.fromFile(flashcardSetFile));
+            Payload payload = Payload.fromFile(flashcardSetFile);
+            payloadIdToFlashcardSetId.put(payload.getId(), flashcardSet.getId());
+            connectionsClient.sendPayload(currentlyConnectedEndpoint, payload);
         } catch (FileNotFoundException exception) {
-
+            if (flashcardSetTransferStatusListener != null) {
+                flashcardSetTransferStatusListener.onFlashcardSetTransferFailure(flashcardSet.getId());
+            }
         }
     }
 
@@ -309,5 +345,7 @@ public class NearbyConnectionsManager {
             connectionsClient = null;
         }
         preConnectionListener = null;
+        postConnectionListener = null;
+        flashcardSetTransferStatusListener = null;
     }
 }
