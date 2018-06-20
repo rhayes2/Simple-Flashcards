@@ -21,6 +21,22 @@
             android:layout_marginTop="0dp"
             android:text="@string/send"
             style="@style/rounded_button"/>
+
+        <TextView
+            android:id="@+id/sending"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/sending"
+            android:textColor="@color/dark_gray"
+            android:textSize="15sp"/>
+
+        <TextView
+            android:id="@+id/sent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/sent"
+            android:textColor="@color/green"
+            android:textSize="15sp"/>
     </FrameLayout>
 
     <LinearLayout

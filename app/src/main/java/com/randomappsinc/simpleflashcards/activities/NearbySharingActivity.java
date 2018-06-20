@@ -1,8 +1,7 @@
 package com.randomappsinc.simpleflashcards.activities;
 
-import android.Manifest;
+import android.Manifest.permission;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
@@ -25,7 +24,7 @@ import butterknife.OnClick;
 
 public class NearbySharingActivity extends StandardActivity {
 
-    @BindView(R.id.location_permission_needed) View locationPrompt;
+    @BindView(R.id.permissions_needed) View permissionsPrompt;
     @BindView(R.id.nearby_name_needed) View nearbyNameNeeded;
     @BindView(R.id.searching) View searching;
     @BindView(R.id.skeleton_devices_list) View skeletonDevicesList;
@@ -67,28 +66,27 @@ public class NearbySharingActivity extends StandardActivity {
                 .cancelable(false)
                 .build();
 
-        if (PermissionUtils.isPermissionGranted(Manifest.permission.ACCESS_COARSE_LOCATION)) {
+        if (arePermissionsGranted()) {
             startSearching();
         } else {
-            locationPrompt.setVisibility(View.VISIBLE);
-            PermissionUtils.requestPermission(
-                    this,
-                    Manifest.permission.ACCESS_COARSE_LOCATION,
-                    1);
+            permissionsPrompt.setVisibility(View.VISIBLE);
+            requestPermissions();
         }
-
-        PermissionUtils.requestPermission(
-                this,
-                Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                1);
     }
 
-    @OnClick(R.id.grant_permission)
-    public void askForPermission() {
-        PermissionUtils.requestPermission(
-                this,
-                Manifest.permission.ACCESS_COARSE_LOCATION,
-                1);
+    private boolean arePermissionsGranted() {
+        return PermissionUtils.isPermissionGranted(permission.ACCESS_COARSE_LOCATION)
+                && PermissionUtils.isPermissionGranted(permission.WRITE_EXTERNAL_STORAGE);
+    }
+
+    private void requestPermissions() {
+        String[] permissions = new String[]{permission.ACCESS_COARSE_LOCATION, permission.WRITE_EXTERNAL_STORAGE};
+        PermissionUtils.requestPermissions(this, permissions);
+    }
+
+    @OnClick(R.id.grant_permissions)
+    public void onPermissionButtonClick() {
+        requestPermissions();
     }
 
     @OnClick(R.id.set_nearby_name_button)
@@ -101,13 +99,13 @@ public class NearbySharingActivity extends StandardActivity {
             int requestCode,
             @NonNull String permissions[],
             @NonNull int[] grantResults) {
-        if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+        if (arePermissionsGranted()) {
             startSearching();
         }
     }
 
     protected void startSearching() {
-        locationPrompt.setVisibility(View.GONE);
+        permissionsPrompt.setVisibility(View.GONE);
         if (TextUtils.isEmpty(nearbyName)) {
             nearbyNameNeeded.setVisibility(View.VISIBLE);
             nearbyNameManager.showNameSetter();

@@ -8,7 +8,7 @@ import android.support.annotation.IntDef;
         QuizScore.BAD,
 })
 public @interface QuizScore {
-    int GOOD = 1;
-    int OKAY = 2;
-    int BAD = 3;
+    int GOOD = 0;
+    int OKAY = 1;
+    int BAD = 2;
 }

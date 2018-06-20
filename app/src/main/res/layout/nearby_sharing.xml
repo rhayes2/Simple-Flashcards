@@ -7,10 +7,10 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:background="@color/white"
-    tools:ignore="SpUsage">
+    tools:ignore="SpUsage, RtlHardcoded">
 
     <LinearLayout
-        android:id="@+id/location_permission_needed"
+        android:id="@+id/permissions_needed"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="40dp"
@@ -18,25 +18,40 @@
         android:gravity="center_horizontal"
         android:visibility="gone">
 
-        <com.joanzapata.iconify.widget.IconTextView
-            android:layout_width="64dp"
-            android:layout_height="64dp"
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_marginBottom="16dp"
-            android:text="@string/nearby_icon"
-            android:textColor="@color/app_blue"
-            android:textSize="60dp"
-            android:gravity="center"/>
+            android:orientation="horizontal">
+
+            <com.joanzapata.iconify.widget.IconTextView
+                android:layout_width="64dp"
+                android:layout_height="64dp"
+                android:text="@string/nearby_icon"
+                android:textColor="@color/app_blue"
+                android:textSize="60dp"
+                android:gravity="center"/>
+
+            <com.joanzapata.iconify.widget.IconTextView
+                android:layout_width="64dp"
+                android:layout_height="64dp"
+                android:layout_marginLeft="16dp"
+                android:text="@string/folder_icon"
+                android:textColor="@color/app_blue"
+                android:textSize="60dp"
+                android:gravity="center"/>
+        </LinearLayout>
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/location_explanation"
+            android:text="@string/permissions_explanation"
             android:textSize="17sp"
             android:textColor="@color/dark_gray"/>
 
         <TextView
-            android:id="@+id/grant_permission"
-            android:text="@string/grant_location_permission"
+            android:id="@+id/grant_permissions"
+            android:text="@string/grant_permissions"
             style="@style/rounded_button"/>
     </LinearLayout>
 
