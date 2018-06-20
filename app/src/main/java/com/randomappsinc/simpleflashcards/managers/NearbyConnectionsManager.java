@@ -59,8 +59,6 @@ public class NearbyConnectionsManager {
     }
 
     public interface FlashcardSetTransferStatusListener {
-        void onFlashcardSetSent(int flashcardSetId);
-
         void onFlashcardSetTransferFailure(int flashcardSetId);
     }
 
@@ -248,11 +246,7 @@ public class NearbyConnectionsManager {
             switch (payloadTransferUpdate.getStatus()) {
                 case PayloadTransferUpdate.Status.SUCCESS:
                     if (payloadIdToFlashcardSetId.containsKey(payloadId)) {
-                        if (flashcardSetTransferStatusListener != null) {
-                            flashcardSetTransferStatusListener
-                                    .onFlashcardSetSent(payloadIdToFlashcardSetId.get(payloadId));
-                            payloadIdToFlashcardSetId.remove(payloadId);
-                        }
+                        payloadIdToFlashcardSetId.remove(payloadId);
                     } else {
                         Payload payload = payloadIdToPayload.get(payloadId);
                         if (payload == null) {

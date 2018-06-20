@@ -44,18 +44,6 @@ public class SendFlashcardsAdapter extends RecyclerView.Adapter<SendFlashcardsAd
     private final NearbyConnectionsManager.FlashcardSetTransferStatusListener flashcardSetTransferStatusListener =
             new NearbyConnectionsManager.FlashcardSetTransferStatusListener() {
                 @Override
-                public void onFlashcardSetSent(int flashcardSetId) {
-                    for (int i = 0; i < flashcardSets.size(); i++) {
-                        FlashcardSetForTransfer set = flashcardSets.get(i);
-                        if (set.getFlashcardSet().getId() == flashcardSetId) {
-                            set.setTransferState(FlashcardSetTransferState.SENT);
-                            notifyItemChanged(i);
-                            break;
-                        }
-                    }
-                }
-
-                @Override
                 public void onFlashcardSetTransferFailure(int flashcardSetId) {
                     for (int i = 0; i < flashcardSets.size(); i++) {
                         FlashcardSetForTransfer set = flashcardSets.get(i);
@@ -71,8 +59,8 @@ public class SendFlashcardsAdapter extends RecyclerView.Adapter<SendFlashcardsAd
                 }
             };
 
-    protected void setItemToSendingState(int position) {
-        flashcardSets.get(position).setTransferState(FlashcardSetTransferState.SENDING);
+    protected void setItemToSentState(int position) {
+        flashcardSets.get(position).setTransferState(FlashcardSetTransferState.SENT);
         notifyItemChanged(position);
     }
 
@@ -100,7 +88,6 @@ public class SendFlashcardsAdapter extends RecyclerView.Adapter<SendFlashcardsAd
         @BindView(R.id.set_name) TextView setName;
         @BindView(R.id.num_flashcards) TextView numFlashcardsText;
         @BindView(R.id.send) View send;
-        @BindView(R.id.sending) View sending;
         @BindView(R.id.sent) View sent;
 
         FlashcardSetViewHolder(View view) {
@@ -119,18 +106,11 @@ public class SendFlashcardsAdapter extends RecyclerView.Adapter<SendFlashcardsAd
 
             switch (flashcardSetForTransfer.getTransferState()) {
                 case FlashcardSetTransferState.NOT_YET_SENT:
-                    sending.setVisibility(View.GONE);
                     sent.setVisibility(View.GONE);
                     send.setVisibility(View.VISIBLE);
                     break;
-                case FlashcardSetTransferState.SENDING:
-                    send.setVisibility(View.GONE);
-                    sent.setVisibility(View.GONE);
-                    sending.setVisibility(View.VISIBLE);
-                    break;
                 case FlashcardSetTransferState.SENT:
                     send.setVisibility(View.GONE);
-                    sending.setVisibility(View.GONE);
                     sent.setVisibility(View.VISIBLE);
                     break;
             }
@@ -138,7 +118,7 @@ public class SendFlashcardsAdapter extends RecyclerView.Adapter<SendFlashcardsAd
 
         @OnClick(R.id.send)
         public void sendFlashcardSet() {
-            setItemToSendingState(getAdapterPosition());
+            setItemToSentState(getAdapterPosition());
             listener.onSendFlashcardSet(flashcardSets.get(getAdapterPosition()).getFlashcardSet());
         }
     }
