@@ -1,5 +1,6 @@
 package com.randomappsinc.simpleflashcards.utils;
 
+import android.support.annotation.Nullable;
 import android.text.TextUtils;
 
 import com.randomappsinc.simpleflashcards.persistence.models.Flashcard;
@@ -42,6 +43,7 @@ public class JSONUtils {
         }
     }
 
+    @Nullable
     public static FlashcardSet deserializeFlashcardSet(String flashcardSetJsonText) {
         if (TextUtils.isEmpty(flashcardSetJsonText)) {
             return null;
@@ -59,7 +61,9 @@ public class JSONUtils {
                 JSONObject flashcardJson = flashcardsArray.getJSONObject(i);
                 Flashcard flashcard = new Flashcard();
                 flashcard.setTerm(flashcardJson.getString(TERM_KEY));
-                flashcard.setTermImageUrl(flashcardJson.getString(TERM_IMAGE_URL_KEY));
+                if (flashcardJson.has(TERM_IMAGE_URL_KEY)) {
+                    flashcard.setTermImageUrl(flashcardJson.getString(TERM_IMAGE_URL_KEY));
+                }
                 flashcard.setDefinition(flashcardJson.getString(DEFINITION_KEY));
                 flashcards.add(flashcard);
             }

@@ -324,6 +324,35 @@ public class DatabaseManager {
         }
     }
 
+    public void saveNearbyTransferSet(FlashcardSet flashcardSet) {
+        try {
+            realm.beginTransaction();
+
+            FlashcardSet set = new FlashcardSet();
+            int newSetId = getNextSetId();
+            set.setId(newSetId);
+            set.setQuizletSetId(flashcardSet.getQuizletSetId());
+            set.setName(flashcardSet.getName());
+
+            RealmList<Flashcard> flashcards = new RealmList<>();
+            int flashcardId = getNextFlashcardId();
+            for (Flashcard original : flashcardSet.getFlashcards()) {
+                Flashcard flashcard = new Flashcard();
+                flashcard.setId(flashcardId++);
+                flashcard.setTerm(original.getTerm());
+                flashcard.setDefinition(original.getDefinition());
+                flashcard.setTermImageUrl(original.getTermImageUrl());
+                flashcards.add(flashcard);
+            }
+            set.setFlashcards(flashcards);
+
+            realm.copyToRealm(set);
+            realm.commitTransaction();
+        } catch (Exception e) {
+            realm.cancelTransaction();
+        }
+    }
+
     public boolean alreadyHasQuizletSet(long quizletSetId) {
         FlashcardSet set = realm
                 .where(FlashcardSet.class)

@@ -22,10 +22,12 @@ import com.google.android.gms.nearby.connection.Strategy;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.randomappsinc.simpleflashcards.R;
 import com.randomappsinc.simpleflashcards.models.NearbyDevice;
+import com.randomappsinc.simpleflashcards.persistence.DatabaseManager;
 import com.randomappsinc.simpleflashcards.persistence.PreferencesManager;
 import com.randomappsinc.simpleflashcards.persistence.models.FlashcardSet;
 import com.randomappsinc.simpleflashcards.utils.DeviceUtils;
 import com.randomappsinc.simpleflashcards.utils.FileUtils;
+import com.randomappsinc.simpleflashcards.utils.JSONUtils;
 import com.randomappsinc.simpleflashcards.utils.MyApplication;
 import com.randomappsinc.simpleflashcards.utils.StringUtils;
 import com.randomappsinc.simpleflashcards.utils.UIUtils;
@@ -80,6 +82,7 @@ public class NearbyConnectionsManager {
 
     @Nullable protected PreConnectionListener preConnectionListener;
     private PreferencesManager preferencesManager = PreferencesManager.get();
+    protected DatabaseManager databaseManager = DatabaseManager.get();
     @Nullable protected ConnectionsClient connectionsClient;
     protected String currentlyConnectedEndpoint;
     protected boolean isRejecter;
@@ -253,7 +256,15 @@ public class NearbyConnectionsManager {
                             return;
                         }
                         File file = payload.asFile().asJavaFile();
-                        UIUtils.showLongToast(FileUtils.getFileContents(file));
+                        FlashcardSet flashcardSet = JSONUtils.deserializeFlashcardSet(
+                                FileUtils.getFileContents(file));
+                        if (flashcardSet == null) {
+                            return;
+                        }
+                        databaseManager.saveNearbyTransferSet(flashcardSet);
+                        UIUtils.showLongToast(MyApplication.getAppContext().getString(
+                                R.string.received_set,
+                                flashcardSet.getName()));
                     }
                     break;
                 case PayloadTransferUpdate.Status.FAILURE:

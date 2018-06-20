@@ -73,4 +73,5 @@
     <string name="sent">Sent</string>
 
     <string name="failed_to_send_set">We failed to send your flashcard set: %s.</string>
+    <string name="received_set">Received: %s</string>
 </resources>
