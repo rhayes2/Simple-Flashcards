@@ -26,7 +26,6 @@ public class SendFlashcardsFragment extends Fragment {
     @BindView(R.id.no_flashcards_to_send) View noFlashcards;
     @BindView(R.id.flashcard_sets_to_send) RecyclerView flashcardSetList;
 
-    private SendFlashcardsAdapter sendFlashcardsAdapter;
     protected NearbyConnectionsManager nearbyConnectionsManager = NearbyConnectionsManager.get();
     private Unbinder unbinder;
 
@@ -47,8 +46,7 @@ public class SendFlashcardsFragment extends Fragment {
         if (flashcardSets.isEmpty()) {
             flashcardSetList.setVisibility(View.GONE);
         } else {
-            sendFlashcardsAdapter = new SendFlashcardsAdapter(flashcardSets, sendFlashcardsListener);
-            flashcardSetList.setAdapter(sendFlashcardsAdapter);
+            flashcardSetList.setAdapter(new SendFlashcardsAdapter(flashcardSets, sendFlashcardsListener));
             flashcardSetList.addItemDecoration(new SimpleDividerItemDecoration(getActivity()));
             noFlashcards.setVisibility(View.GONE);
         }

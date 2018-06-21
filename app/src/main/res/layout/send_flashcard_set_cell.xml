@@ -4,8 +4,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:background="@color/white"
     android:padding="8dp"
-    tools:ignore="SpUsage, RtlHardcoded, RtlSymmetry">
+    tools:ignore="RtlHardcoded, RtlSymmetry">
 
     <FrameLayout
         android:id="@+id/sending_state"
@@ -39,7 +40,6 @@
         android:layout_height="wrap_content"
         android:layout_toLeftOf="@id/sending_state"
         android:layout_centerVertical="true"
-        android:background="@color/white"
         android:orientation="vertical">
 
         <TextView

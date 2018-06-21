@@ -64,6 +64,10 @@ public class NearbyConnectionsManager {
         void onFlashcardSetTransferFailure(int flashcardSetId);
     }
 
+    public interface FlashcardSetReceiptListener {
+        void onFlashcardSetReceived(FlashcardSet flashcardSet);
+    }
+
     private static NearbyConnectionsManager instance;
 
     public static NearbyConnectionsManager get() {
@@ -90,6 +94,7 @@ public class NearbyConnectionsManager {
 
     @Nullable protected PostConnectionListener postConnectionListener;
     @Nullable protected FlashcardSetTransferStatusListener flashcardSetTransferStatusListener;
+    @Nullable protected FlashcardSetReceiptListener flashcardSetReceiptListener;
 
     // For incoming payloads
     protected Map<Long, Payload> payloadIdToPayload = new HashMap<>();
@@ -262,6 +267,9 @@ public class NearbyConnectionsManager {
                             return;
                         }
                         databaseManager.saveNearbyTransferSet(flashcardSet);
+                        if (flashcardSetReceiptListener != null) {
+                            flashcardSetReceiptListener.onFlashcardSetReceived(flashcardSet);
+                        }
                         UIUtils.showLongToast(MyApplication.getAppContext().getString(
                                 R.string.received_set,
                                 flashcardSet.getName()));
@@ -340,6 +348,10 @@ public class NearbyConnectionsManager {
                 flashcardSetTransferStatusListener.onFlashcardSetTransferFailure(flashcardSet.getId());
             }
         }
+    }
+
+    public void setFlashcardSetReceiptListener(@NonNull FlashcardSetReceiptListener listener) {
+        flashcardSetReceiptListener = listener;
     }
 
     public void shutdown() {
