@@ -9,7 +9,6 @@ import com.joanzapata.iconify.fonts.IoniconsIcons;
 import com.randomappsinc.simpleflashcards.R;
 import com.randomappsinc.simpleflashcards.constants.Constants;
 import com.randomappsinc.simpleflashcards.persistence.DatabaseManager;
-import com.randomappsinc.simpleflashcards.persistence.models.FlashcardSet;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -19,7 +18,7 @@ public class QuizSettingsActivity extends StandardActivity {
 
     @BindView(R.id.num_questions) TextView numQuestions;
 
-    private FlashcardSet flashcardSet;
+    int numFlashcards;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,9 +33,36 @@ public class QuizSettingsActivity extends StandardActivity {
                         .actionBarSize());
 
         int flashcardSetId = getIntent().getIntExtra(Constants.FLASHCARD_SET_ID_KEY, 0);
-        flashcardSet = DatabaseManager.get().getFlashcardSet(flashcardSetId);
+        numFlashcards = DatabaseManager.get().getFlashcardSet(flashcardSetId).getFlashcards().size();
+        numQuestions.setText(String.valueOf(numFlashcards));
+    }
 
-        numQuestions.setText(String.valueOf(flashcardSet.getFlashcards().size()));
+    @OnClick(R.id.minus_5_questions)
+    public void remove5Questions() {
+        int current = Integer.valueOf(numQuestions.getText().toString());
+        current = Math.max(1, current - 5);
+        numQuestions.setText(String.valueOf(current));
+    }
+
+    @OnClick(R.id.minus_1_question)
+    public void remove1Question() {
+        int current = Integer.valueOf(numQuestions.getText().toString());
+        current = Math.max(1, current - 1);
+        numQuestions.setText(String.valueOf(current));
+    }
+
+    @OnClick(R.id.plus_one_question)
+    public void add1Question() {
+        int current = Integer.valueOf(numQuestions.getText().toString());
+        current = Math.min(numFlashcards, current + 1);
+        numQuestions.setText(String.valueOf(current));
+    }
+
+    @OnClick(R.id.plus_5_questions)
+    public void add5Questions() {
+        int current = Integer.valueOf(numQuestions.getText().toString());
+        current = Math.min(numFlashcards, current + 5);
+        numQuestions.setText(String.valueOf(current));
     }
 
     @OnClick(R.id.start_quiz)
