@@ -21,6 +21,7 @@ public class QuizSettingsActivity extends StandardActivity {
     @BindView(R.id.num_questions) TextView numQuestions;
     @BindView(R.id.no_time_limit) CheckBox noTimeLimit;
     @BindView(R.id.set_time_limit) CheckBox setTimeLimit;
+    @BindView(R.id.num_minutes) TextView numMinutes;
 
     int numFlashcards;
 
@@ -67,6 +68,34 @@ public class QuizSettingsActivity extends StandardActivity {
         int current = Integer.valueOf(numQuestions.getText().toString());
         current = Math.min(numFlashcards, current + 5);
         numQuestions.setText(String.valueOf(current));
+    }
+
+    @OnClick(R.id.minus_5_minutes)
+    public void remove5Minutes() {
+        int current = Integer.valueOf(numMinutes.getText().toString());
+        current = Math.max(1, current - 5);
+        numMinutes.setText(String.valueOf(current));
+    }
+
+    @OnClick(R.id.minus_1_minute)
+    public void remove1Minute() {
+        int current = Integer.valueOf(numMinutes.getText().toString());
+        current = Math.max(1, current - 1);
+        numMinutes.setText(String.valueOf(current));
+    }
+
+    @OnClick(R.id.plus_one_minute)
+    public void add1Minute() {
+        int current = Integer.valueOf(numMinutes.getText().toString());
+        current = Math.min(999, current + 1);
+        numMinutes.setText(String.valueOf(current));
+    }
+
+    @OnClick(R.id.plus_5_minutes)
+    public void add5Minutes() {
+        int current = Integer.valueOf(numMinutes.getText().toString());
+        current = Math.min(999, current + 5);
+        numMinutes.setText(String.valueOf(current));
     }
 
     @OnClick(R.id.start_quiz)

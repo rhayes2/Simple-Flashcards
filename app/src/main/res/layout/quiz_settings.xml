@@ -92,6 +92,60 @@
                 android:id="@+id/set_time_limit"
                 android:text="@string/set_a_time_limit"
                 style="@style/quiz_settings_checkbox"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:orientation="horizontal"
+                android:gravity="center_vertical">
+
+                <TextView
+                    android:id="@+id/minus_5_minutes"
+                    android:text="@string/minus_5"
+                    style="@style/quiz_settings_number_change_button"/>
+
+                <TextView
+                    android:id="@+id/minus_1_minute"
+                    android:text="@string/minus_1"
+                    style="@style/quiz_settings_number_change_button"/>
+
+                <LinearLayout
+                    android:layout_width="60dp"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_marginRight="8dp">
+
+                    <TextView
+                        android:id="@+id/num_minutes"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="-4dp"
+                        android:gravity="center_horizontal"
+                        android:text="@string/default_num_minutes"
+                        android:textSize="29dp"
+                        android:textColor="@color/dark_gray"/>
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="-4dp"
+                        android:gravity="center_horizontal"
+                        android:text="@string/minutes"
+                        android:textSize="13dp"
+                        android:textColor="@color/dark_gray"/>
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/plus_one_minute"
+                    android:text="@string/plus_1"
+                    style="@style/quiz_settings_number_change_button"/>
+
+                <TextView
+                    android:id="@+id/plus_5_minutes"
+                    android:text="@string/plus_5"
+                    style="@style/quiz_settings_number_change_button"/>
+            </LinearLayout>
         </LinearLayout>
     </ScrollView>
 

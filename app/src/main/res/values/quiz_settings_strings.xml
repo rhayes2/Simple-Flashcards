@@ -15,4 +15,7 @@
 
     <string name="no_time_limit">No time limit</string>
     <string name="set_a_time_limit">Set a time limit of:</string>
+
+    <string name="default_num_minutes">15</string>
+    <string name="minutes">minutes</string>
 </resources>
