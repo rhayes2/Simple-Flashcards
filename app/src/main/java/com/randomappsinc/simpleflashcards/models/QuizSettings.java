@@ -3,27 +3,29 @@ package com.randomappsinc.simpleflashcards.models;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import java.util.concurrent.TimeUnit;
+
 public class QuizSettings implements Parcelable {
 
     private int numQuestions;
-    private int numMinutes;
+    private int numSeconds;
 
     public QuizSettings(int numQuestions, int numMinutes) {
         this.numQuestions = numQuestions;
-        this.numMinutes = numMinutes;
+        this.numSeconds = (int) TimeUnit.MINUTES.toSeconds(numMinutes);
     }
 
     public int getNumQuestions() {
         return numQuestions;
     }
 
-    public int getNumMinutes() {
-        return numMinutes;
+    public int getNumSeconds() {
+        return numSeconds;
     }
 
     protected QuizSettings(Parcel in) {
         numQuestions = in.readInt();
-        numMinutes = in.readInt();
+        numSeconds = in.readInt();
     }
 
     @Override
@@ -34,7 +36,7 @@ public class QuizSettings implements Parcelable {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeInt(numQuestions);
-        dest.writeInt(numMinutes);
+        dest.writeInt(numSeconds);
     }
 
     @SuppressWarnings("unused")

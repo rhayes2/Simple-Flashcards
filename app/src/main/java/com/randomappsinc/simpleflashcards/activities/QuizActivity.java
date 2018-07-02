@@ -71,7 +71,9 @@ public class QuizActivity extends StandardActivity implements QuitQuizDialog.Lis
         int setId = getIntent().getIntExtra(Constants.FLASHCARD_SET_ID_KEY, 0);
         flashcardSet = DatabaseManager.get().getFlashcardSet(setId);
         quizSettings = getIntent().getParcelableExtra(Constants.QUIZ_SETTINGS_KEY);
-        setTitle(flashcardSet.getName());
+        if (quizSettings.getNumSeconds() <= 0) {
+            setTitle(flashcardSet.getName());
+        }
 
         quitQuizDialog = new QuitQuizDialog(this, this);
 
