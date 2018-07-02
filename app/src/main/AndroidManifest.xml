@@ -83,5 +83,10 @@
             android:name=".activities.NearbyFlashcardsTransferActivity"
             android:theme="@style/AppTheme.NoActionBar"
             android:configChanges="orientation|screenSize"/>
+
+        <activity
+            android:name=".activities.QuizSettingsActivity"
+            android:label="@string/quiz_settings"
+            android:configChanges="orientation|screenSize"/>
     </application>
 </manifest>

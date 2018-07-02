@@ -150,8 +150,9 @@ public class MainActivity extends StandardActivity
                     Snackbar.LENGTH_LONG);
         } else {
             startActivity(new Intent(
-                    this, QuizActivity.class)
+                    this, QuizSettingsActivity.class)
                     .putExtra(Constants.FLASHCARD_SET_ID_KEY, flashcardSet.getId()));
+            overridePendingTransition(R.anim.slide_in_bottom, R.anim.stay);
         }
     }
 
