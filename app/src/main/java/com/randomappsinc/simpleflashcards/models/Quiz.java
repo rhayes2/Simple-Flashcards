@@ -6,7 +6,6 @@ import com.randomappsinc.simpleflashcards.persistence.models.FlashcardSet;
 import com.randomappsinc.simpleflashcards.utils.RandUtils;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 
@@ -49,14 +48,13 @@ public class Quiz {
         }
     }
 
-    public Quiz(FlashcardSet flashcardSet) {
+    public Quiz(FlashcardSet flashcardSet, int numQuestions) {
         problems = new ArrayList<>();
         List<Flashcard> flashcards = flashcardSet.getFlashcards();
-        List<Integer> indexes = new ArrayList<>();
-        for (int i = 0; i < flashcards.size(); i++) {
-            indexes.add(i);
-        }
-        Collections.shuffle(indexes);
+
+        // Indexes of the flashcards we are generating questions for
+        List<Integer> indexes = RandUtils.getProblemIndexes(flashcards.size(), numQuestions);
+
         for (int index : indexes) {
             Flashcard flashcard = flashcards.get(index);
 

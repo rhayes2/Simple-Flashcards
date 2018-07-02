@@ -9,6 +9,7 @@ import com.joanzapata.iconify.IconDrawable;
 import com.joanzapata.iconify.fonts.IoniconsIcons;
 import com.randomappsinc.simpleflashcards.R;
 import com.randomappsinc.simpleflashcards.constants.Constants;
+import com.randomappsinc.simpleflashcards.models.QuizSettings;
 import com.randomappsinc.simpleflashcards.persistence.DatabaseManager;
 
 import butterknife.BindView;
@@ -23,7 +24,7 @@ public class QuizSettingsActivity extends StandardActivity {
     @BindView(R.id.set_time_limit) CheckBox setTimeLimit;
     @BindView(R.id.num_minutes) TextView numMinutes;
 
-    int numFlashcards;
+    private int numFlashcards;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -101,10 +102,15 @@ public class QuizSettingsActivity extends StandardActivity {
     @OnClick(R.id.start_quiz)
     public void startQuiz() {
         int flashcardSetId = getIntent().getIntExtra(Constants.FLASHCARD_SET_ID_KEY, 0);
+        int questionsValue = Integer.valueOf(numQuestions.getText().toString());
+        int numMinutesValue = Integer.valueOf(numMinutes.getText().toString());
+        int finalNumMinutes = noTimeLimit.isChecked() ? 0 : numMinutesValue;
+        QuizSettings quizSettings = new QuizSettings(questionsValue, finalNumMinutes);
         finish();
         startActivity(new Intent(
                 this, QuizActivity.class)
-                .putExtra(Constants.FLASHCARD_SET_ID_KEY, flashcardSetId));
+                .putExtra(Constants.FLASHCARD_SET_ID_KEY, flashcardSetId)
+                .putExtra(Constants.QUIZ_SETTINGS_KEY, quizSettings));
     }
 
     @OnCheckedChanged(R.id.no_time_limit)

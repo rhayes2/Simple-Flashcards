@@ -19,6 +19,7 @@ import com.randomappsinc.simpleflashcards.constants.QuizScore;
 import com.randomappsinc.simpleflashcards.dialogs.QuitQuizDialog;
 import com.randomappsinc.simpleflashcards.models.Problem;
 import com.randomappsinc.simpleflashcards.models.Quiz;
+import com.randomappsinc.simpleflashcards.models.QuizSettings;
 import com.randomappsinc.simpleflashcards.persistence.DatabaseManager;
 import com.randomappsinc.simpleflashcards.persistence.models.FlashcardSet;
 import com.randomappsinc.simpleflashcards.utils.UIUtils;
@@ -58,6 +59,7 @@ public class QuizActivity extends StandardActivity implements QuitQuizDialog.Lis
     private FlashcardSet flashcardSet;
     private Quiz quiz;
     private QuitQuizDialog quitQuizDialog;
+    private QuizSettings quizSettings;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,11 +70,12 @@ public class QuizActivity extends StandardActivity implements QuitQuizDialog.Lis
 
         int setId = getIntent().getIntExtra(Constants.FLASHCARD_SET_ID_KEY, 0);
         flashcardSet = DatabaseManager.get().getFlashcardSet(setId);
+        quizSettings = getIntent().getParcelableExtra(Constants.QUIZ_SETTINGS_KEY);
         setTitle(flashcardSet.getName());
 
         quitQuizDialog = new QuitQuizDialog(this, this);
 
-        quiz = new Quiz(flashcardSet);
+        quiz = new Quiz(flashcardSet, quizSettings.getNumQuestions());
         int numOptions = quiz.getNumOptions();
         if (numOptions >= 3) {
             optionButtons.get(2).setVisibility(View.VISIBLE);
@@ -347,7 +350,7 @@ public class QuizActivity extends StandardActivity implements QuitQuizDialog.Lis
 
     @OnClick(R.id.retake)
     public void retake() {
-        quiz = new Quiz(flashcardSet);
+        quiz = new Quiz(flashcardSet, quizSettings.getNumQuestions());
         fadeOutResultsPage();
     }
 
