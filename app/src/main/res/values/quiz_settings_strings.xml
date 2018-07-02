@@ -4,4 +4,12 @@
     <string name="time_limit">Time Limit</string>
     <string name="number_of_questions">Number of Questions</string>
     <string name="start_quiz">Start Quiz</string>
+
+    <string name="question_mark_icon">{ion-help}</string>
+    <string name="time_icon">{ion-android-time}</string>
+
+    <string name="minus_5">-5</string>
+    <string name="minus_1">-1</string>
+    <string name="plus_1">+1</string>
+    <string name="plus_5">+5</string>
 </resources>

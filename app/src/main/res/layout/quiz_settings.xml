@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    tools:ignore="SpUsage, RtlHardcoded">
 
     <ScrollView
         android:layout_width="match_parent"
@@ -12,7 +14,72 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:padding="16dp"
             android:orientation="vertical">
+
+            <LinearLayout style="@style/quiz_settings_header_container">
+                <com.joanzapata.iconify.widget.IconTextView
+                    android:text="@string/question_mark_icon"
+                    style="@style/quiz_settings_icon"/>
+
+                <TextView
+                    android:text="@string/number_of_questions"
+                    style="@style/quiz_settings_section_title"/>
+            </LinearLayout>
+
+            <View style="@style/quiz_settings_divider"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:orientation="horizontal"
+                android:gravity="center_vertical">
+
+                <TextView
+                    android:id="@+id/minus_5_questions"
+                    android:text="@string/minus_5"
+                    style="@style/quiz_settings_number_change_button"/>
+
+                <TextView
+                    android:id="@+id/minus_1_question"
+                    android:text="@string/minus_1"
+                    style="@style/quiz_settings_number_change_button"/>
+
+                <TextView
+                    android:id="@+id/num_questions"
+                    android:layout_width="60dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="8dp"
+                    android:gravity="center_horizontal"
+                    android:textSize="29dp"
+                    android:textColor="@color/dark_gray"/>
+
+                <TextView
+                    android:id="@+id/plus_one_question"
+                    android:text="@string/plus_1"
+                    style="@style/quiz_settings_number_change_button"/>
+
+                <TextView
+                    android:id="@+id/plus_5_questions"
+                    android:text="@string/plus_5"
+                    style="@style/quiz_settings_number_change_button"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_marginTop="16dp"
+                style="@style/quiz_settings_header_container">
+
+                <com.joanzapata.iconify.widget.IconTextView
+                    android:text="@string/time_icon"
+                    style="@style/quiz_settings_icon"/>
+
+                <TextView
+                    android:text="@string/time_limit"
+                    style="@style/quiz_settings_section_title"/>
+            </LinearLayout>
+
+            <View style="@style/quiz_settings_divider"/>
         </LinearLayout>
     </ScrollView>
 
