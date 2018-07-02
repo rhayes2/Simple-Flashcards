@@ -80,6 +80,18 @@
             </LinearLayout>
 
             <View style="@style/quiz_settings_divider"/>
+
+            <CheckBox
+                android:id="@+id/no_time_limit"
+                android:text="@string/no_time_limit"
+                android:checked="true"
+                android:clickable="false"
+                style="@style/quiz_settings_checkbox"/>
+
+            <CheckBox
+                android:id="@+id/set_time_limit"
+                android:text="@string/set_a_time_limit"
+                style="@style/quiz_settings_checkbox"/>
         </LinearLayout>
     </ScrollView>
 

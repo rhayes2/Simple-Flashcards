@@ -12,4 +12,7 @@
     <string name="minus_1">-1</string>
     <string name="plus_1">+1</string>
     <string name="plus_5">+5</string>
+
+    <string name="no_time_limit">No time limit</string>
+    <string name="set_a_time_limit">Set a time limit of:</string>
 </resources>

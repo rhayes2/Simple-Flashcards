@@ -2,6 +2,7 @@ package com.randomappsinc.simpleflashcards.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.widget.CheckBox;
 import android.widget.TextView;
 
 import com.joanzapata.iconify.IconDrawable;
@@ -12,11 +13,14 @@ import com.randomappsinc.simpleflashcards.persistence.DatabaseManager;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnCheckedChanged;
 import butterknife.OnClick;
 
 public class QuizSettingsActivity extends StandardActivity {
 
     @BindView(R.id.num_questions) TextView numQuestions;
+    @BindView(R.id.no_time_limit) CheckBox noTimeLimit;
+    @BindView(R.id.set_time_limit) CheckBox setTimeLimit;
 
     int numFlashcards;
 
@@ -72,6 +76,24 @@ public class QuizSettingsActivity extends StandardActivity {
         startActivity(new Intent(
                 this, QuizActivity.class)
                 .putExtra(Constants.FLASHCARD_SET_ID_KEY, flashcardSetId));
+    }
+
+    @OnCheckedChanged(R.id.no_time_limit)
+    public void noTimeLimitSelected(boolean isChecked) {
+        if (isChecked) {
+            noTimeLimit.setClickable(false);
+            setTimeLimit.setChecked(false);
+            setTimeLimit.setClickable(true);
+        }
+    }
+
+    @OnCheckedChanged(R.id.set_time_limit)
+    public void setTimeLimitSelected(boolean isChecked) {
+        if (isChecked) {
+            setTimeLimit.setClickable(false);
+            noTimeLimit.setChecked(false);
+            noTimeLimit.setClickable(true);
+        }
     }
 
     @Override
