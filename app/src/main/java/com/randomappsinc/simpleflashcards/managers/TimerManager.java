@@ -3,10 +3,10 @@ package com.randomappsinc.simpleflashcards.managers;
 import android.os.Handler;
 import android.support.annotation.NonNull;
 
-public class TimerManager {
+import com.randomappsinc.simpleflashcards.constants.TimerState;
+import com.randomappsinc.simpleflashcards.utils.TimeUtils;
 
-    private static final int SECONDS_PER_MINUTE = 60;
-    private static final int SECONDS_PER_HOUR = 60 * SECONDS_PER_MINUTE;
+public class TimerManager {
 
     public interface Listener {
 
@@ -17,15 +17,20 @@ public class TimerManager {
         void onTimeUp();
     }
 
-    @NonNull private Listener listener;
+    @TimerState private int timerState = TimerState.NEEDS_ACTIVATION;
+    protected Listener listener;
     protected int remainingSeconds;
     private Handler handler = new Handler();
     private Runnable updateTimeRunnable = new Runnable() {
         @Override
         public void run() {
             remainingSeconds--;
+            if (remainingSeconds > 0) {
+                scheduleTimeUpdate();
+            } else {
+                listener.onTimeUp();
+            }
             renderRemainingSecondsAndSend();
-            scheduleTimeUpdate();
         }
     };
 
@@ -34,12 +39,11 @@ public class TimerManager {
         this.remainingSeconds = remainingSeconds;
     }
 
-    public void startTimer() {
-        renderRemainingSecondsAndSend();
-        scheduleTimeUpdate();
-    }
-
     public void resumeTimer() {
+        if (timerState == TimerState.NEEDS_ACTIVATION) {
+            renderRemainingSecondsAndSend();
+            timerState = TimerState.RUNNING;
+        }
         scheduleTimeUpdate();
     }
 
@@ -47,18 +51,17 @@ public class TimerManager {
         handler.postDelayed(updateTimeRunnable, 1000L);
     }
 
-    public void stopTimer() {
+    public void pauseTimer() {
+        timerState = TimerState.PAUSED;
         handler.removeCallbacks(updateTimeRunnable);
     }
 
     protected void renderRemainingSecondsAndSend() {
-        int remainingHours = remainingSeconds / SECONDS_PER_HOUR;
-        int withHoursRemoved = remainingSeconds % SECONDS_PER_HOUR;
-        int remainingMinutes = withHoursRemoved / SECONDS_PER_MINUTE;
-        int remainingSeconds = withHoursRemoved % SECONDS_PER_MINUTE;
-        String remainingTimeText = String.valueOf(remainingHours)
-                + ":" + String.valueOf(remainingMinutes)
-                + ":" + String.valueOf(remainingSeconds);
-        listener.onTimeUpdated(remainingTimeText);
+        listener.onTimeUpdated(TimeUtils.getSecondsAsCountdown(remainingSeconds));
+    }
+
+    public void finish() {
+        listener = null;
+        handler.removeCallbacksAndMessages(null);
     }
 }

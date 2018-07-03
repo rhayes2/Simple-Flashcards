@@ -17,6 +17,7 @@ import com.randomappsinc.simpleflashcards.R;
 import com.randomappsinc.simpleflashcards.constants.Constants;
 import com.randomappsinc.simpleflashcards.constants.QuizScore;
 import com.randomappsinc.simpleflashcards.dialogs.QuitQuizDialog;
+import com.randomappsinc.simpleflashcards.managers.TimerManager;
 import com.randomappsinc.simpleflashcards.models.Problem;
 import com.randomappsinc.simpleflashcards.models.Quiz;
 import com.randomappsinc.simpleflashcards.models.QuizSettings;
@@ -60,6 +61,7 @@ public class QuizActivity extends StandardActivity implements QuitQuizDialog.Lis
     private Quiz quiz;
     private QuitQuizDialog quitQuizDialog;
     private QuizSettings quizSettings;
+    @Nullable private TimerManager timerManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,6 +75,8 @@ public class QuizActivity extends StandardActivity implements QuitQuizDialog.Lis
         quizSettings = getIntent().getParcelableExtra(Constants.QUIZ_SETTINGS_KEY);
         if (quizSettings.getNumSeconds() <= 0) {
             setTitle(flashcardSet.getName());
+        } else {
+            timerManager = new TimerManager(timerListener, quizSettings.getNumSeconds());
         }
 
         quitQuizDialog = new QuitQuizDialog(this, this);
@@ -87,6 +91,18 @@ public class QuizActivity extends StandardActivity implements QuitQuizDialog.Lis
         }
         loadCurrentQuestionIntoView();
     }
+
+    private final TimerManager.Listener timerListener = new TimerManager.Listener() {
+        @Override
+        public void onTimeUpdated(String time) {
+            setTitle(time);
+        }
+
+        @Override
+        public void onTimeUp() {
+            fadeOutProblemPage();
+        }
+    };
 
     protected void loadCurrentQuestionIntoView() {
         // Uncheck currently chosen option if applicable
@@ -219,7 +235,7 @@ public class QuizActivity extends StandardActivity implements QuitQuizDialog.Lis
         }
     }
 
-    private void fadeOutProblemPage() {
+    protected void fadeOutProblemPage() {
         problemParent
                 .animate()
                 .alpha(0)
@@ -397,6 +413,30 @@ public class QuizActivity extends StandardActivity implements QuitQuizDialog.Lis
     @Override
     public void onBackPressed() {
         onQuizExit();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (timerManager != null) {
+            timerManager.resumeTimer();
+        }
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        if (timerManager != null) {
+            timerManager.pauseTimer();
+        }
+    }
+
+    @Override
+    public void finish() {
+        super.finish();
+        if (timerManager != null) {
+            timerManager.finish();
+        }
     }
 
     @Override
