@@ -78,6 +78,7 @@ public class QuizResultsAdapter extends RecyclerView.Adapter<QuizResultsAdapter.
         @BindColor(R.color.green) int green;
         @BindColor(R.color.red) int red;
         @BindString(R.string.quiz_question_header) String headerTemplate;
+        @BindString(R.string.unsubmitted) String unsubmitted;
 
         QuizResultViewHolder(View view) {
             super(view);
@@ -101,7 +102,8 @@ public class QuizResultsAdapter extends RecyclerView.Adapter<QuizResultsAdapter.
             boolean wasUserCorrect = problem.wasUserCorrect();
             yourAnswerIcon.setText(wasUserCorrect ? R.string.check_icon : R.string.x_icon);
             yourAnswerIcon.setTextColor(wasUserCorrect ? green : red);
-            yourAnswer.setText(problem.getGivenAnswer());
+            String givenAnswer = problem.getGivenAnswer();
+            yourAnswer.setText(TextUtils.isEmpty(givenAnswer) ? unsubmitted : givenAnswer);
 
             if (wasUserCorrect) {
                 correctAnswerHeader.setVisibility(View.GONE);

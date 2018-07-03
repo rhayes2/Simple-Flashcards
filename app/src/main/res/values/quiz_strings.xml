@@ -23,4 +23,6 @@
 
     <string name="check_icon">{ion-checkmark-round}</string>
     <string name="x_icon">{ion-close-round}</string>
+    
+    <string name="unsubmitted">Unsubmitted</string>
 </resources>

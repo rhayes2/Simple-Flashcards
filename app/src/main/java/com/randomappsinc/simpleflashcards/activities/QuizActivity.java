@@ -228,6 +228,9 @@ public class QuizActivity extends StandardActivity implements QuitQuizDialog.Lis
             quiz.submitAnswer(chosenButton.getText().toString());
             quiz.advanceToNextProblem();
             if (quiz.isQuizComplete()) {
+                if (timerManager != null) {
+                    timerManager.stopTimer();
+                }
                 fadeOutProblemPage();
             } else {
                 animateQuestionOut();
@@ -369,6 +372,9 @@ public class QuizActivity extends StandardActivity implements QuitQuizDialog.Lis
     @OnClick(R.id.retake)
     public void retake() {
         quiz = new Quiz(flashcardSet, quizSettings.getNumQuestions());
+        if (timerManager != null) {
+            timerManager.resetAndStart();
+        }
         fadeOutResultsPage();
     }
 

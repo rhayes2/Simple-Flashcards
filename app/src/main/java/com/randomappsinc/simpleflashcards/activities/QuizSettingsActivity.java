@@ -76,6 +76,7 @@ public class QuizSettingsActivity extends StandardActivity {
         int current = Integer.valueOf(numMinutes.getText().toString());
         current = Math.max(1, current - 5);
         numMinutes.setText(String.valueOf(current));
+        setTimeLimit.setChecked(true);
     }
 
     @OnClick(R.id.minus_1_minute)
@@ -83,6 +84,7 @@ public class QuizSettingsActivity extends StandardActivity {
         int current = Integer.valueOf(numMinutes.getText().toString());
         current = Math.max(1, current - 1);
         numMinutes.setText(String.valueOf(current));
+        setTimeLimit.setChecked(true);
     }
 
     @OnClick(R.id.plus_one_minute)
@@ -90,6 +92,7 @@ public class QuizSettingsActivity extends StandardActivity {
         int current = Integer.valueOf(numMinutes.getText().toString());
         current = Math.min(999, current + 1);
         numMinutes.setText(String.valueOf(current));
+        setTimeLimit.setChecked(true);
     }
 
     @OnClick(R.id.plus_5_minutes)
@@ -97,6 +100,7 @@ public class QuizSettingsActivity extends StandardActivity {
         int current = Integer.valueOf(numMinutes.getText().toString());
         current = Math.min(999, current + 5);
         numMinutes.setText(String.valueOf(current));
+        setTimeLimit.setChecked(true);
     }
 
     @OnClick(R.id.start_quiz)
