@@ -47,7 +47,7 @@
             android:configChanges="orientation|screenSize"/>
 
         <activity
-            android:name=".activities.StudyModeActivity"
+            android:name=".activities.BrowseFlashcardsActivity"
             android:theme="@style/AppTheme.StudyMode"
             android:configChanges="orientation|screenSize"/>
 

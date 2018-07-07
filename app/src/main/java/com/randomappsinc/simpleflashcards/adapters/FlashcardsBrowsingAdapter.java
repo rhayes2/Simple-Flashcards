@@ -4,9 +4,11 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 
+import com.randomappsinc.simpleflashcards.R;
 import com.randomappsinc.simpleflashcards.fragments.FlashcardFragment;
 import com.randomappsinc.simpleflashcards.persistence.DatabaseManager;
 import com.randomappsinc.simpleflashcards.persistence.models.Flashcard;
+import com.randomappsinc.simpleflashcards.utils.UIUtils;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -14,23 +16,32 @@ import java.util.List;
 
 public class FlashcardsBrowsingAdapter extends FragmentStatePagerAdapter {
 
-    private List<Integer> flashcardIds;
+    private List<Integer> originalFlashcardIds = new ArrayList<>();
+    private List<Integer> shuffledFlashcardsIds = new ArrayList<>();
+    private boolean isShuffled = false;
 
     public FlashcardsBrowsingAdapter(FragmentManager fragmentManager, int setId) {
         super(fragmentManager);
         List<Flashcard> flashcards = DatabaseManager.get().getAllFlashcards(setId);
-        flashcardIds = new ArrayList<>();
         for (Flashcard flashcard : flashcards) {
-            flashcardIds.add(flashcard.getId());
+            originalFlashcardIds.add(flashcard.getId());
+            shuffledFlashcardsIds.add(flashcard.getId());
         }
     }
 
-    public void shuffle() {
-        Collections.shuffle(flashcardIds);
+    public void toggleShuffle() {
+        isShuffled = !isShuffled;
+        if (isShuffled) {
+            Collections.shuffle(shuffledFlashcardsIds);
+            UIUtils.showShortToast(R.string.flashcards_shuffled);
+        } else {
+            UIUtils.showShortToast(R.string.flashcards_order_restored);
+        }
     }
 
     @Override
     public Fragment getItem(int position) {
+        List<Integer> flashcardIds = isShuffled ? shuffledFlashcardsIds : originalFlashcardIds;
         return FlashcardFragment.create(
                 flashcardIds.get(position),
                 position + 1,
@@ -39,6 +50,6 @@ public class FlashcardsBrowsingAdapter extends FragmentStatePagerAdapter {
 
     @Override
     public int getCount() {
-        return flashcardIds.size();
+        return originalFlashcardIds.size();
     }
 }

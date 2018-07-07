@@ -136,7 +136,7 @@ public class MainActivity extends StandardActivity
                     Snackbar.LENGTH_LONG);
         } else {
             startActivity(new Intent(
-                    this, StudyModeActivity.class)
+                    this, BrowseFlashcardsActivity.class)
                     .putExtra(Constants.FLASHCARD_SET_ID_KEY, flashcardSet.getId()));
         }
     }

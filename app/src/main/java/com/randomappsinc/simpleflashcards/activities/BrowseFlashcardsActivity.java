@@ -3,6 +3,7 @@ package com.randomappsinc.simpleflashcards.activities;
 import android.media.AudioManager;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
+import android.view.View;
 import android.widget.SeekBar;
 
 import com.randomappsinc.simpleflashcards.R;
@@ -11,17 +12,19 @@ import com.randomappsinc.simpleflashcards.constants.Constants;
 import com.randomappsinc.simpleflashcards.managers.TextToSpeechManager;
 import com.randomappsinc.simpleflashcards.persistence.DatabaseManager;
 import com.randomappsinc.simpleflashcards.persistence.models.FlashcardSet;
-import com.randomappsinc.simpleflashcards.utils.UIUtils;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.OnPageChange;
 
-public class StudyModeActivity extends StandardActivity {
+public class BrowseFlashcardsActivity extends StandardActivity {
+
+    private static final float UNSHUFFLE_ALPHA = 0.25f;
 
     @BindView(R.id.flashcards_pager) ViewPager flashcardsPager;
     @BindView(R.id.flashcards_slider) SeekBar flashcardsSlider;
+    @BindView(R.id.shuffle) View shuffleToggle;
 
     private FlashcardsBrowsingAdapter flashcardsBrowsingAdapter;
     private TextToSpeechManager textToSpeechManager;
@@ -29,7 +32,7 @@ public class StudyModeActivity extends StandardActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.study_mode);
+        setContentView(R.layout.browse_flashcards);
         ButterKnife.bind(this);
 
         textToSpeechManager = TextToSpeechManager.get();
@@ -70,11 +73,11 @@ public class StudyModeActivity extends StandardActivity {
 
     @OnClick(R.id.shuffle)
     public void shuffleFlashcards() {
-        flashcardsBrowsingAdapter.shuffle();
+        flashcardsBrowsingAdapter.toggleShuffle();
         flashcardsPager.setAdapter(flashcardsBrowsingAdapter);
         flashcardsPager.setCurrentItem(0);
         flashcardsSlider.setProgress(0);
-        UIUtils.showShortToast(R.string.flashcard_set_shuffled);
+        shuffleToggle.setAlpha(shuffleToggle.getAlpha() < 1 ? 1.0f : UNSHUFFLE_ALPHA);
     }
 
     @OnClick(R.id.back)

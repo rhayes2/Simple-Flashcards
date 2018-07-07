@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -24,6 +23,7 @@
             android:id="@+id/shuffle"
             android:text="@string/shuffle_icon"
             android:layout_alignParentRight="true"
+            android:alpha="0.25"
             style="@style/action_bar_icon"/>
     </RelativeLayout>
 
@@ -32,8 +32,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="12dp"
-        android:layout_alignParentBottom="true"
-        android:progressBackgroundTint="@color/white"/>
+        android:layout_alignParentBottom="true"/>
 
     <android.support.v4.view.ViewPager
         android:id="@+id/flashcards_pager"
