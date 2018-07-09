@@ -19,6 +19,13 @@
             android:layout_alignParentLeft="true"
             style="@style/action_bar_icon"/>
 
+        <TextView
+            android:id="@+id/term_definition_toggle"
+            android:text="@string/t"
+            android:layout_toLeftOf="@id/shuffle"
+            android:background="@drawable/white_square_border"
+            style="@style/action_bar_icon"/>
+
         <com.joanzapata.iconify.widget.IconTextView
             android:id="@+id/shuffle"
             android:text="@string/shuffle_icon"

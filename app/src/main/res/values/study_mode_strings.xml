@@ -13,4 +13,7 @@
     <string name="flashcards_order_restored">Flashcards order restored.</string>
 
     <string name="text_to_speech_fail">We were unable to initialize your device\'s Text To Speech engine.</string>
+
+    <string name="t">T</string>
+    <string name="d">D</string>
 </resources>
