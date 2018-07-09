@@ -16,4 +16,7 @@
 
     <string name="t">T</string>
     <string name="d">D</string>
+
+    <string name="now_terms_default">Now showing terms by default.</string>
+    <string name="now_definitions_default">Now showing definitions by default.</string>
 </resources>

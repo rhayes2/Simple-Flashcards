@@ -5,10 +5,12 @@ import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.view.View;
 import android.widget.SeekBar;
+import android.widget.TextView;
 
 import com.randomappsinc.simpleflashcards.R;
 import com.randomappsinc.simpleflashcards.adapters.FlashcardsBrowsingAdapter;
 import com.randomappsinc.simpleflashcards.constants.Constants;
+import com.randomappsinc.simpleflashcards.managers.BrowseFlashcardsSettingsManager;
 import com.randomappsinc.simpleflashcards.managers.TextToSpeechManager;
 import com.randomappsinc.simpleflashcards.persistence.DatabaseManager;
 import com.randomappsinc.simpleflashcards.persistence.models.FlashcardSet;
@@ -24,10 +26,12 @@ public class BrowseFlashcardsActivity extends StandardActivity {
 
     @BindView(R.id.flashcards_pager) ViewPager flashcardsPager;
     @BindView(R.id.flashcards_slider) SeekBar flashcardsSlider;
+    @BindView(R.id.term_definition_toggle) TextView defaultSideToggle;
     @BindView(R.id.shuffle) View shuffleToggle;
 
     private FlashcardsBrowsingAdapter flashcardsBrowsingAdapter;
-    private TextToSpeechManager textToSpeechManager;
+    private TextToSpeechManager textToSpeechManager = TextToSpeechManager.get();
+    private BrowseFlashcardsSettingsManager settingsManager = BrowseFlashcardsSettingsManager.get();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,7 +39,6 @@ public class BrowseFlashcardsActivity extends StandardActivity {
         setContentView(R.layout.browse_flashcards);
         ButterKnife.bind(this);
 
-        textToSpeechManager = TextToSpeechManager.get();
         setVolumeControlStream(AudioManager.STREAM_MUSIC);
 
         int setId = getIntent().getIntExtra(Constants.FLASHCARD_SET_ID_KEY, 0);
@@ -71,6 +74,12 @@ public class BrowseFlashcardsActivity extends StandardActivity {
         flashcardsSlider.setProgress(position);
     }
 
+    @OnClick(R.id.term_definition_toggle)
+    public void toggleDefaultSide() {
+        settingsManager.toggleDefaultSide();
+        defaultSideToggle.setText(settingsManager.getShowTermsByDefault() ? R.string.t : R.string.d);
+    }
+
     @OnClick(R.id.shuffle)
     public void shuffleFlashcards() {
         flashcardsBrowsingAdapter.toggleShuffle();
@@ -89,5 +98,11 @@ public class BrowseFlashcardsActivity extends StandardActivity {
     public void onPause() {
         super.onPause();
         textToSpeechManager.stopSpeaking();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        settingsManager.shutdown();
     }
 }

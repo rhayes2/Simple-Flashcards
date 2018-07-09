@@ -17,6 +17,7 @@ import android.widget.TextView;
 import com.randomappsinc.simpleflashcards.R;
 import com.randomappsinc.simpleflashcards.activities.PictureFullViewActivity;
 import com.randomappsinc.simpleflashcards.constants.Constants;
+import com.randomappsinc.simpleflashcards.managers.BrowseFlashcardsSettingsManager;
 import com.randomappsinc.simpleflashcards.managers.TextToSpeechManager;
 import com.randomappsinc.simpleflashcards.persistence.DatabaseManager;
 import com.randomappsinc.simpleflashcards.persistence.models.Flashcard;
@@ -53,9 +54,10 @@ public class FlashcardFragment extends Fragment {
     @BindInt(R.integer.default_anim_length) int flipAnimLength;
 
     private Flashcard flashcard;
-    protected boolean isShowingTerm = true;
-    private TextToSpeechManager textToSpeechManager;
+    protected boolean isShowingTerm;
+    private TextToSpeechManager textToSpeechManager = TextToSpeechManager.get();
     private Unbinder unbinder;
+    private BrowseFlashcardsSettingsManager settingsManager = BrowseFlashcardsSettingsManager.get();
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -65,7 +67,8 @@ public class FlashcardFragment extends Fragment {
                 false);
         unbinder = ButterKnife.bind(this, rootView);
 
-        textToSpeechManager = TextToSpeechManager.get();
+        settingsManager.addListener(defaultSideListener);
+        isShowingTerm = settingsManager.getShowTermsByDefault();
 
         int flashcardId = getArguments().getInt(Constants.FLASHCARD_ID_KEY);
         flashcard = DatabaseManager.get().getFlashcard(flashcardId);
@@ -138,6 +141,15 @@ public class FlashcardFragment extends Fragment {
         }
     }
 
+    private final BrowseFlashcardsSettingsManager.Listener defaultSideListener =
+            new BrowseFlashcardsSettingsManager.Listener() {
+                @Override
+                public void onDefaultSideChanged(boolean showTermsByDefault) {
+                    isShowingTerm = showTermsByDefault;
+                    loadFlashcardIntoView();
+                }
+            };
+
     @OnClick(R.id.speak)
     public void speakFlashcard() {
         textToSpeechManager.speak(isShowingTerm ? flashcard.getTerm() : flashcard.getDefinition());
@@ -158,6 +170,7 @@ public class FlashcardFragment extends Fragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+        settingsManager.removeListener(defaultSideListener);
         unbinder.unbind();
     }
 }
