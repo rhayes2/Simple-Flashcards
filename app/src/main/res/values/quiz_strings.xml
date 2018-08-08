@@ -32,5 +32,5 @@
         <item>@string/right</item>
     </string-array>
     <string name="none_wrong">Congratulations, you got no questions wrong! {fa-smile-o}</string>
-    <string name="none_right">Sorry, you got no questions right! {fa-frown-o}</string>
+    <string name="none_right">Sorry, you got no questions right. {fa-frown-o}</string>
 </resources>

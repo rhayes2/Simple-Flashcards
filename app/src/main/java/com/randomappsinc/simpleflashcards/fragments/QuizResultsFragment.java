@@ -9,6 +9,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.randomappsinc.simpleflashcards.R;
 import com.randomappsinc.simpleflashcards.activities.PictureFullViewActivity;
@@ -25,15 +26,20 @@ import butterknife.Unbinder;
 
 public class QuizResultsFragment extends Fragment {
 
-    public static QuizResultsFragment getInstance(ArrayList<Problem> problems, int numQuestions) {
+    public static QuizResultsFragment getInstance(
+            ArrayList<Problem> problems,
+            int numQuestions,
+            boolean showWrongAnswers) {
         QuizResultsFragment quizResultsFragment = new QuizResultsFragment();
         Bundle bundle = new Bundle();
         bundle.putParcelableArrayList(Constants.PROBLEMS_KEY, problems);
         bundle.putInt(Constants.NUM_QUESTIONS_KEY, numQuestions);
+        bundle.putBoolean(Constants.SHOW_WRONG_QUESTIONS_KEY, showWrongAnswers);
         quizResultsFragment.setArguments(bundle);
         return quizResultsFragment;
     }
 
+    @BindView(R.id.no_problems) TextView noProblems;
     @BindView(R.id.quiz_results) RecyclerView quizResults;
 
     private Unbinder unbinder;
@@ -47,9 +53,21 @@ public class QuizResultsFragment extends Fragment {
         unbinder = ButterKnife.bind(this, rootView);
 
         List<Problem> problems = getArguments().getParcelableArrayList(Constants.PROBLEMS_KEY);
-        int numQuestions = getArguments().getInt(Constants.NUM_QUESTIONS_KEY);
-        QuizResultsAdapter quizResultsAdapter = new QuizResultsAdapter(problems, numQuestions,resultClickListener);
-        quizResults.setAdapter(quizResultsAdapter);
+
+        if (problems != null && !problems.isEmpty()) {
+            noProblems.setVisibility(View.GONE);
+            int numQuestions = getArguments().getInt(Constants.NUM_QUESTIONS_KEY);
+            QuizResultsAdapter quizResultsAdapter = new QuizResultsAdapter(
+                    problems,
+                    numQuestions,
+                    resultClickListener);
+            quizResults.setAdapter(quizResultsAdapter);
+        } else {
+            quizResults.setVisibility(View.GONE);
+            boolean showWrongAnswers = getArguments().getBoolean(Constants.SHOW_WRONG_QUESTIONS_KEY);
+            noProblems.setText(showWrongAnswers ? R.string.none_wrong : R.string.none_right);
+            noProblems.setVisibility(View.VISIBLE);
+        }
         return rootView;
     }
 

@@ -33,7 +33,7 @@ public class QuizResultsTabsAdapter extends FragmentPagerAdapter {
                         wrongProblems.add(problem);
                     }
                 }
-                return QuizResultsFragment.getInstance(wrongProblems, problems.size());
+                return QuizResultsFragment.getInstance(wrongProblems, problems.size(), true);
             case 1:
                 ArrayList<Problem> rightProblems = new ArrayList<>();
                 for (Problem problem : problems) {
@@ -41,7 +41,7 @@ public class QuizResultsTabsAdapter extends FragmentPagerAdapter {
                         rightProblems.add(problem);
                     }
                 }
-                return QuizResultsFragment.getInstance(rightProblems, problems.size());
+                return QuizResultsFragment.getInstance(rightProblems, problems.size(), false);
             default:
                 return null;
         }

@@ -1,11 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<FrameLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/white"
-    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
+
+    <com.joanzapata.iconify.widget.IconTextView
+        android:id="@+id/no_problems"
+        style="@style/empty_state_text"/>
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/quiz_results"
@@ -15,4 +18,4 @@
         android:paddingBottom="4dp"
         android:clipToPadding="false"
         app:layoutManager="android.support.v7.widget.LinearLayoutManager"/>
-</LinearLayout>
+</FrameLayout>

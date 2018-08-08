@@ -13,4 +13,5 @@ public class Constants {
     public static final String QUIZ_SETTINGS_KEY = "quizSettings";
     public static final String PROBLEMS_KEY = "problems";
     public static final String NUM_QUESTIONS_KEY = "numQuestions";
+    public static final String SHOW_WRONG_QUESTIONS_KEY = "showWrongQuestions";
 }
