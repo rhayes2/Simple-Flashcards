@@ -55,10 +55,12 @@ public class Quiz {
         // Indexes of the flashcards we are generating questions for
         List<Integer> indexes = RandUtils.getProblemIndexes(flashcards.size(), numQuestions);
 
+        int currentQuestionPosition = 1;
         for (int index : indexes) {
             Flashcard flashcard = flashcards.get(index);
 
             Problem problem = new Problem();
+            problem.setQuestionNumber(currentQuestionPosition);
             problem.setQuestion(flashcard.getTerm());
             problem.setQuestionImageUrl(flashcard.getTermImageUrl());
             problem.setAnswer(flashcard.getDefinition());
@@ -71,6 +73,8 @@ public class Quiz {
             }
             problem.setOptions(options);
             problems.add(problem);
+
+            currentQuestionPosition++;
         }
     }
 

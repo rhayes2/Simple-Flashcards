@@ -25,4 +25,12 @@
     <string name="x_icon">{ion-close-round}</string>
     
     <string name="unsubmitted">Unsubmitted</string>
+    <string name="wrong">Wrong</string>
+    <string name="right">Right</string>
+    <string-array name="quiz_results_tabs">
+        <item>@string/wrong</item>
+        <item>@string/right</item>
+    </string-array>
+    <string name="none_wrong">Congratulations, you got no questions wrong! {fa-smile-o}</string>
+    <string name="none_right">Sorry, you got no questions right! {fa-frown-o}</string>
 </resources>

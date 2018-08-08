@@ -57,6 +57,8 @@
 
         <activity
             android:name=".activities.QuizResultsActivity"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:label="@string/quiz_results"
             android:configChanges="orientation|screenSize"/>
 
         <activity

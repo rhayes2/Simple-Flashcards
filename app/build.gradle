@@ -8,8 +8,8 @@ android {
         applicationId "com.randomappsinc.simpleflashcards"
         minSdkVersion 14
         targetSdkVersion 27
-        versionCode 223
-        versionName "2.2.3"
+        versionCode 224
+        versionName "2.2.4"
     }
     buildTypes {
         release {
@@ -34,6 +34,7 @@ dependencies {
     implementation 'com.jakewharton:butterknife:8.8.1'
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
     implementation 'com.joanzapata.iconify:android-iconify-ionicons:2.2.2'
+    implementation 'com.joanzapata.iconify:android-iconify-fontawesome:2.2.2'
     implementation 'com.afollestad.material-dialogs:core:0.9.6.0'
     implementation 'com.squareup.retrofit2:retrofit:2.3.0'
     implementation 'com.squareup.retrofit2:converter-gson:2.3.0'

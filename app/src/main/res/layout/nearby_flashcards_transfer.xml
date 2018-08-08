@@ -15,7 +15,7 @@
         <android.support.v7.widget.Toolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
+            android:layout_height="?android:attr/actionBarSize"
             android:background="@color/app_blue"
             android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
             app:popupTheme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"/>
@@ -27,16 +27,7 @@
 
         <android.support.design.widget.TabLayout
             android:id="@+id/nearby_flashcards_tabs"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/app_blue"
-            app:tabGravity="fill"
-            app:tabMode="fixed"
-            app:tabMaxWidth="0dp"
-            app:tabIndicatorColor="@color/green"
-            app:tabIndicatorHeight="4dp"
-            app:tabTextColor="@color/half_white"
-            app:tabSelectedTextColor="@color/white"/>
+            style="@style/tabs"/>
 
         <View
             android:layout_width="match_parent"

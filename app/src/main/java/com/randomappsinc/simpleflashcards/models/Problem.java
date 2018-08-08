@@ -9,6 +9,7 @@ import java.util.List;
 
 public class Problem implements Parcelable {
 
+    private int questionNumber;
     private String question;
     @Nullable private String questionImageUrl;
     private String answer;
@@ -16,6 +17,14 @@ public class Problem implements Parcelable {
     private String givenAnswer;
 
     Problem() {}
+
+    public int getQuestionNumber() {
+        return questionNumber;
+    }
+
+    public void setQuestionNumber(int questionNumber) {
+        this.questionNumber = questionNumber;
+    }
 
     public String getQuestion() {
         return question;
@@ -63,6 +72,7 @@ public class Problem implements Parcelable {
     }
 
     protected Problem(Parcel in) {
+        questionNumber = in.readInt();
         question = in.readString();
         questionImageUrl = in.readString();
         answer = in.readString();
@@ -82,6 +92,7 @@ public class Problem implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(questionNumber);
         dest.writeString(question);
         dest.writeString(questionImageUrl);
         dest.writeString(answer);

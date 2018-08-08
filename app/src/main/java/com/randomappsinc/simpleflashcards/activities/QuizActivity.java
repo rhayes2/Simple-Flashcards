@@ -387,8 +387,7 @@ public class QuizActivity extends StandardActivity implements QuitQuizDialog.Lis
     public void viewResults() {
         Intent intent = new Intent(this, QuizResultsActivity.class)
                 .putParcelableArrayListExtra(Constants.QUIZ_RESULTS_KEY, quiz.getProblems())
-                .putExtra(Constants.FLASHCARD_SET_NAME_KEY, flashcardSet.getName())
-                .putExtra(Constants.FLASHCARD_SET_SIZE_KEY, flashcardSet.getFlashcards().size());
+                .putExtra(Constants.NUM_QUESTIONS_KEY, quizSettings.getNumQuestions());
         startActivity(intent);
         overridePendingTransition(R.anim.slide_in_bottom, R.anim.stay);
     }

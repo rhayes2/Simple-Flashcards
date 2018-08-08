@@ -30,17 +30,17 @@ public class QuizResultsAdapter extends RecyclerView.Adapter<QuizResultsAdapter.
 
     private Context context;
     protected List<Problem> problems;
-    protected int flashcardSetSize;
+    protected int numProblems;
     protected Listener listener;
 
     public QuizResultsAdapter(
             Context context,
             List<Problem> problems,
-            int flashcardSetSize,
+            int numProblems,
             @NonNull Listener listener) {
         this.context = context;
         this.problems = problems;
-        this.flashcardSetSize = flashcardSetSize;
+        this.numProblems = numProblems;
         this.listener = listener;
     }
 
@@ -87,7 +87,7 @@ public class QuizResultsAdapter extends RecyclerView.Adapter<QuizResultsAdapter.
 
         void loadResult(int position) {
             Problem problem = problems.get(position);
-            String headerText = String.format(headerTemplate, position + 1, flashcardSetSize);
+            String headerText = String.format(headerTemplate, problem.getQuestionNumber(), numProblems);
             questionHeader.setText(headerText);
             question.setText(problem.getQuestion());
 

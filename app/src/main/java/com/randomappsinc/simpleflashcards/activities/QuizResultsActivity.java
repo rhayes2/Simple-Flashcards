@@ -1,13 +1,14 @@
 package com.randomappsinc.simpleflashcards.activities;
 
-import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.widget.RecyclerView;
+import android.support.design.widget.TabLayout;
+import android.support.v4.view.ViewPager;
+import android.support.v7.widget.Toolbar;
 
 import com.joanzapata.iconify.IconDrawable;
 import com.joanzapata.iconify.fonts.IoniconsIcons;
 import com.randomappsinc.simpleflashcards.R;
-import com.randomappsinc.simpleflashcards.adapters.QuizResultsAdapter;
+import com.randomappsinc.simpleflashcards.adapters.QuizResultsTabsAdapter;
 import com.randomappsinc.simpleflashcards.constants.Constants;
 import com.randomappsinc.simpleflashcards.models.Problem;
 
@@ -18,7 +19,9 @@ import butterknife.ButterKnife;
 
 public class QuizResultsActivity extends StandardActivity {
 
-    @BindView(R.id.quiz_results) RecyclerView quizResults;
+    @BindView(R.id.toolbar) Toolbar toolbar;
+    @BindView(R.id.quiz_results_tabs) TabLayout tabs;
+    @BindView(R.id.quiz_results_pager) ViewPager viewPager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,33 +29,18 @@ public class QuizResultsActivity extends StandardActivity {
         setContentView(R.layout.quiz_results);
         ButterKnife.bind(this);
 
+        setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar()
                 .setHomeAsUpIndicator(new IconDrawable(this, IoniconsIcons.ion_android_close)
                 .colorRes(R.color.white)
                 .actionBarSize());
 
-        String setName = getIntent().getStringExtra(Constants.FLASHCARD_SET_NAME_KEY);
-        setTitle(setName);
-
         List<Problem> problems = getIntent().getParcelableArrayListExtra(Constants.QUIZ_RESULTS_KEY);
-        int flashcardSetSize = getIntent().getIntExtra(Constants.FLASHCARD_SET_SIZE_KEY, 0);
-        quizResults.setAdapter(new QuizResultsAdapter(
-                this,
-                problems,
-                flashcardSetSize,
-                resultClickListener));
+        int numQuestions = getIntent().getIntExtra(Constants.NUM_QUESTIONS_KEY, 0);
+        viewPager.setAdapter(new QuizResultsTabsAdapter(getSupportFragmentManager(), problems, numQuestions));
+        tabs.setupWithViewPager(viewPager);
     }
-
-    private final QuizResultsAdapter.Listener resultClickListener = new QuizResultsAdapter.Listener() {
-        @Override
-        public void onImageClicked(String imageUrl) {
-            Intent intent = new Intent(QuizResultsActivity.this, PictureFullViewActivity.class)
-                    .putExtra(Constants.IMAGE_URL_KEY, imageUrl);
-            startActivity(intent);
-            overridePendingTransition(R.anim.fade_in, 0);
-        }
-    };
 
     @Override
     public void finish() {
