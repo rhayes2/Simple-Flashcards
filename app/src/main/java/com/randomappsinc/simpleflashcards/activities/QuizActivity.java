@@ -386,8 +386,7 @@ public class QuizActivity extends StandardActivity implements QuitQuizDialog.Lis
     @OnClick(R.id.view_results)
     public void viewResults() {
         Intent intent = new Intent(this, QuizResultsActivity.class)
-                .putParcelableArrayListExtra(Constants.QUIZ_RESULTS_KEY, quiz.getProblems())
-                .putExtra(Constants.NUM_QUESTIONS_KEY, quizSettings.getNumQuestions());
+                .putParcelableArrayListExtra(Constants.QUIZ_RESULTS_KEY, quiz.getProblems());
         startActivity(intent);
         overridePendingTransition(R.anim.slide_in_bottom, R.anim.stay);
     }

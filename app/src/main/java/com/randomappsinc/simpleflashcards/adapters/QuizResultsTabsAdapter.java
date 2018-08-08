@@ -17,7 +17,7 @@ public class QuizResultsTabsAdapter extends FragmentPagerAdapter {
     private String[] resultsTabs;
     private List<Problem> problems;
 
-    public QuizResultsTabsAdapter(FragmentManager fragmentManager, List<Problem> problems, int numQuestions) {
+    public QuizResultsTabsAdapter(FragmentManager fragmentManager, List<Problem> problems) {
         super(fragmentManager);
         this.resultsTabs = StringUtils.getStringArray(R.array.quiz_results_tabs);
         this.problems = problems;
@@ -33,7 +33,7 @@ public class QuizResultsTabsAdapter extends FragmentPagerAdapter {
                         wrongProblems.add(problem);
                     }
                 }
-                return QuizResultsFragment.getInstance(wrongProblems);
+                return QuizResultsFragment.getInstance(wrongProblems, problems.size());
             case 1:
                 ArrayList<Problem> rightProblems = new ArrayList<>();
                 for (Problem problem : problems) {
@@ -41,7 +41,7 @@ public class QuizResultsTabsAdapter extends FragmentPagerAdapter {
                         rightProblems.add(problem);
                     }
                 }
-                return QuizResultsFragment.getInstance(rightProblems);
+                return QuizResultsFragment.getInstance(rightProblems, problems.size());
             default:
                 return null;
         }

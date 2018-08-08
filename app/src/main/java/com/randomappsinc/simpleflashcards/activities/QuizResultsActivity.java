@@ -37,8 +37,7 @@ public class QuizResultsActivity extends StandardActivity {
                 .actionBarSize());
 
         List<Problem> problems = getIntent().getParcelableArrayListExtra(Constants.QUIZ_RESULTS_KEY);
-        int numQuestions = getIntent().getIntExtra(Constants.NUM_QUESTIONS_KEY, 0);
-        viewPager.setAdapter(new QuizResultsTabsAdapter(getSupportFragmentManager(), problems, numQuestions));
+        viewPager.setAdapter(new QuizResultsTabsAdapter(getSupportFragmentManager(), problems));
         tabs.setupWithViewPager(viewPager);
     }
 

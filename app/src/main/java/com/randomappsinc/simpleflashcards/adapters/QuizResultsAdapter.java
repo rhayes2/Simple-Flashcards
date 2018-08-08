@@ -1,6 +1,5 @@
 package com.randomappsinc.simpleflashcards.adapters;
 
-import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
@@ -28,17 +27,14 @@ public class QuizResultsAdapter extends RecyclerView.Adapter<QuizResultsAdapter.
         void onImageClicked(String imageUrl);
     }
 
-    private Context context;
     protected List<Problem> problems;
     protected int numProblems;
     protected Listener listener;
 
     public QuizResultsAdapter(
-            Context context,
             List<Problem> problems,
             int numProblems,
             @NonNull Listener listener) {
-        this.context = context;
         this.problems = problems;
         this.numProblems = numProblems;
         this.listener = listener;
@@ -47,7 +43,7 @@ public class QuizResultsAdapter extends RecyclerView.Adapter<QuizResultsAdapter.
     @NonNull
     @Override
     public QuizResultViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View itemView = LayoutInflater.from(context).inflate(
+        View itemView = LayoutInflater.from(parent.getContext()).inflate(
                 R.layout.quiz_result_item_cell,
                 parent,
                 false);
