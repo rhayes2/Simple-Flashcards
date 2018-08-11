@@ -138,7 +138,8 @@ public class QuizActivity extends StandardActivity implements QuitQuizDialog.Lis
         String imageUrl = quiz.getCurrentProblem().getQuestionImageUrl();
         if (!TextUtils.isEmpty(imageUrl)) {
             Intent intent = new Intent(this, PictureFullViewActivity.class)
-                    .putExtra(Constants.IMAGE_URL_KEY, imageUrl);
+                    .putExtra(Constants.IMAGE_URL_KEY, imageUrl)
+                    .putExtra(Constants.CAPTION_KEY, quiz.getCurrentProblem().getQuestion());
             startActivity(intent);
             overridePendingTransition(R.anim.fade_in, 0);
         }

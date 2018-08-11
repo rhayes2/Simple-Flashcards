@@ -24,7 +24,7 @@ import butterknife.OnClick;
 public class QuizResultsAdapter extends RecyclerView.Adapter<QuizResultsAdapter.QuizResultViewHolder> {
 
     public interface Listener {
-        void onImageClicked(String imageUrl);
+        void onImageClicked(Problem problem);
     }
 
     protected List<Problem> problems;
@@ -113,7 +113,7 @@ public class QuizResultsAdapter extends RecyclerView.Adapter<QuizResultsAdapter.
 
         @OnClick(R.id.question_image)
         public void openImageInFullView() {
-            listener.onImageClicked(problems.get(getAdapterPosition()).getQuestionImageUrl());
+            listener.onImageClicked(problems.get(getAdapterPosition()));
         }
     }
 }

@@ -73,19 +73,20 @@ public class QuizResultsFragment extends Fragment {
 
     private final QuizResultsAdapter.Listener resultClickListener = new QuizResultsAdapter.Listener() {
         @Override
-        public void onImageClicked(String imageUrl) {
-            openFullImageView(imageUrl);
+        public void onImageClicked(Problem problem) {
+            openFullImageView(problem);
         }
     };
 
-    protected void openFullImageView(String imageUrl) {
+    protected void openFullImageView(Problem problem) {
         Activity activity = getActivity();
         if (activity == null) {
             return;
         }
 
         Intent intent = new Intent(activity, PictureFullViewActivity.class)
-                .putExtra(Constants.IMAGE_URL_KEY, imageUrl);
+                .putExtra(Constants.IMAGE_URL_KEY, problem.getQuestionImageUrl())
+                .putExtra(Constants.CAPTION_KEY, problem.getQuestion());
         startActivity(intent);
         activity.overridePendingTransition(R.anim.fade_in, 0);
     }

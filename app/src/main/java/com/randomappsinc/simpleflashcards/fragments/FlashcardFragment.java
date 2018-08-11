@@ -161,7 +161,8 @@ public class FlashcardFragment extends Fragment {
         Activity activity = getActivity();
         if (!TextUtils.isEmpty(imageUrl) && activity != null) {
             Intent intent = new Intent(activity, PictureFullViewActivity.class)
-                    .putExtra(Constants.IMAGE_URL_KEY, imageUrl);
+                    .putExtra(Constants.IMAGE_URL_KEY, imageUrl)
+                    .putExtra(Constants.CAPTION_KEY, flashcard.getTerm());
             activity.startActivity(intent);
             activity.overridePendingTransition(R.anim.fade_in, 0);
         }

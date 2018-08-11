@@ -14,4 +14,5 @@ public class Constants {
     public static final String PROBLEMS_KEY = "problems";
     public static final String NUM_QUESTIONS_KEY = "numQuestions";
     public static final String SHOW_WRONG_QUESTIONS_KEY = "showWrongQuestions";
+    public static final String CAPTION_KEY = "caption";
 }

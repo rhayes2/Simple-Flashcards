@@ -24,7 +24,7 @@ import butterknife.OnClick;
 public class QuizletFlashcardsAdapter extends RecyclerView.Adapter<QuizletFlashcardsAdapter.FlashcardViewHolder> {
 
     public interface Listener {
-        void onImageClicked(@NonNull String imageUrl);
+        void onImageClicked(QuizletFlashcard flashcard);
     }
 
     protected Context context;
@@ -93,9 +93,9 @@ public class QuizletFlashcardsAdapter extends RecyclerView.Adapter<QuizletFlashc
 
         @OnClick(R.id.term_image)
         public void openImageInFullView() {
-            String imageUrl = flashcards.get(getAdapterPosition()).getImageUrl();
-            if (!TextUtils.isEmpty(imageUrl)) {
-                listener.onImageClicked(imageUrl);
+            QuizletFlashcard flashcard = flashcards.get(getAdapterPosition());
+            if (!TextUtils.isEmpty(flashcard.getImageUrl())) {
+                listener.onImageClicked(flashcard);
             }
         }
     }

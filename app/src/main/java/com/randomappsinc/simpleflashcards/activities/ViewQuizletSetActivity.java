@@ -2,7 +2,6 @@ package com.randomappsinc.simpleflashcards.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -11,6 +10,7 @@ import android.widget.TextView;
 import com.randomappsinc.simpleflashcards.R;
 import com.randomappsinc.simpleflashcards.adapters.QuizletFlashcardsAdapter;
 import com.randomappsinc.simpleflashcards.api.QuizletFlashcardSetFetcher;
+import com.randomappsinc.simpleflashcards.api.models.QuizletFlashcard;
 import com.randomappsinc.simpleflashcards.api.models.QuizletFlashcardSet;
 import com.randomappsinc.simpleflashcards.constants.Constants;
 import com.randomappsinc.simpleflashcards.persistence.DatabaseManager;
@@ -78,11 +78,12 @@ public class ViewQuizletSetActivity extends StandardActivity {
     private final QuizletFlashcardsAdapter.Listener flashcardClickListener =
             new QuizletFlashcardsAdapter.Listener() {
                 @Override
-                public void onImageClicked(@NonNull String imageUrl) {
+                public void onImageClicked(QuizletFlashcard flashcard) {
                     Intent intent = new Intent(
                             ViewQuizletSetActivity.this,
                             PictureFullViewActivity.class)
-                            .putExtra(Constants.IMAGE_URL_KEY, imageUrl);
+                            .putExtra(Constants.IMAGE_URL_KEY, flashcard.getImageUrl())
+                            .putExtra(Constants.CAPTION_KEY, flashcard.getTerm());
                     startActivity(intent);
                     overridePendingTransition(R.anim.fade_in, 0);
                 }

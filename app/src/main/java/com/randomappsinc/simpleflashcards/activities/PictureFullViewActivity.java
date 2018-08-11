@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.joanzapata.iconify.IconDrawable;
 import com.joanzapata.iconify.fonts.IoniconsIcons;
@@ -23,6 +24,7 @@ public class PictureFullViewActivity extends AppCompatActivity {
 
     @BindView(R.id.parent) View parent;
     @BindView(R.id.picture) ImageView picture;
+    @BindView(R.id.picture_caption) TextView caption;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +46,13 @@ public class PictureFullViewActivity extends AppCompatActivity {
                     .into(picture, imageLoadingCallback);
         } else {
             throw new IllegalArgumentException("Started full view with a blank/null picture URL");
+        }
+
+        String captionText = getIntent().getStringExtra(Constants.CAPTION_KEY);
+        if (!TextUtils.isEmpty(captionText)) {
+            caption.setText(captionText);
+        } else {
+            caption.setVisibility(View.GONE);
         }
     }
 
