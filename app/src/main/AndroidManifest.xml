@@ -90,5 +90,10 @@
             android:name=".activities.QuizSettingsActivity"
             android:label="@string/quiz_settings"
             android:configChanges="orientation|screenSize"/>
+
+        <activity
+            android:name=".activities.QuizletSearchFilterActivity"
+            android:label="@string/filter"
+            android:configChanges="orientation|screenSize"/>
     </application>
 </manifest>

@@ -5,11 +5,14 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.joanzapata.iconify.fonts.IoniconsIcons;
 import com.randomappsinc.simpleflashcards.R;
 import com.randomappsinc.simpleflashcards.adapters.QuizletSearchResultsAdapter;
 import com.randomappsinc.simpleflashcards.api.QuizletSearchManager;
@@ -136,5 +139,24 @@ public class QuizletSearchActivity extends StandardActivity {
     public void onDestroy() {
         super.onDestroy();
         searchManager.clearEverything();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_quizlet_search, menu);
+        UIUtils.loadMenuIcon(menu, R.id.filter, IoniconsIcons.ion_funnel, this);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.filter:
+                startActivity(new Intent(this, QuizletSearchFilterActivity.class));
+                overridePendingTransition(R.anim.slide_in_bottom, R.anim.stay);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 }
