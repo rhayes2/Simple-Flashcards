@@ -4,9 +4,17 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:ignore="RtlHardcoded">
+    tools:ignore="SpUsage, RtlHardcoded">
 
-
+    <CheckBox
+        android:id="@+id/only_show_image_sets"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        android:paddingLeft="4dp"
+        android:text="@string/only_show_image_sets"
+        android:textColor="@color/dark_gray"
+        android:textSize="17dp"/>
 
     <FrameLayout
         android:id="@+id/button_container"

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="filter">Filter</string>
+    <string name="only_show_image_sets">Only show flashcard sets with images</string>
     <string name="apply_filter">Apply Filter</string>
     <string name="filter_applied">Filter applied.</string>
 </resources>

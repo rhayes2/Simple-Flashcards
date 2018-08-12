@@ -47,14 +47,14 @@ public class QuizletRestClient {
         handler = new Handler(backgroundThread.getLooper());
     }
 
-    void findFlashcardSets(final String searchTerm) {
+    void findFlashcardSets(final String searchTerm, final int imageSetsOnly) {
         handler.post(new Runnable() {
             @Override
             public void run() {
                 if (currentFindFlashcardSetsCall != null) {
                     currentFindFlashcardSetsCall.cancel();
                 }
-                currentFindFlashcardSetsCall = quizletService.findFlashcardSets(searchTerm);
+                currentFindFlashcardSetsCall = quizletService.findFlashcardSets(searchTerm, imageSetsOnly);
                 currentFindFlashcardSetsCall.enqueue(new FindFlashcardSetsCallback());
             }
         });

@@ -11,7 +11,7 @@ import retrofit2.http.Query;
 public interface QuizletService {
 
     @GET("search/sets")
-    Call<QuizletSearchResults> findFlashcardSets(@Query("q") String term);
+    Call<QuizletSearchResults> findFlashcardSets(@Query("q") String term, @Query("images_only") int imagesOnly);
 
     @GET("sets/{id}")
     Call<QuizletFlashcardSet> getFlashcardSetInfo(@Path("id") long setId);

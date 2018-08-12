@@ -25,6 +25,7 @@ public class QuizletSearchManager {
 
     @Nullable private Listener listener;
     private QuizletRestClient restClient;
+    private boolean onlyShowImageSets;
 
     private QuizletSearchManager() {
         restClient = QuizletRestClient.getInstance();
@@ -35,13 +36,21 @@ public class QuizletSearchManager {
     }
 
     public void performSearch(String searchTerm) {
-        restClient.findFlashcardSets(searchTerm);
+        restClient.findFlashcardSets(searchTerm, onlyShowImageSets ? 1 : 0);
     }
 
     public void onFlashcardSetsFound(List<QuizletSetResult> flashcardSets) {
         if (listener != null) {
             listener.onResultsFetched(flashcardSets);
         }
+    }
+
+    public boolean getOnlyShowImageSets() {
+        return onlyShowImageSets;
+    }
+
+    public void setOnlyShowImageSets(boolean onlyShowImageSets) {
+        this.onlyShowImageSets = onlyShowImageSets;
     }
 
     public void clearEverything() {

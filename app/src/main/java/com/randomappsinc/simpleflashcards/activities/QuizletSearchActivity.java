@@ -1,5 +1,6 @@
 package com.randomappsinc.simpleflashcards.activities;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -88,7 +89,6 @@ public class QuizletSearchActivity extends StandardActivity {
     @OnTextChanged(value = R.id.flashcard_set_search, callback = OnTextChanged.Callback.AFTER_TEXT_CHANGED)
     public void afterTextChanged(Editable input) {
         if (input.length() > 0) {
-
             searchManager.performSearch(input.toString());
         }
         searchResults.setVisibility(View.GONE);
@@ -136,6 +136,18 @@ public class QuizletSearchActivity extends StandardActivity {
             };
 
     @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        String input = setSearch.getText().toString();
+        if (resultCode == Activity.RESULT_OK && !input.isEmpty()) {
+            searchManager.performSearch(input);
+            searchResults.setVisibility(View.GONE);
+            searchResults.scrollToPosition(0);
+            skeletonResults.setVisibility(View.VISIBLE);
+        }
+    }
+
+    @Override
     public void onDestroy() {
         super.onDestroy();
         searchManager.clearEverything();
@@ -152,7 +164,9 @@ public class QuizletSearchActivity extends StandardActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.filter:
-                startActivity(new Intent(this, QuizletSearchFilterActivity.class));
+                startActivityForResult(
+                        new Intent(this, QuizletSearchFilterActivity.class),
+                        1);
                 overridePendingTransition(R.anim.slide_in_bottom, R.anim.stay);
                 return true;
             default:
