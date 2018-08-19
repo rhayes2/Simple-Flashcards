@@ -159,6 +159,7 @@
     <orderEntry type="library" name="Gradle: android.arch.lifecycle:livedata-core-1.1.0" level="project" />
     <orderEntry type="library" name="Gradle: com.google.android.gms:play-services-tasks-15.0.1" level="project" />
     <orderEntry type="library" name="Gradle: com.squareup.picasso:picasso-2.71828" level="project" />
+    <orderEntry type="library" name="Gradle: com.squareup:seismic:1.0.2@jar" level="project" />
     <orderEntry type="library" name="Gradle: com.joanzapata.iconify:android-iconify-ionicons-2.2.2" level="project" />
     <orderEntry type="library" name="Gradle: android.arch.core:common:1.1.0@jar" level="project" />
     <orderEntry type="library" name="Gradle: com.getkeepsafe.relinker:relinker-1.2.2" level="project" />

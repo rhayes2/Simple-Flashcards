@@ -6,6 +6,7 @@
 
     <string name="speak_icon">{ion-ios-volume-high}</string>
     <string name="back_arrow_icon">{ion-android-arrow-back}</string>
+    <string name="shake_icon">{ion-radio-waves}</string>
     <string name="shuffle_icon">{ion-shuffle}</string>
     <string name="flip_icon">{ion-refresh}</string>
 
@@ -19,4 +20,11 @@
 
     <string name="now_terms_default">Now showing terms by default.</string>
     <string name="now_definitions_default">Now showing definitions by default.</string>
+
+    <string name="shake_it">Shake It!</string>
+    <string name="shake_now_supported">
+        Want to spice it up? Simply shake your phone to jump to a random flashcards!
+        Don\'t like this feature? No problem!
+        You can turn it off and on anytime by clicking the {ion-radio-waves} button at the top of the page!
+    </string>
 </resources>

@@ -19,6 +19,13 @@
             android:layout_alignParentLeft="true"
             style="@style/action_bar_icon"/>
 
+        <com.joanzapata.iconify.widget.IconTextView
+            android:id="@+id/shake_toggle"
+            android:text="@string/shake_icon"
+            android:layout_toLeftOf="@id/term_definition_toggle"
+            android:alpha="0.25"
+            style="@style/action_bar_icon"/>
+
         <TextView
             android:id="@+id/term_definition_toggle"
             android:text="@string/t"

@@ -1,37 +1,45 @@
 package com.randomappsinc.simpleflashcards.activities;
 
+import android.hardware.SensorManager;
 import android.media.AudioManager;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.randomappsinc.simpleflashcards.R;
 import com.randomappsinc.simpleflashcards.adapters.FlashcardsBrowsingAdapter;
 import com.randomappsinc.simpleflashcards.constants.Constants;
 import com.randomappsinc.simpleflashcards.managers.BrowseFlashcardsSettingsManager;
 import com.randomappsinc.simpleflashcards.managers.TextToSpeechManager;
 import com.randomappsinc.simpleflashcards.persistence.DatabaseManager;
+import com.randomappsinc.simpleflashcards.persistence.PreferencesManager;
 import com.randomappsinc.simpleflashcards.persistence.models.FlashcardSet;
+import com.squareup.seismic.ShakeDetector;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.OnPageChange;
 
-public class BrowseFlashcardsActivity extends StandardActivity {
+public class BrowseFlashcardsActivity extends StandardActivity implements ShakeDetector.Listener {
 
-    private static final float UNSHUFFLE_ALPHA = 0.25f;
+    private static final float DISABLED_ALPHA = 0.25f;
 
     @BindView(R.id.flashcards_pager) ViewPager flashcardsPager;
     @BindView(R.id.flashcards_slider) SeekBar flashcardsSlider;
+    @BindView(R.id.shake_toggle) View shakeToggle;
     @BindView(R.id.term_definition_toggle) TextView defaultSideToggle;
     @BindView(R.id.shuffle) View shuffleToggle;
 
     private FlashcardsBrowsingAdapter flashcardsBrowsingAdapter;
     private TextToSpeechManager textToSpeechManager = TextToSpeechManager.get();
     private BrowseFlashcardsSettingsManager settingsManager = BrowseFlashcardsSettingsManager.get();
+    private PreferencesManager preferencesManager = PreferencesManager.get();
+    private ShakeDetector shakeDetector;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,6 +58,21 @@ public class BrowseFlashcardsActivity extends StandardActivity {
 
         flashcardsSlider.setMax(flashcardSet.getFlashcards().size() - 1);
         flashcardsSlider.setOnSeekBarChangeListener(flashcardsSliderListener);
+
+        shakeDetector = new ShakeDetector(this);
+
+        if (preferencesManager.shouldShowShakeAdvice()) {
+            TextView dialogView = (TextView) LayoutInflater.from(this).inflate(
+                    R.layout.dialog_body_text,
+                    null,
+                    false);
+            dialogView.setText(R.string.shake_now_supported);
+            new MaterialDialog.Builder(this)
+                    .title(R.string.shake_it)
+                    .positiveText(android.R.string.yes)
+                    .customView(dialogView, true)
+                    .show();
+        }
     }
 
     private final SeekBar.OnSeekBarChangeListener flashcardsSliderListener =
@@ -68,10 +91,42 @@ public class BrowseFlashcardsActivity extends StandardActivity {
                 public void onStopTrackingTouch(SeekBar seekBar) {}
             };
 
+    @Override
+    public void onSaveInstanceState(Bundle savedInstanceState) {
+        if (preferencesManager.isShakeEnabled()) {
+            shakeDetector.stop();
+        }
+        super.onSaveInstanceState(savedInstanceState);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (preferencesManager.isShakeEnabled()) {
+            shakeDetector.start((SensorManager) getSystemService(SENSOR_SERVICE));
+        }
+    }
+
+    @Override
+    public void hearShake() {
+
+    }
+
     @OnPageChange(R.id.flashcards_pager)
     public void onFlashcardChanged(int position) {
         textToSpeechManager.stopSpeaking();
         flashcardsSlider.setProgress(position);
+    }
+
+    @OnClick(R.id.shake_toggle)
+    public void toggleShakeToChoose() {
+        if (shakeToggle.getAlpha() < 1) {
+            shakeToggle.setAlpha(1.0f);
+            shakeDetector.start((SensorManager) getSystemService(SENSOR_SERVICE));
+        } else {
+            shakeToggle.setAlpha(DISABLED_ALPHA);
+            shakeDetector.stop();
+        }
     }
 
     @OnClick(R.id.term_definition_toggle)
@@ -86,7 +141,7 @@ public class BrowseFlashcardsActivity extends StandardActivity {
         flashcardsPager.setAdapter(flashcardsBrowsingAdapter);
         flashcardsPager.setCurrentItem(0);
         flashcardsSlider.setProgress(0);
-        shuffleToggle.setAlpha(shuffleToggle.getAlpha() < 1 ? 1.0f : UNSHUFFLE_ALPHA);
+        shuffleToggle.setAlpha(shuffleToggle.getAlpha() < 1 ? 1.0f : DISABLED_ALPHA);
     }
 
     @OnClick(R.id.back)
@@ -98,6 +153,9 @@ public class BrowseFlashcardsActivity extends StandardActivity {
     public void onPause() {
         super.onPause();
         textToSpeechManager.stopSpeaking();
+        if (preferencesManager.isShakeEnabled()) {
+            shakeDetector.stop();
+        }
     }
 
     @Override
