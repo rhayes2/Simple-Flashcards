@@ -23,7 +23,6 @@
             android:id="@+id/shake_toggle"
             android:text="@string/shake_icon"
             android:layout_toLeftOf="@id/term_definition_toggle"
-            android:alpha="0.25"
             style="@style/action_bar_icon"/>
 
         <TextView

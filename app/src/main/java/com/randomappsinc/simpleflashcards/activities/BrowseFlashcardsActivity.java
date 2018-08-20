@@ -18,7 +18,10 @@ import com.randomappsinc.simpleflashcards.managers.TextToSpeechManager;
 import com.randomappsinc.simpleflashcards.persistence.DatabaseManager;
 import com.randomappsinc.simpleflashcards.persistence.PreferencesManager;
 import com.randomappsinc.simpleflashcards.persistence.models.FlashcardSet;
+import com.randomappsinc.simpleflashcards.utils.UIUtils;
 import com.squareup.seismic.ShakeDetector;
+
+import java.util.Random;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -39,6 +42,7 @@ public class BrowseFlashcardsActivity extends StandardActivity implements ShakeD
     private TextToSpeechManager textToSpeechManager = TextToSpeechManager.get();
     private BrowseFlashcardsSettingsManager settingsManager = BrowseFlashcardsSettingsManager.get();
     private PreferencesManager preferencesManager = PreferencesManager.get();
+    private Random random;
     private ShakeDetector shakeDetector;
 
     @Override
@@ -59,8 +63,10 @@ public class BrowseFlashcardsActivity extends StandardActivity implements ShakeD
         flashcardsSlider.setMax(flashcardSet.getFlashcards().size() - 1);
         flashcardsSlider.setOnSeekBarChangeListener(flashcardsSliderListener);
 
-        shakeDetector = new ShakeDetector(this);
+        shakeToggle.setAlpha(preferencesManager.isShakeEnabled() ? 1.0f : DISABLED_ALPHA);
 
+        random = new Random();
+        shakeDetector = new ShakeDetector(this);
         if (preferencesManager.shouldShowShakeAdvice()) {
             TextView dialogView = (TextView) LayoutInflater.from(this).inflate(
                     R.layout.dialog_body_text,
@@ -109,7 +115,8 @@ public class BrowseFlashcardsActivity extends StandardActivity implements ShakeD
 
     @Override
     public void hearShake() {
-
+        int index = random.nextInt(flashcardsBrowsingAdapter.getCount());
+        flashcardsPager.setCurrentItem(index);
     }
 
     @OnPageChange(R.id.flashcards_pager)
@@ -123,9 +130,13 @@ public class BrowseFlashcardsActivity extends StandardActivity implements ShakeD
         if (shakeToggle.getAlpha() < 1) {
             shakeToggle.setAlpha(1.0f);
             shakeDetector.start((SensorManager) getSystemService(SENSOR_SERVICE));
+            preferencesManager.setShakeEnabled(true);
+            UIUtils.showShortToast(R.string.shake_to_jump_enabled);
         } else {
             shakeToggle.setAlpha(DISABLED_ALPHA);
             shakeDetector.stop();
+            preferencesManager.setShakeEnabled(false);
+            UIUtils.showShortToast(R.string.shake_to_jump_disabled);
         }
     }
 

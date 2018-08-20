@@ -23,8 +23,10 @@
 
     <string name="shake_it">Shake It!</string>
     <string name="shake_now_supported">
-        Want to spice it up? Simply shake your phone to jump to a random flashcards!
+        Want to spice it up? Simply shake your phone to jump to a random flashcard!
         Don\'t like this feature? No problem!
         You can turn it off and on anytime by clicking the {ion-radio-waves} button at the top of the page!
     </string>
+    <string name="shake_to_jump_enabled">Shake to jump enabled.</string>
+    <string name="shake_to_jump_disabled">Shake to jump disabled.</string>
 </resources>
