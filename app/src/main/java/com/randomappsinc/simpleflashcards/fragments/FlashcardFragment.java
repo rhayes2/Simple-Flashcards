@@ -15,10 +15,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.randomappsinc.simpleflashcards.R;
+import com.randomappsinc.simpleflashcards.activities.BrowseFlashcardsActivity;
 import com.randomappsinc.simpleflashcards.activities.PictureFullViewActivity;
 import com.randomappsinc.simpleflashcards.constants.Constants;
 import com.randomappsinc.simpleflashcards.managers.BrowseFlashcardsSettingsManager;
-import com.randomappsinc.simpleflashcards.managers.TextToSpeechManager;
 import com.randomappsinc.simpleflashcards.persistence.DatabaseManager;
 import com.randomappsinc.simpleflashcards.persistence.models.Flashcard;
 import com.squareup.picasso.Picasso;
@@ -55,7 +55,6 @@ public class FlashcardFragment extends Fragment {
 
     private Flashcard flashcard;
     protected boolean isShowingTerm;
-    private TextToSpeechManager textToSpeechManager = TextToSpeechManager.get();
     private Unbinder unbinder;
     private BrowseFlashcardsSettingsManager settingsManager = BrowseFlashcardsSettingsManager.get();
 
@@ -85,9 +84,14 @@ public class FlashcardFragment extends Fragment {
         return rootView;
     }
 
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+    }
+
     @OnClick(R.id.flashcard_container)
     public void flipFlashcard() {
-        textToSpeechManager.stopSpeaking();
+        stopSpeaking();
         flashcardContainer.setEnabled(false);
         flashcardContainer.clearAnimation();
         flashcardContainer
@@ -152,7 +156,21 @@ public class FlashcardFragment extends Fragment {
 
     @OnClick(R.id.speak)
     public void speakFlashcard() {
-        textToSpeechManager.speak(isShowingTerm ? flashcard.getTerm() : flashcard.getDefinition());
+        speak(isShowingTerm ? flashcard.getTerm() : flashcard.getDefinition());
+    }
+
+    private void speak(String text) {
+        BrowseFlashcardsActivity activity = (BrowseFlashcardsActivity) getActivity();
+        if (activity != null) {
+            activity.speak(text);
+        }
+    }
+
+    private void stopSpeaking() {
+        BrowseFlashcardsActivity activity = (BrowseFlashcardsActivity) getActivity();
+        if (activity != null) {
+            activity.stopSpeaking();
+        }
     }
 
     @OnClick(R.id.term_image)

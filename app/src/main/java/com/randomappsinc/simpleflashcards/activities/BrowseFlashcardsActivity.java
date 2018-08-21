@@ -39,7 +39,7 @@ public class BrowseFlashcardsActivity extends StandardActivity implements ShakeD
     @BindView(R.id.shuffle) View shuffleToggle;
 
     private FlashcardsBrowsingAdapter flashcardsBrowsingAdapter;
-    private TextToSpeechManager textToSpeechManager = TextToSpeechManager.get();
+    private TextToSpeechManager textToSpeechManager;
     private BrowseFlashcardsSettingsManager settingsManager = BrowseFlashcardsSettingsManager.get();
     private PreferencesManager preferencesManager = PreferencesManager.get();
     private Random random;
@@ -52,6 +52,7 @@ public class BrowseFlashcardsActivity extends StandardActivity implements ShakeD
         ButterKnife.bind(this);
 
         setVolumeControlStream(AudioManager.STREAM_MUSIC);
+        textToSpeechManager = new TextToSpeechManager(this);
 
         int setId = getIntent().getIntExtra(Constants.FLASHCARD_SET_ID_KEY, 0);
         FlashcardSet flashcardSet = DatabaseManager.get().getFlashcardSet(setId);
@@ -153,6 +154,14 @@ public class BrowseFlashcardsActivity extends StandardActivity implements ShakeD
         flashcardsPager.setCurrentItem(0);
         flashcardsSlider.setProgress(0);
         shuffleToggle.setAlpha(shuffleToggle.getAlpha() < 1 ? 1.0f : DISABLED_ALPHA);
+    }
+
+    public void speak(String text) {
+        textToSpeechManager.speak(text);
+    }
+
+    public void stopSpeaking() {
+        textToSpeechManager.stopSpeaking();
     }
 
     @OnClick(R.id.back)
