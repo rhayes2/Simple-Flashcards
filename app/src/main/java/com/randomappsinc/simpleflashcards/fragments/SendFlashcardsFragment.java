@@ -13,6 +13,7 @@ import com.randomappsinc.simpleflashcards.adapters.SendFlashcardsAdapter;
 import com.randomappsinc.simpleflashcards.managers.NearbyConnectionsManager;
 import com.randomappsinc.simpleflashcards.persistence.DatabaseManager;
 import com.randomappsinc.simpleflashcards.persistence.models.FlashcardSet;
+import com.randomappsinc.simpleflashcards.utils.UIUtils;
 import com.randomappsinc.simpleflashcards.views.SimpleDividerItemDecoration;
 
 import java.util.List;
@@ -55,7 +56,14 @@ public class SendFlashcardsFragment extends Fragment {
     private final SendFlashcardsAdapter.Listener sendFlashcardsListener = new SendFlashcardsAdapter.Listener() {
         @Override
         public void onSendFlashcardSet(FlashcardSet flashcardSet) {
-            nearbyConnectionsManager.sendFlashcardSet(flashcardSet);
+            nearbyConnectionsManager.sendFlashcardSet(flashcardSet, getContext());
+        }
+
+        @Override
+        public void onFlashcardSetTransferFailure(FlashcardSet flashcardSet) {
+            UIUtils.showLongToast(getString(
+                    R.string.failed_to_send_set,
+                    flashcardSet.getName()), getContext());
         }
     };
 

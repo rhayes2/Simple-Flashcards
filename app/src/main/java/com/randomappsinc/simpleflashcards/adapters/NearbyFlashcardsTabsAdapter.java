@@ -4,18 +4,16 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
-import com.randomappsinc.simpleflashcards.R;
 import com.randomappsinc.simpleflashcards.fragments.ReceivedFlashcardsFragment;
 import com.randomappsinc.simpleflashcards.fragments.SendFlashcardsFragment;
-import com.randomappsinc.simpleflashcards.utils.StringUtils;
 
 public class NearbyFlashcardsTabsAdapter extends FragmentPagerAdapter {
 
-    private String[] favoriteTabs;
+    private String[] tabNames;
 
-    public NearbyFlashcardsTabsAdapter(FragmentManager fragmentManager) {
+    public NearbyFlashcardsTabsAdapter(FragmentManager fragmentManager, String[] tabNames) {
         super(fragmentManager);
-        favoriteTabs = StringUtils.getStringArray(R.array.nearby_flashcards_tabs);
+        this.tabNames = tabNames;
     }
 
     @Override
@@ -32,11 +30,11 @@ public class NearbyFlashcardsTabsAdapter extends FragmentPagerAdapter {
 
     @Override
     public int getCount() {
-        return favoriteTabs.length;
+        return tabNames.length;
     }
 
     @Override
     public CharSequence getPageTitle(int position) {
-        return favoriteTabs[position];
+        return tabNames[position];
     }
 }

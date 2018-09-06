@@ -52,7 +52,7 @@ public class MainActivity extends StandardActivity
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
 
-        PreferencesManager preferencesManager = PreferencesManager.get();
+        PreferencesManager preferencesManager = new PreferencesManager(this);
         preferencesManager.logAppOpen();
         if (preferencesManager.isFirstTimeUser()) {
             preferencesManager.rememberWelcome();

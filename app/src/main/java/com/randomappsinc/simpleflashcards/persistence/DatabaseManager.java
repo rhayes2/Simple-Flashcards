@@ -6,7 +6,6 @@ import com.randomappsinc.simpleflashcards.api.models.QuizletFlashcard;
 import com.randomappsinc.simpleflashcards.api.models.QuizletFlashcardSet;
 import com.randomappsinc.simpleflashcards.persistence.models.Flashcard;
 import com.randomappsinc.simpleflashcards.persistence.models.FlashcardSet;
-import com.randomappsinc.simpleflashcards.utils.MyApplication;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -44,7 +43,6 @@ public class DatabaseManager {
     protected boolean idMigrationNeeded;
 
     private DatabaseManager() {
-        Realm.init(MyApplication.getAppContext());
         RealmConfiguration realmConfig = new RealmConfiguration.Builder()
                 .schemaVersion(CURRENT_REALM_VERSION)
                 .migration(migration)

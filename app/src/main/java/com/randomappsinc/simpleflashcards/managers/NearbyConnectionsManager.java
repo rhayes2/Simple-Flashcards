@@ -20,7 +20,6 @@ import com.google.android.gms.nearby.connection.PayloadCallback;
 import com.google.android.gms.nearby.connection.PayloadTransferUpdate;
 import com.google.android.gms.nearby.connection.Strategy;
 import com.google.android.gms.tasks.OnFailureListener;
-import com.randomappsinc.simpleflashcards.R;
 import com.randomappsinc.simpleflashcards.models.NearbyDevice;
 import com.randomappsinc.simpleflashcards.persistence.DatabaseManager;
 import com.randomappsinc.simpleflashcards.persistence.PreferencesManager;
@@ -28,9 +27,7 @@ import com.randomappsinc.simpleflashcards.persistence.models.FlashcardSet;
 import com.randomappsinc.simpleflashcards.utils.DeviceUtils;
 import com.randomappsinc.simpleflashcards.utils.FileUtils;
 import com.randomappsinc.simpleflashcards.utils.JSONUtils;
-import com.randomappsinc.simpleflashcards.utils.MyApplication;
 import com.randomappsinc.simpleflashcards.utils.StringUtils;
-import com.randomappsinc.simpleflashcards.utils.UIUtils;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -46,18 +43,19 @@ public class NearbyConnectionsManager {
 
         void onConnectionRequest(ConnectionInfo connectionInfo);
 
-        /**
-         * This is called when we fail to establish the connection. This happens when:
-         * 1. The other side rejects the connection.
-         * 2. We failed to establish the connection during the confirmation step.
-         */
         void onConnectionFailed();
 
+        void onConnectionRejected();
+
         void onConnectionSuccessful();
+
+        void onAdvertisingFailed();
+
+        void onDiscoveryFailed();
     }
 
     public interface PostConnectionListener {
-        void onDisconnect();
+        void onDisconnect(String otherSideName);
     }
 
     public interface FlashcardSetTransferStatusListener {
@@ -85,12 +83,13 @@ public class NearbyConnectionsManager {
     }
 
     @Nullable protected PreConnectionListener preConnectionListener;
-    private PreferencesManager preferencesManager = PreferencesManager.get();
+    private PreferencesManager preferencesManager;
     protected DatabaseManager databaseManager = DatabaseManager.get();
     @Nullable protected ConnectionsClient connectionsClient;
     protected String currentlyConnectedEndpoint;
     protected boolean isRejecter;
     protected String otherSideName;
+    protected String packageName;
 
     @Nullable protected PostConnectionListener postConnectionListener;
     @Nullable protected FlashcardSetTransferStatusListener flashcardSetTransferStatusListener;
@@ -103,6 +102,11 @@ public class NearbyConnectionsManager {
     protected Map<Long, Integer> payloadIdToFlashcardSetId = new HashMap<>();
 
     private NearbyConnectionsManager() {}
+
+    public void initialize(Context context) {
+        preferencesManager = new PreferencesManager(context);
+        packageName = context.getPackageName();
+    }
 
     public void setPreConnectionListener(@NonNull PreConnectionListener preConnectionListener) {
         this.preConnectionListener = preConnectionListener;
@@ -149,21 +153,18 @@ public class NearbyConnectionsManager {
                 @NonNull ConnectionResolution connectionResolution) {
             switch (connectionResolution.getStatus().getStatusCode()) {
                 case ConnectionsStatusCodes.STATUS_OK:
-                    UIUtils.showLongToast(R.string.connection_successful);
                     if (preConnectionListener != null) {
                         preConnectionListener.onConnectionSuccessful();
                     }
                     break;
                 case ConnectionsStatusCodes.STATUS_CONNECTION_REJECTED:
                     if (!isRejecter) {
-                        UIUtils.showLongToast(R.string.connection_rejected);
                         if (preConnectionListener != null) {
-                            preConnectionListener.onConnectionFailed();
+                            preConnectionListener.onConnectionRejected();
                         }
                     }
                     break;
                 case ConnectionsStatusCodes.STATUS_ERROR:
-                    UIUtils.showLongToast(R.string.connection_confirmation_failed);
                     if (preConnectionListener != null) {
                         preConnectionListener.onConnectionFailed();
                     }
@@ -174,11 +175,8 @@ public class NearbyConnectionsManager {
 
         @Override
         public void onDisconnected(@NonNull String endpointId) {
-            UIUtils.showLongToast(MyApplication
-                    .getAppContext()
-                    .getString(R.string.disconnected_from, otherSideName));
             if (postConnectionListener != null) {
-                postConnectionListener.onDisconnect();
+                postConnectionListener.onDisconnect(otherSideName);
             }
         }
     };
@@ -188,9 +186,7 @@ public class NearbyConnectionsManager {
         public void onEndpointFound(
                 @NonNull String endpointId,
                 @NonNull DiscoveredEndpointInfo discoveredEndpointInfo) {
-            if (discoveredEndpointInfo
-                    .getServiceId()
-                    .equals(MyApplication.getAppContext().getPackageName()) && preConnectionListener != null) {
+            if (discoveredEndpointInfo.getServiceId().equals(packageName) && preConnectionListener != null) {
                 NearbyDevice device = new NearbyDevice();
                 device.setEndpointId(endpointId);
 
@@ -270,9 +266,6 @@ public class NearbyConnectionsManager {
                         if (flashcardSetReceiptListener != null) {
                             flashcardSetReceiptListener.onFlashcardSetReceived(flashcardSet);
                         }
-                        UIUtils.showLongToast(MyApplication.getAppContext().getString(
-                                R.string.received_set,
-                                flashcardSet.getName()));
                     }
                     break;
                 case PayloadTransferUpdate.Status.FAILURE:
@@ -292,14 +285,14 @@ public class NearbyConnectionsManager {
     private final OnFailureListener advertisingFailureListener = new OnFailureListener() {
         @Override
         public void onFailure(@NonNull Exception e) {
-            UIUtils.showLongToast(R.string.advertising_fail);
+            preConnectionListener.onAdvertisingFailed();
         }
     };
 
     private final OnFailureListener discoveryFailureListener = new OnFailureListener() {
         @Override
         public void onFailure(@NonNull Exception e) {
-            UIUtils.showLongToast(R.string.discovery_fail);
+            preConnectionListener.onDiscoveryFailed();
         }
     };
 
@@ -330,13 +323,13 @@ public class NearbyConnectionsManager {
         flashcardSetTransferStatusListener = listener;
     }
 
-    public void sendFlashcardSet(FlashcardSet flashcardSet) {
+    public void sendFlashcardSet(FlashcardSet flashcardSet, Context context) {
         if (connectionsClient == null) {
             return;
         }
 
         try {
-            File flashcardSetFile = FileUtils.writeFlashcardSetToFile(flashcardSet);
+            File flashcardSetFile = FileUtils.writeFlashcardSetToFile(flashcardSet, context);
             if (flashcardSetFile == null) {
                 return;
             }

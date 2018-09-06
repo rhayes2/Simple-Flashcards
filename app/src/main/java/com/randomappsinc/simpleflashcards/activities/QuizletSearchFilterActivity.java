@@ -41,7 +41,7 @@ public class QuizletSearchFilterActivity extends AppCompatActivity {
     @OnClick(R.id.apply_filter)
     public void applyFilter() {
         quizletSearchManager.setOnlyShowImageSets(onlyShowImageSets.isChecked());
-        UIUtils.showShortToast(R.string.filter_applied);
+        UIUtils.showShortToast(R.string.filter_applied, this);
         setResult(RESULT_OK);
         finish();
     }

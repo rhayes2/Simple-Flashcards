@@ -13,6 +13,7 @@ import com.randomappsinc.simpleflashcards.R;
 import com.randomappsinc.simpleflashcards.adapters.ReceivedFlashcardsAdapter;
 import com.randomappsinc.simpleflashcards.managers.NearbyConnectionsManager;
 import com.randomappsinc.simpleflashcards.persistence.models.FlashcardSet;
+import com.randomappsinc.simpleflashcards.utils.UIUtils;
 import com.randomappsinc.simpleflashcards.views.SimpleDividerItemDecoration;
 
 import butterknife.BindView;
@@ -59,6 +60,7 @@ public class ReceivedFlashcardsFragment extends Fragment {
                 noFlashcards.setVisibility(View.GONE);
                 flashcardSets.setVisibility(View.VISIBLE);
             }
+            UIUtils.showLongToast(getString(R.string.received_set, flashcardSet.getName()), getContext());
         }
     };
 

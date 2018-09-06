@@ -17,6 +17,7 @@ import com.randomappsinc.simpleflashcards.managers.NearbyConnectionsManager;
 import com.randomappsinc.simpleflashcards.managers.NearbyNameManager;
 import com.randomappsinc.simpleflashcards.models.NearbyDevice;
 import com.randomappsinc.simpleflashcards.utils.PermissionUtils;
+import com.randomappsinc.simpleflashcards.utils.UIUtils;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -48,6 +49,7 @@ public class NearbySharingActivity extends StandardActivity {
         nearbyNameManager = new NearbyNameManager(this, nameChangeListener);
         nearbyName = nearbyNameManager.getCurrentName();
         nearbyConnectionsManager = NearbyConnectionsManager.get();
+        nearbyConnectionsManager.initialize(this);
         nearbyConnectionsManager.setPreConnectionListener(preConnectionListener);
         confirmConnectionDialog = new ConfirmConnectionDialog(this, connectionChoiceListener);
 
@@ -75,12 +77,14 @@ public class NearbySharingActivity extends StandardActivity {
     }
 
     private boolean arePermissionsGranted() {
-        return PermissionUtils.isPermissionGranted(permission.ACCESS_COARSE_LOCATION)
-                && PermissionUtils.isPermissionGranted(permission.WRITE_EXTERNAL_STORAGE);
+        return PermissionUtils.isPermissionGranted(permission.ACCESS_COARSE_LOCATION, this)
+                && PermissionUtils.isPermissionGranted(permission.WRITE_EXTERNAL_STORAGE, this);
     }
 
     private void requestPermissions() {
-        String[] permissions = new String[]{permission.ACCESS_COARSE_LOCATION, permission.WRITE_EXTERNAL_STORAGE};
+        String[] permissions = new String[]{
+                permission.ACCESS_COARSE_LOCATION,
+                permission.WRITE_EXTERNAL_STORAGE};
         PermissionUtils.requestPermissions(this, permissions);
     }
 
@@ -143,7 +147,7 @@ public class NearbySharingActivity extends StandardActivity {
                 @Override
                 public void onConnectionRequest(ConnectionInfo connectionInfo) {
                     requestingConnectionDialog.dismiss();
-                    confirmConnectionDialog.show(connectionInfo);
+                    confirmConnectionDialog.show(connectionInfo, NearbySharingActivity.this);
                 }
 
                 @Override
@@ -151,12 +155,40 @@ public class NearbySharingActivity extends StandardActivity {
                     requestingConnectionDialog.dismiss();
                     confirmConnectionDialog.dismiss();
                     waitingForAcceptDialog.dismiss();
+                    UIUtils.showLongToast(
+                            R.string.connection_confirmation_failed,
+                            NearbySharingActivity.this);
+                }
+
+                @Override
+                public void onConnectionRejected() {
+                    requestingConnectionDialog.dismiss();
+                    confirmConnectionDialog.dismiss();
+                    waitingForAcceptDialog.dismiss();
+                    UIUtils.showLongToast(
+                            R.string.connection_rejected,
+                            NearbySharingActivity.this);
                 }
 
                 @Override
                 public void onConnectionSuccessful() {
                     waitingForAcceptDialog.dismiss();
                     openNearbyFlashcardsTransferPage();
+                    UIUtils.showLongToast(R.string.connection_successful, NearbySharingActivity.this);
+                }
+
+                @Override
+                public void onAdvertisingFailed() {
+                    UIUtils.showLongToast(
+                            R.string.advertising_fail,
+                            NearbySharingActivity.this);
+                }
+
+                @Override
+                public void onDiscoveryFailed() {
+                    UIUtils.showLongToast(
+                            R.string.discovery_fail,
+                            NearbySharingActivity.this);
                 }
             };
 

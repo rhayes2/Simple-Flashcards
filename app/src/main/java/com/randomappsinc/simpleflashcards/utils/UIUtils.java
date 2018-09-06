@@ -37,33 +37,35 @@ public class UIUtils {
     }
 
     public static void showSnackbar(View parent, String message, int length) {
-        Context context = MyApplication.getAppContext();
         Snackbar snackbar = Snackbar.make(parent, message, length);
         View rootView = snackbar.getView();
-        snackbar.getView().setBackgroundColor(context.getResources().getColor(R.color.app_blue));
+        snackbar.getView().setBackgroundColor(parent
+                .getContext()
+                .getResources()
+                .getColor(R.color.app_blue));
         TextView tv = rootView.findViewById(android.support.design.R.id.snackbar_text);
         tv.setTextColor(Color.WHITE);
         snackbar.show();
     }
 
-    public static void showShortToast(@StringRes int stringId) {
-        showToast(stringId, Toast.LENGTH_SHORT);
+    public static void showShortToast(@StringRes int stringId, Context context) {
+        showToast(stringId, Toast.LENGTH_SHORT, context);
     }
 
-    public static void showLongToast(@StringRes int stringId) {
-        showToast(stringId, Toast.LENGTH_LONG);
+    public static void showLongToast(@StringRes int stringId, Context context) {
+        showToast(stringId, Toast.LENGTH_LONG, context);
     }
 
-    private static void showToast(@StringRes int stringId, int duration) {
-        Toast.makeText(MyApplication.getAppContext(), stringId, duration).show();
+    protected static void showToast(@StringRes int stringId, int duration, Context context) {
+        Toast.makeText(context, stringId, duration).show();
     }
 
-    public static void showLongToast(String text) {
-        showToast(text, Toast.LENGTH_LONG);
+    public static void showLongToast(String text, Context context) {
+        showToast(text, Toast.LENGTH_LONG, context);
     }
 
-    private static void showToast(String text, int duration) {
-        Toast.makeText(MyApplication.getAppContext(), text, duration).show();
+    private static void showToast(String text, int duration, Context context) {
+        Toast.makeText(context, text, duration).show();
     }
 
     public static void askForRating(final Activity activity) {
@@ -79,7 +81,7 @@ public class UIUtils {
                         if (!(activity
                                 .getPackageManager()
                                 .queryIntentActivities(intent, 0).size() > 0)) {
-                            UIUtils.showToast(R.string.play_store_error, Toast.LENGTH_LONG);
+                            UIUtils.showToast(R.string.play_store_error, Toast.LENGTH_LONG, activity);
                             return;
                         }
                         activity.startActivity(intent);

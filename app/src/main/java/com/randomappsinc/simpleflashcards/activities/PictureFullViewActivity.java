@@ -62,7 +62,7 @@ public class PictureFullViewActivity extends AppCompatActivity {
 
         @Override
         public void onError(Exception e) {
-            UIUtils.showLongToast(R.string.image_load_fail);
+            UIUtils.showLongToast(R.string.image_load_fail, PictureFullViewActivity.this);
         }
     };
 

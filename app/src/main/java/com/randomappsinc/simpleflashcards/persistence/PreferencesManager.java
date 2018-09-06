@@ -1,9 +1,8 @@
 package com.randomappsinc.simpleflashcards.persistence;
 
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
-
-import com.randomappsinc.simpleflashcards.utils.MyApplication;
 
 public class PreferencesManager {
 
@@ -17,24 +16,9 @@ public class PreferencesManager {
     private static final int NUM_APP_OPENS_BEFORE_ASKING_FOR_SHARE = 10;
 
     private SharedPreferences prefs;
-    private static PreferencesManager instance;
 
-    public static PreferencesManager get() {
-        if (instance == null) {
-            instance = getSync();
-        }
-        return instance;
-    }
-
-    private static synchronized PreferencesManager getSync() {
-        if (instance == null) {
-            instance = new PreferencesManager();
-        }
-        return instance;
-    }
-
-    private PreferencesManager() {
-        prefs = PreferenceManager.getDefaultSharedPreferences(MyApplication.getAppContext());
+    public PreferencesManager(Context context) {
+        prefs = PreferenceManager.getDefaultSharedPreferences(context);
     }
 
     public boolean isFirstTimeUser() {

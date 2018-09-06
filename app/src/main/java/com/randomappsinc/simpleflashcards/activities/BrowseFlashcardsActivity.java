@@ -41,7 +41,7 @@ public class BrowseFlashcardsActivity extends StandardActivity implements ShakeD
     private FlashcardsBrowsingAdapter flashcardsBrowsingAdapter;
     private TextToSpeechManager textToSpeechManager;
     private BrowseFlashcardsSettingsManager settingsManager = BrowseFlashcardsSettingsManager.get();
-    private PreferencesManager preferencesManager = PreferencesManager.get();
+    private PreferencesManager preferencesManager;
     private Random random;
     private ShakeDetector shakeDetector;
 
@@ -52,7 +52,9 @@ public class BrowseFlashcardsActivity extends StandardActivity implements ShakeD
         ButterKnife.bind(this);
 
         setVolumeControlStream(AudioManager.STREAM_MUSIC);
-        textToSpeechManager = new TextToSpeechManager(this);
+        textToSpeechManager = new TextToSpeechManager(this, textToSpeechListener);
+
+        preferencesManager = new PreferencesManager(this);
 
         int setId = getIntent().getIntExtra(Constants.FLASHCARD_SET_ID_KEY, 0);
         FlashcardSet flashcardSet = DatabaseManager.get().getFlashcardSet(setId);
@@ -65,6 +67,8 @@ public class BrowseFlashcardsActivity extends StandardActivity implements ShakeD
         flashcardsSlider.setOnSeekBarChangeListener(flashcardsSliderListener);
 
         shakeToggle.setAlpha(preferencesManager.isShakeEnabled() ? 1.0f : DISABLED_ALPHA);
+
+        settingsManager.addListener(defaultSideListener);
 
         random = new Random();
         shakeDetector = new ShakeDetector(this);
@@ -97,6 +101,13 @@ public class BrowseFlashcardsActivity extends StandardActivity implements ShakeD
                 @Override
                 public void onStopTrackingTouch(SeekBar seekBar) {}
             };
+
+    private final TextToSpeechManager.Listener textToSpeechListener = new TextToSpeechManager.Listener() {
+        @Override
+        public void onTextToSpeechFailure() {
+            UIUtils.showLongToast(R.string.text_to_speech_fail, BrowseFlashcardsActivity.this);
+        }
+    };
 
     @Override
     public void onSaveInstanceState(Bundle savedInstanceState) {
@@ -132,12 +143,12 @@ public class BrowseFlashcardsActivity extends StandardActivity implements ShakeD
             shakeToggle.setAlpha(1.0f);
             shakeDetector.start((SensorManager) getSystemService(SENSOR_SERVICE));
             preferencesManager.setShakeEnabled(true);
-            UIUtils.showShortToast(R.string.shake_to_jump_enabled);
+            UIUtils.showShortToast(R.string.shake_to_jump_enabled, this);
         } else {
             shakeToggle.setAlpha(DISABLED_ALPHA);
             shakeDetector.stop();
             preferencesManager.setShakeEnabled(false);
-            UIUtils.showShortToast(R.string.shake_to_jump_disabled);
+            UIUtils.showShortToast(R.string.shake_to_jump_disabled, this);
         }
     }
 
@@ -147,6 +158,17 @@ public class BrowseFlashcardsActivity extends StandardActivity implements ShakeD
         defaultSideToggle.setText(settingsManager.getShowTermsByDefault() ? R.string.t : R.string.d);
     }
 
+    private final BrowseFlashcardsSettingsManager.Listener defaultSideListener =
+            new BrowseFlashcardsSettingsManager.Listener() {
+                @Override
+                public void onDefaultSideChanged(boolean showTermsByDefault) {
+                    UIUtils.showShortToast(showTermsByDefault
+                            ? R.string.now_terms_default
+                            : R.string.now_definitions_default,
+                            BrowseFlashcardsActivity.this);
+                }
+            };
+
     @OnClick(R.id.shuffle)
     public void shuffleFlashcards() {
         flashcardsBrowsingAdapter.toggleShuffle();
@@ -154,6 +176,11 @@ public class BrowseFlashcardsActivity extends StandardActivity implements ShakeD
         flashcardsPager.setCurrentItem(0);
         flashcardsSlider.setProgress(0);
         shuffleToggle.setAlpha(shuffleToggle.getAlpha() < 1 ? 1.0f : DISABLED_ALPHA);
+        UIUtils.showShortToast(
+                flashcardsBrowsingAdapter.isShuffled()
+                        ? R.string.flashcards_shuffled
+                        : R.string.flashcards_order_restored,
+                this);
     }
 
     public void speak(String text) {

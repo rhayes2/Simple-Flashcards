@@ -14,6 +14,7 @@ import com.randomappsinc.simpleflashcards.models.Problem;
 
 import java.util.List;
 
+import butterknife.BindArray;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
@@ -22,6 +23,7 @@ public class QuizResultsActivity extends StandardActivity {
     @BindView(R.id.toolbar) Toolbar toolbar;
     @BindView(R.id.quiz_results_tabs) TabLayout tabs;
     @BindView(R.id.quiz_results_pager) ViewPager viewPager;
+    @BindArray(R.array.quiz_results_tabs) String[] resultTabs;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,7 +39,7 @@ public class QuizResultsActivity extends StandardActivity {
                 .actionBarSize());
 
         List<Problem> problems = getIntent().getParcelableArrayListExtra(Constants.QUIZ_RESULTS_KEY);
-        viewPager.setAdapter(new QuizResultsTabsAdapter(getSupportFragmentManager(), problems));
+        viewPager.setAdapter(new QuizResultsTabsAdapter(getSupportFragmentManager(), problems, resultTabs));
         tabs.setupWithViewPager(viewPager);
     }
 

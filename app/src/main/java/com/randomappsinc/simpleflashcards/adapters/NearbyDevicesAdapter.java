@@ -10,11 +10,11 @@ import android.widget.TextView;
 
 import com.randomappsinc.simpleflashcards.R;
 import com.randomappsinc.simpleflashcards.models.NearbyDevice;
-import com.randomappsinc.simpleflashcards.utils.StringUtils;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.BindString;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -77,6 +77,7 @@ public class NearbyDevicesAdapter extends RecyclerView.Adapter<NearbyDevicesAdap
     class NearbyDeviceViewHolder extends RecyclerView.ViewHolder {
         @BindView(R.id.nearby_name) TextView nearbyName;
         @BindView(R.id.device_type) TextView deviceType;
+        @BindString(R.string.unknown_device_type) String unknownDevice;
 
         NearbyDeviceViewHolder(View view) {
             super(view);
@@ -87,7 +88,7 @@ public class NearbyDevicesAdapter extends RecyclerView.Adapter<NearbyDevicesAdap
             NearbyDevice device = nearbyDevices.get(position);
             nearbyName.setText(device.getNearbyName());
             deviceType.setText(TextUtils.isEmpty(device.getDeviceType())
-                    ? StringUtils.getString(R.string.unknown_device_type)
+                    ? unknownDevice
                     : device.getDeviceType());
         }
 

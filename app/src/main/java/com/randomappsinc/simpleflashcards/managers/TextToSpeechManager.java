@@ -10,14 +10,16 @@ import android.os.Handler;
 import android.speech.tts.TextToSpeech;
 import android.speech.tts.UtteranceProgressListener;
 
-import com.randomappsinc.simpleflashcards.R;
-import com.randomappsinc.simpleflashcards.utils.UIUtils;
-
 import java.util.HashMap;
 import java.util.Locale;
 
 public class TextToSpeechManager implements TextToSpeech.OnInitListener {
 
+    public interface Listener {
+        void onTextToSpeechFailure();
+    }
+
+    protected Listener listener;
     private TextToSpeech textToSpeech;
     private boolean enabled;
     protected AudioManager audioManager;
@@ -25,7 +27,8 @@ public class TextToSpeechManager implements TextToSpeech.OnInitListener {
     // Oreo audio focus shenanigans
     private AudioFocusRequest audioFocusRequest;
 
-    public TextToSpeechManager(Context context) {
+    public TextToSpeechManager(Context context, Listener listener) {
+        this.listener = listener;
         textToSpeech = new TextToSpeech(context, this);
         textToSpeech.setLanguage(Locale.getDefault());
         audioManager = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
@@ -55,7 +58,7 @@ public class TextToSpeechManager implements TextToSpeech.OnInitListener {
                 requestAudioFocusPreO(text);
             }
         } else {
-            UIUtils.showLongToast(R.string.text_to_speech_fail);
+            listener.onTextToSpeechFailure();
         }
     }
 
@@ -89,7 +92,7 @@ public class TextToSpeechManager implements TextToSpeech.OnInitListener {
         if (result == AudioManager.AUDIOFOCUS_REQUEST_GRANTED) {
             playTts(text);
         } else {
-            UIUtils.showLongToast(R.string.text_to_speech_fail);
+            listener.onTextToSpeechFailure();
         }
     }
 
@@ -136,7 +139,7 @@ public class TextToSpeechManager implements TextToSpeech.OnInitListener {
 
             @Override
             public void onError(String utteranceId) {
-                UIUtils.showLongToast(R.string.text_to_speech_fail);
+                listener.onTextToSpeechFailure();
             }
         });
     }

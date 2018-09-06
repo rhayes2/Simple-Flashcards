@@ -15,12 +15,13 @@ public class NearbyNameManager {
         void onNameChanged();
     }
 
-    protected PreferencesManager preferencesManager = PreferencesManager.get();
+    protected PreferencesManager preferencesManager;
     @Nullable protected Listener listener;
     protected String currentName;
     private MaterialDialog nameSettingDialog;
 
     public NearbyNameManager(Context context, @Nullable final Listener listener) {
+        this.preferencesManager = new PreferencesManager(context);
         this.currentName = preferencesManager.getNearbyName();
         this.listener = listener;
         String nearbyNameHint = context.getString(R.string.nearby_name);

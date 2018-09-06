@@ -4,11 +4,9 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 
-import com.randomappsinc.simpleflashcards.R;
 import com.randomappsinc.simpleflashcards.fragments.FlashcardFragment;
 import com.randomappsinc.simpleflashcards.persistence.DatabaseManager;
 import com.randomappsinc.simpleflashcards.persistence.models.Flashcard;
-import com.randomappsinc.simpleflashcards.utils.UIUtils;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -33,10 +31,11 @@ public class FlashcardsBrowsingAdapter extends FragmentStatePagerAdapter {
         isShuffled = !isShuffled;
         if (isShuffled) {
             Collections.shuffle(shuffledFlashcardsIds);
-            UIUtils.showShortToast(R.string.flashcards_shuffled);
-        } else {
-            UIUtils.showShortToast(R.string.flashcards_order_restored);
         }
+    }
+
+    public boolean isShuffled() {
+        return isShuffled;
     }
 
     @Override

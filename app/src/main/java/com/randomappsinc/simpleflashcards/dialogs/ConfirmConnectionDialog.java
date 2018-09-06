@@ -10,7 +10,6 @@ import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.google.android.gms.nearby.connection.ConnectionInfo;
 import com.randomappsinc.simpleflashcards.R;
-import com.randomappsinc.simpleflashcards.utils.MyApplication;
 import com.randomappsinc.simpleflashcards.utils.StringUtils;
 
 import butterknife.BindView;
@@ -52,8 +51,7 @@ public class ConfirmConnectionDialog {
                 .build();
     }
 
-    public void show(ConnectionInfo connectionInfo) {
-        Context context = MyApplication.getAppContext();
+    public void show(ConnectionInfo connectionInfo, Context context) {
         String deviceText = StringUtils.getSaneDeviceString(connectionInfo.getEndpointName());
         title.setText(connectionInfo.isIncomingConnection()
                 ? context.getString(R.string.x_would_like_to_connect, deviceText)

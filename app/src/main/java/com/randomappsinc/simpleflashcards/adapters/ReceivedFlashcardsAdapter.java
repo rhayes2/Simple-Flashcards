@@ -9,16 +9,16 @@ import android.widget.TextView;
 
 import com.randomappsinc.simpleflashcards.R;
 import com.randomappsinc.simpleflashcards.persistence.models.FlashcardSet;
-import com.randomappsinc.simpleflashcards.utils.MyApplication;
-import com.randomappsinc.simpleflashcards.utils.StringUtils;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.BindString;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class ReceivedFlashcardsAdapter extends RecyclerView.Adapter<ReceivedFlashcardsAdapter.FlashcardSetViewHolder>{
+public class ReceivedFlashcardsAdapter
+        extends RecyclerView.Adapter<ReceivedFlashcardsAdapter.FlashcardSetViewHolder>{
 
     protected List<FlashcardSet> flashcardSets = new ArrayList<>();
 
@@ -51,6 +51,9 @@ public class ReceivedFlashcardsAdapter extends RecyclerView.Adapter<ReceivedFlas
         @BindView(R.id.set_name) TextView setName;
         @BindView(R.id.num_flashcards) TextView numFlashcardsText;
 
+        @BindString(R.string.one_flashcard) String oneFlashcard;
+        @BindString(R.string.x_flashcards) String manyFlashcardsTemplate;
+
         FlashcardSetViewHolder(View view) {
             super(view);
             ButterKnife.bind(this, view);
@@ -61,8 +64,8 @@ public class ReceivedFlashcardsAdapter extends RecyclerView.Adapter<ReceivedFlas
             setName.setText(flashcardSet.getName());
             int numFlashcards = flashcardSet.getFlashcards().size();
             numFlashcardsText.setText(numFlashcards == 1
-                    ? StringUtils.getString(R.string.one_flashcard)
-                    : MyApplication.getAppContext().getString(R.string.x_flashcards, numFlashcards));
+                    ? oneFlashcard
+                    : String.format(manyFlashcardsTemplate, numFlashcards));
         }
     }
 }

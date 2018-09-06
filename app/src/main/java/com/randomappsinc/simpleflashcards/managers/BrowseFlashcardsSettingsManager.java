@@ -1,8 +1,5 @@
 package com.randomappsinc.simpleflashcards.managers;
 
-import com.randomappsinc.simpleflashcards.R;
-import com.randomappsinc.simpleflashcards.utils.UIUtils;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -42,7 +39,6 @@ public class BrowseFlashcardsSettingsManager {
         for (Listener listener : listeners) {
             listener.onDefaultSideChanged(showTermsByDefault);
         }
-        UIUtils.showShortToast(showTermsByDefault ? R.string.now_terms_default : R.string.now_definitions_default);
     }
 
     public void addListener(Listener listener) {

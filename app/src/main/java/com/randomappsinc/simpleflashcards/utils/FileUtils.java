@@ -13,9 +13,8 @@ import java.util.Scanner;
 public class FileUtils {
 
     @Nullable
-    public static File writeFlashcardSetToFile(FlashcardSet flashcardSet) {
+    public static File writeFlashcardSetToFile(FlashcardSet flashcardSet, Context context) {
         String filename = String.valueOf(flashcardSet.getId());
-        Context context = MyApplication.getAppContext();
         File file = new File(context.getFilesDir(), filename);
         String fileContents = JSONUtils.serializeFlashcardSet(flashcardSet);
 
@@ -28,13 +27,6 @@ public class FileUtils {
         } catch (Exception e) {
             return null;
         }
-    }
-
-    public static void deleteFileForFlashcardSet(FlashcardSet flashcardSet) {
-        File file = new File(
-                MyApplication.getAppContext().getFilesDir(),
-                String.valueOf(flashcardSet.getId()));
-        file.delete();
     }
 
     public static String getFileContents(File file) {

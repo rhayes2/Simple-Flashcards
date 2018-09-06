@@ -12,13 +12,11 @@ import com.randomappsinc.simpleflashcards.constants.FlashcardSetTransferState;
 import com.randomappsinc.simpleflashcards.managers.NearbyConnectionsManager;
 import com.randomappsinc.simpleflashcards.models.FlashcardSetForTransfer;
 import com.randomappsinc.simpleflashcards.persistence.models.FlashcardSet;
-import com.randomappsinc.simpleflashcards.utils.MyApplication;
-import com.randomappsinc.simpleflashcards.utils.StringUtils;
-import com.randomappsinc.simpleflashcards.utils.UIUtils;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.BindString;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -27,6 +25,8 @@ public class SendFlashcardsAdapter extends RecyclerView.Adapter<SendFlashcardsAd
 
     public interface Listener {
         void onSendFlashcardSet(FlashcardSet flashcardSet);
+
+        void onFlashcardSetTransferFailure(FlashcardSet flashcardSet);
     }
 
     protected Listener listener;
@@ -50,9 +50,7 @@ public class SendFlashcardsAdapter extends RecyclerView.Adapter<SendFlashcardsAd
                         if (set.getFlashcardSet().getId() == flashcardSetId) {
                             set.setTransferState(FlashcardSetTransferState.NOT_YET_SENT);
                             notifyItemChanged(i);
-                            UIUtils.showLongToast(MyApplication.getAppContext().getString(
-                                    R.string.failed_to_send_set,
-                                    set.getFlashcardSet().getName()));
+                            listener.onFlashcardSetTransferFailure(set.getFlashcardSet());
                             break;
                         }
                     }
@@ -90,6 +88,9 @@ public class SendFlashcardsAdapter extends RecyclerView.Adapter<SendFlashcardsAd
         @BindView(R.id.send) View send;
         @BindView(R.id.sent) View sent;
 
+        @BindString(R.string.one_flashcard) String oneFlashcard;
+        @BindString(R.string.x_flashcards) String xFlashcards;
+
         FlashcardSetViewHolder(View view) {
             super(view);
             ButterKnife.bind(this, view);
@@ -101,8 +102,8 @@ public class SendFlashcardsAdapter extends RecyclerView.Adapter<SendFlashcardsAd
             setName.setText(flashcardSet.getName());
             int numFlashcards = flashcardSet.getFlashcards().size();
             numFlashcardsText.setText(numFlashcards == 1
-                    ? StringUtils.getString(R.string.one_flashcard)
-                    : MyApplication.getAppContext().getString(R.string.x_flashcards, numFlashcards));
+                    ? oneFlashcard
+                    : String.format(xFlashcards, numFlashcards));
 
             switch (flashcardSetForTransfer.getTransferState()) {
                 case FlashcardSetTransferState.NOT_YET_SENT:

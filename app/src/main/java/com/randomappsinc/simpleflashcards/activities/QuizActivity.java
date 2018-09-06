@@ -223,7 +223,7 @@ public class QuizActivity extends StandardActivity implements QuitQuizDialog.Lis
         }
         RadioButton chosenButton = getChosenButton();
         if (chosenButton == null) {
-            UIUtils.showLongToast(R.string.please_check_something);
+            UIUtils.showLongToast(R.string.please_check_something, this);
         } else {
             problemParent.fullScroll(ScrollView.FOCUS_UP);
             quiz.submitAnswer(chosenButton.getText().toString());
