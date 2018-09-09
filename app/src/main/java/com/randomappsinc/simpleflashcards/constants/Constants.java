@@ -16,5 +16,5 @@ public class Constants {
     public static final String SHOW_WRONG_QUESTIONS_KEY = "showWrongQuestions";
     public static final String CAPTION_KEY = "caption";
 
-    public static final String ONLY_SHOW_IMAGE_SETS_KEY = "onlyShowImageSets";
+    public static final String BACKUP_KEY = "backup";
 }

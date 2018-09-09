@@ -3,6 +3,7 @@ package com.randomappsinc.simpleflashcards.persistence;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
+import android.support.annotation.Nullable;
 
 public class PreferencesManager {
 
@@ -11,6 +12,7 @@ public class PreferencesManager {
     private static final String NEARBY_NAME = "nearbyName";
     private static final String SHAKE_IS_NEW = "shakeIsNew";
     private static final String ENABLE_SHAKE = "enableShake";
+    private static final String BACKUP_FILE_PATH = "backupFilePath";
 
     private static final int NUM_APP_OPENS_BEFORE_ASKING_FOR_RATING = 5;
     private static final int NUM_APP_OPENS_BEFORE_ASKING_FOR_SHARE = 10;
@@ -64,5 +66,14 @@ public class PreferencesManager {
 
     public void setShakeEnabled(boolean enableShake) {
         prefs.edit().putBoolean(ENABLE_SHAKE, enableShake).apply();
+    }
+
+    @Nullable
+    public String getBackupFilePath() {
+        return prefs.getString(BACKUP_FILE_PATH, null);
+    }
+
+    public void setBackupFilePath(String backupFilePath) {
+        prefs.edit().putString(BACKUP_FILE_PATH, backupFilePath).apply();
     }
 }

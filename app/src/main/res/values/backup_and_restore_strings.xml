@@ -1,8 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="backup_and_restore_title">Back Up And Restore Data</string>
+    <string name="backup_data_explanation">
+        Click \"Backup Data\" to tell Simple Flashcards Plus where you want it
+        to back up your data and have it start doing regular backups!
+    </string>
+
     <string-array name="backup_and_restore_tabs">
         <item>Backup</item>
         <item>Restore</item>
     </string-array>
+
+    <string name="backup_data">Backup Data</string>
+    <string name="choose">Choose</string>
+    <string name="export_data">Export Data</string>
+
+    <string name="restore_data">Restore Data</string>
 </resources>
