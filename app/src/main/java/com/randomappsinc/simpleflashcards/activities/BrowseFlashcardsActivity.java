@@ -105,7 +105,9 @@ public class BrowseFlashcardsActivity extends StandardActivity implements ShakeD
     private final TextToSpeechManager.Listener textToSpeechListener = new TextToSpeechManager.Listener() {
         @Override
         public void onTextToSpeechFailure() {
-            UIUtils.showLongToast(R.string.text_to_speech_fail, BrowseFlashcardsActivity.this);
+            UIUtils.showLongToast(
+                    R.string.text_to_speech_fail,
+                    BrowseFlashcardsActivity.this);
         }
     };
 

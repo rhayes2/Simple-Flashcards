@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="backup_and_restore_data">Backup and restore data</string>
     <string name="set_nearby_name">Set nearby name</string>
     <string name="send_feedback">Send feedback</string>
     <string name="share_this_app">Share this app</string>
@@ -7,6 +8,7 @@
     <string name="rate_this_app">Rate this app</string>
     <string name="source_code">Source code</string>
     <string-array name="settings_options">
+        <item>@string/backup_and_restore_data</item>
         <item>@string/set_nearby_name</item>
         <item>@string/send_feedback</item>
         <item>@string/share_this_app</item>
@@ -15,16 +17,18 @@
         <item>@string/source_code</item>
     </string-array>
 
-    <string name="play_store_error">Unable to open the Play Store.</string>
-    <string name="feedback_subject">Simple Flashcards Feedback</string>
+    <string name="play_store_error">Unable to open the Google Play Store.</string>
+    <string name="feedback_subject">Simple Flashcards Plus Feedback</string>
     <string name="send_email">Send email</string>
 
+    <string name="backup_icon">{ion-android-upload}</string>
     <string name="email_icon">{ion-email}</string>
     <string name="share_icon">{ion-android-share-alt}</string>
     <string name="android_icon">{ion-social-android}</string>
     <string name="like_icon">{ion-thumbsup}</string>
     <string name="github_icon">{ion-social-github}</string>
     <string-array name="settings_icons">
+        <item>@string/backup_icon</item>
         <item>@string/person_icon</item>
         <item>@string/email_icon</item>
         <item>@string/share_icon</item>
@@ -34,7 +38,7 @@
     </string-array>
 
     <string name="share_app_message">
-        Hey! I think you\'ll enjoy Simple Flashcards, a free, lightweight way to study on Android.
+        Hey! I think you\'ll enjoy Simple Flashcards Plus, a free, lightweight way to study on Android.
         You can download it at: https://play.google.com/store/apps/details?id=com.randomappsinc.simpleflashcards
     </string>
 </resources>

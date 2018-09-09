@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="backup_and_restore_title">Back Up And Restore Data</string>
+    <string-array name="backup_and_restore_tabs">
+        <item>Backup</item>
+        <item>Restore</item>
+    </string-array>
+</resources>
