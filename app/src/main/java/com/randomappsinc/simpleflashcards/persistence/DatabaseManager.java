@@ -1,6 +1,7 @@
 package com.randomappsinc.simpleflashcards.persistence;
 
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 
 import com.randomappsinc.simpleflashcards.api.models.QuizletFlashcard;
 import com.randomappsinc.simpleflashcards.api.models.QuizletFlashcardSet;
@@ -13,6 +14,7 @@ import java.util.List;
 import io.realm.Case;
 import io.realm.DynamicRealm;
 import io.realm.Realm;
+import io.realm.RealmChangeListener;
 import io.realm.RealmConfiguration;
 import io.realm.RealmList;
 import io.realm.RealmMigration;
@@ -20,6 +22,10 @@ import io.realm.RealmObjectSchema;
 import io.realm.RealmSchema;
 
 public class DatabaseManager {
+
+    public interface Listener {
+        void onDatabaseUpdated();
+    }
 
     private static final int CURRENT_REALM_VERSION = 4;
 
@@ -41,6 +47,7 @@ public class DatabaseManager {
 
     private Realm realm;
     protected boolean idMigrationNeeded;
+    @Nullable protected Listener listener;
 
     private DatabaseManager() {
         RealmConfiguration realmConfig = new RealmConfiguration.Builder()
@@ -54,6 +61,25 @@ public class DatabaseManager {
             addIdsToEverything();
         }
     }
+
+    public void setListener(@Nullable final Listener listener) {
+        this.listener = listener;
+        if (listener == null) {
+            realm.removeChangeListener(realmChangeListener);
+        } else {
+            realm.addChangeListener(realmChangeListener);
+        }
+    }
+
+    private final RealmChangeListener<Realm> realmChangeListener =
+            new RealmChangeListener<Realm>() {
+                @Override
+                public void onChange(@NonNull Realm realm) {
+                    if (listener != null) {
+                        listener.onDatabaseUpdated();
+                    }
+                }
+            };
 
     private final RealmMigration migration = new RealmMigration() {
         @Override

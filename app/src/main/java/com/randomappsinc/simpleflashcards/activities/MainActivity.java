@@ -19,6 +19,7 @@ import com.randomappsinc.simpleflashcards.adapters.FlashcardSetsAdapter;
 import com.randomappsinc.simpleflashcards.constants.Constants;
 import com.randomappsinc.simpleflashcards.dialogs.DeleteFlashcardSetDialog;
 import com.randomappsinc.simpleflashcards.dialogs.FlashcardSetCreatorDialog;
+import com.randomappsinc.simpleflashcards.managers.BackupDataManager;
 import com.randomappsinc.simpleflashcards.persistence.DatabaseManager;
 import com.randomappsinc.simpleflashcards.persistence.PreferencesManager;
 import com.randomappsinc.simpleflashcards.persistence.models.FlashcardSet;
@@ -45,6 +46,8 @@ public class MainActivity extends StandardActivity
     protected FlashcardSetsAdapter adapter;
     private FlashcardSetCreatorDialog flashcardSetCreatorDialog;
     private DeleteFlashcardSetDialog deleteFlashcardSetDialog;
+    protected BackupDataManager backupDataManager = BackupDataManager.get();
+    private DatabaseManager databaseManager = DatabaseManager.get();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,7 +80,16 @@ public class MainActivity extends StandardActivity
         adapter = new FlashcardSetsAdapter(this, this);
         sets.addItemDecoration(new SimpleDividerItemDecoration(this));
         sets.setAdapter(adapter);
+
+        databaseManager.setListener(databaseListener);
     }
+
+    private final DatabaseManager.Listener databaseListener = new DatabaseManager.Listener() {
+        @Override
+        public void onDatabaseUpdated() {
+            backupDataManager.backupData(getApplicationContext());
+        }
+    };
 
     @Override
     protected void onResume() {
@@ -191,6 +203,12 @@ public class MainActivity extends StandardActivity
                 sets.setVisibility(View.VISIBLE);
             }
         }
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        databaseManager.setListener(null);
     }
 
     @Override
