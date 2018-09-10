@@ -11,6 +11,7 @@ import com.randomappsinc.simpleflashcards.R;
 import com.randomappsinc.simpleflashcards.adapters.BackupAndRestoreTabsAdapter;
 import com.randomappsinc.simpleflashcards.constants.Constants;
 import com.randomappsinc.simpleflashcards.managers.BackupDataManager;
+import com.randomappsinc.simpleflashcards.managers.RestoreDataManager;
 import com.randomappsinc.simpleflashcards.persistence.PreferencesManager;
 
 import java.io.File;
@@ -49,6 +50,8 @@ public class BackupAndRestoreActivity extends StandardActivity implements Folder
             PreferencesManager preferencesManager = new PreferencesManager(this);
             preferencesManager.setBackupFolderPath(folder.getAbsolutePath());
             BackupDataManager.get().backupData(this);
+        } else if (dialog.getTag().equals(Constants.RESTORE_KEY)) {
+            RestoreDataManager.get().restoreData(folder.getAbsolutePath());
         }
     }
 

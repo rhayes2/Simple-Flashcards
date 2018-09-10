@@ -25,4 +25,12 @@
     </string>
 
     <string name="restore_data">Restore Data</string>
+    <string name="restore_data_explanation">
+        Click \"Restore Data\" to tell Simple Flashcards Plus where your data
+        backup file is and have it restore your flashcard sets!
+    </string>
+    <string name="backup_file_not_found">
+        We were unable to find \"simple-flashcards-plus-backup.txt\"
+        in your specified folder.
+    </string>
 </resources>
