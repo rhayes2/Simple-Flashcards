@@ -87,7 +87,7 @@ public class MainActivity extends StandardActivity
     private final DatabaseManager.Listener databaseListener = new DatabaseManager.Listener() {
         @Override
         public void onDatabaseUpdated() {
-            backupDataManager.backupData(getApplicationContext());
+            backupDataManager.backupData(getApplicationContext(), false);
         }
     };
 

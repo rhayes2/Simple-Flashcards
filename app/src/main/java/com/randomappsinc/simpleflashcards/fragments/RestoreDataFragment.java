@@ -51,17 +51,12 @@ public class RestoreDataFragment extends Fragment {
     private final RestoreDataManager.Listener restoreDataListener = new RestoreDataManager.Listener() {
         @Override
         public void onDataRestorationComplete() {
-
+            UIUtils.showShortToast(R.string.flashcard_sets_restored, getContext());
         }
 
         @Override
         public void onFileNotFound() {
             UIUtils.showLongToast(R.string.backup_file_not_found, getContext());
-        }
-
-        @Override
-        public void onDataRestorationFailure() {
-
         }
     };
 

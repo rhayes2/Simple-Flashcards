@@ -2,9 +2,15 @@ package com.randomappsinc.simpleflashcards.managers;
 
 import android.os.Handler;
 import android.os.HandlerThread;
+import android.os.Looper;
 import android.support.annotation.Nullable;
 
+import com.randomappsinc.simpleflashcards.persistence.DatabaseManager;
+import com.randomappsinc.simpleflashcards.persistence.models.FlashcardSet;
+import com.randomappsinc.simpleflashcards.utils.JSONUtils;
+
 import java.io.File;
+import java.util.List;
 
 public class RestoreDataManager {
 
@@ -12,8 +18,6 @@ public class RestoreDataManager {
         void onDataRestorationComplete();
 
         void onFileNotFound();
-
-        void onDataRestorationFailure();
     }
 
     private static RestoreDataManager instance;
@@ -32,8 +36,9 @@ public class RestoreDataManager {
         return instance;
     }
 
-    @Nullable private Listener listener;
+    @Nullable protected Listener listener;
     private Handler backgroundHandler;
+    private Handler uiHandler = new Handler(Looper.getMainLooper());
 
     private RestoreDataManager() {
         HandlerThread handlerThread = new HandlerThread("Restore Data");
@@ -46,13 +51,33 @@ public class RestoreDataManager {
     }
 
     public void restoreData(String folderPath) {
-        File backupFile = new File(folderPath + "/" + BackupDataManager.BACKUP_FILE_NAME);
+        final File backupFile = new File(folderPath + "/" + BackupDataManager.BACKUP_FILE_NAME);
         if (backupFile.exists()) {
-
+            backgroundHandler.post(new Runnable() {
+                @Override
+                public void run() {
+                    List<FlashcardSet> flashcardSets = JSONUtils.getSetsForDataRestoration(backupFile);
+                    restoreFlashcardSets(flashcardSets);
+                }
+            });
         } else {
             if (listener != null) {
                 listener.onFileNotFound();
             }
         }
+    }
+
+    protected void restoreFlashcardSets(final List<FlashcardSet> flashcardSets) {
+        uiHandler.post(new Runnable() {
+            @Override
+            public void run() {
+                DatabaseManager databaseManager = DatabaseManager.get();
+                databaseManager.restoreFlashcardSets(flashcardSets);
+
+                if (listener != null) {
+                    listener.onDataRestorationComplete();
+                }
+            }
+        });
     }
 }

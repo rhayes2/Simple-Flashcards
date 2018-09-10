@@ -10,6 +10,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 
 import io.realm.RealmList;
@@ -68,9 +70,17 @@ public class JSONUtils {
             return null;
         }
 
-        FlashcardSet flashcardSet = new FlashcardSet();
         try {
             JSONObject flashcardSetJson = new JSONObject(flashcardSetJsonText);
+            return getFlashcardSetFromJson(flashcardSetJson);
+        } catch (JSONException ignored) {
+            return null;
+        }
+    }
+
+    public static FlashcardSet getFlashcardSetFromJson(JSONObject flashcardSetJson) {
+        FlashcardSet flashcardSet = new FlashcardSet();
+        try {
             flashcardSet.setQuizletSetId(flashcardSetJson.getLong(QUIZLET_SET_ID_KEY));
             flashcardSet.setName(flashcardSetJson.getString(NAME_KEY));
 
@@ -90,5 +100,19 @@ public class JSONUtils {
         }
         catch (JSONException ignored) {}
         return flashcardSet;
+    }
+
+    public static List<FlashcardSet> getSetsForDataRestoration(File backupFile) {
+        List<FlashcardSet> flashcardSets = new ArrayList<>();
+        String fileContents = FileUtils.getFileContents(backupFile);
+        try {
+            JSONArray setsArray = new JSONArray(fileContents);
+            for (int i = 0; i < setsArray.length(); i++) {
+                JSONObject flashcardSetJson = setsArray.getJSONObject(i);
+                flashcardSets.add(getFlashcardSetFromJson(flashcardSetJson));
+            }
+        }
+        catch (JSONException ignored) {}
+        return flashcardSets;
     }
 }

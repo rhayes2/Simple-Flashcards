@@ -52,7 +52,7 @@ public class BackupDataManager {
         backgroundHandler = new Handler(handlerThread.getLooper());
     }
 
-    public void backupData(final Context context) {
+    public void backupData(final Context context, final boolean userTriggered) {
         final List<FlashcardSet> flashcardSets = databaseManager.getAllFlashcardSetsClean();
         backgroundHandler.post(new Runnable() {
             @Override
@@ -63,9 +63,13 @@ public class BackupDataManager {
                     FileOutputStream stream = new FileOutputStream(file);
                     stream.write(JSONUtils.serializeFlashcardSets(flashcardSets).getBytes());
                     stream.close();
-                    alertListenerOfBackupComplete();
+                    if (userTriggered) {
+                        alertListenerOfBackupComplete();
+                    }
                 } catch (Exception exception) {
-                    alertListenerOfBackupFail();
+                    if (userTriggered) {
+                        alertListenerOfBackupFail();
+                    }
                 }
             }
         });

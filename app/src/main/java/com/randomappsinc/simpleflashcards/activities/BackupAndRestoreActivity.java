@@ -49,7 +49,7 @@ public class BackupAndRestoreActivity extends StandardActivity implements Folder
         if (dialog.getTag().equals(Constants.BACKUP_KEY)) {
             PreferencesManager preferencesManager = new PreferencesManager(this);
             preferencesManager.setBackupFolderPath(folder.getAbsolutePath());
-            BackupDataManager.get().backupData(this);
+            BackupDataManager.get().backupData(this, true);
         } else if (dialog.getTag().equals(Constants.RESTORE_KEY)) {
             RestoreDataManager.get().restoreData(folder.getAbsolutePath());
         }

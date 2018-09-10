@@ -91,7 +91,7 @@ public class BackupDataFragment extends Fragment {
         if (preferencesManager.getBackupFolderPath() == null) {
             folderChooserDialog.show(getActivity());
         } else {
-            backupDataManager.backupData(getContext());
+            backupDataManager.backupData(getContext(), true);
         }
     }
 

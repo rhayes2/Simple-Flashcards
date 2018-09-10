@@ -33,4 +33,5 @@
         We were unable to find \"simple-flashcards-plus-backup.txt\"
         in your specified folder.
     </string>
+    <string name="flashcard_sets_restored">Flashcard sets restored.</string>
 </resources>

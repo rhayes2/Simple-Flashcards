@@ -359,7 +359,10 @@ public class DatabaseManager {
         }
     }
 
-    public void saveNearbyTransferSet(FlashcardSet flashcardSet) {
+    /**
+     * Adds a flashcard set from nearby sharing or data restoration to DB.
+     */
+    public void addExternalSetToDb(FlashcardSet flashcardSet) {
         try {
             realm.beginTransaction();
 
@@ -385,6 +388,12 @@ public class DatabaseManager {
             realm.commitTransaction();
         } catch (Exception e) {
             realm.cancelTransaction();
+        }
+    }
+
+    public void restoreFlashcardSets(final List<FlashcardSet> flashcardSets) {
+        for (FlashcardSet flashcardSet : flashcardSets) {
+            addExternalSetToDb(flashcardSet);
         }
     }
 
