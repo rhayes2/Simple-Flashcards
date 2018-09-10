@@ -3,8 +3,8 @@ package com.randomappsinc.simpleflashcards.managers;
 import android.content.Context;
 import android.os.Handler;
 import android.os.HandlerThread;
+import android.os.Looper;
 import android.support.annotation.Nullable;
-import android.util.Log;
 
 import com.randomappsinc.simpleflashcards.persistence.DatabaseManager;
 import com.randomappsinc.simpleflashcards.persistence.PreferencesManager;
@@ -20,8 +20,6 @@ public class BackupDataManager {
     public static final String BACKUP_FILE_NAME = "simple-flashcards-plus-backup.txt";
 
     public interface Listener {
-        void onBackupStarted();
-
         void onBackupComplete();
 
         void onBackupFailed();
@@ -44,6 +42,7 @@ public class BackupDataManager {
     }
 
     private Handler backgroundHandler;
+    private Handler uiHandler = new Handler(Looper.getMainLooper());
     private DatabaseManager databaseManager = DatabaseManager.get();
     @Nullable protected Listener listener;
 
@@ -54,32 +53,44 @@ public class BackupDataManager {
     }
 
     public void backupData(final Context context) {
-        if (listener != null) {
-            listener.onBackupStarted();
-        }
-
         final List<FlashcardSet> flashcardSets = databaseManager.getAllFlashcardSetsClean();
         backgroundHandler.post(new Runnable() {
             @Override
             public void run() {
                 PreferencesManager preferencesManager = new PreferencesManager(context);
                 File file = new File(preferencesManager.getBackupFolderPath(), BACKUP_FILE_NAME);
-                Log.d("Backup", file.getAbsolutePath());
                 try {
                     FileOutputStream stream = new FileOutputStream(file);
                     stream.write(JSONUtils.serializeFlashcardSets(flashcardSets).getBytes());
                     stream.close();
-
-                    if (listener != null) {
-                        listener.onBackupComplete();
-                    }
+                    alertListenerOfBackupComplete();
                 } catch (Exception exception) {
-                    if (listener != null) {
-                        listener.onBackupFailed();
-                    }
+                    alertListenerOfBackupFail();
                 }
             }
         });
+    }
+
+    protected void alertListenerOfBackupComplete() {
+        if (listener != null) {
+            uiHandler.post(new Runnable() {
+                @Override
+                public void run() {
+                    listener.onBackupComplete();
+                }
+            });
+        }
+    }
+
+    protected void alertListenerOfBackupFail() {
+        if (listener != null) {
+            uiHandler.post(new Runnable() {
+                @Override
+                public void run() {
+                    listener.onBackupFailed();
+                }
+            });
+        }
     }
 
     public void setListener(@Nullable Listener listener) {

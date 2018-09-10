@@ -11,6 +11,7 @@ import android.support.v4.content.FileProvider;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.afollestad.materialdialogs.folderselector.FolderChooserDialog;
 import com.randomappsinc.simpleflashcards.R;
@@ -19,10 +20,13 @@ import com.randomappsinc.simpleflashcards.managers.BackupDataManager;
 import com.randomappsinc.simpleflashcards.persistence.PreferencesManager;
 import com.randomappsinc.simpleflashcards.utils.FileUtils;
 import com.randomappsinc.simpleflashcards.utils.PermissionUtils;
+import com.randomappsinc.simpleflashcards.utils.TimeUtils;
 import com.randomappsinc.simpleflashcards.utils.UIUtils;
 
 import java.io.File;
 
+import butterknife.BindString;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
@@ -30,6 +34,9 @@ import butterknife.Unbinder;
 public class BackupDataFragment extends Fragment {
 
     private static final int WRITE_EXTERNAL_STORAGE_CODE = 1;
+
+    @BindView(R.id.backup_subtitle) TextView backupSubtitle;
+    @BindString(R.string.backup_subtitle_with_backup) String subtitleTemplate;
 
     private FolderChooserDialog folderChooserDialog;
     private BackupDataManager backupDataManager = BackupDataManager.get();
@@ -43,6 +50,7 @@ public class BackupDataFragment extends Fragment {
                 container,
                 false);
         unbinder = ButterKnife.bind(this, rootView);
+        setBackupSubtitle();
         return rootView;
     }
 
@@ -55,6 +63,16 @@ public class BackupDataFragment extends Fragment {
                 .chooseButton(R.string.choose)
                 .build();
         backupDataManager.setListener(backupDataListener);
+    }
+
+    protected void setBackupSubtitle() {
+        File backupFile = FileUtils.getBackupFile(getContext());
+        if (backupFile == null) {
+            backupSubtitle.setText(R.string.backup_data_explanation);
+        } else {
+            String lastBackupTime = TimeUtils.getLastBackupTime(backupFile.lastModified());
+            backupSubtitle.setText(String.format(subtitleTemplate, lastBackupTime, backupFile.getAbsolutePath()));
+        }
     }
 
     @OnClick(R.id.backup_data)
@@ -98,18 +116,14 @@ public class BackupDataFragment extends Fragment {
 
     private final BackupDataManager.Listener backupDataListener = new BackupDataManager.Listener() {
         @Override
-        public void onBackupStarted() {
-
-        }
-
-        @Override
         public void onBackupComplete() {
-            UIUtils.showLongToast("Backup complete!", getContext());
+            UIUtils.showShortToast(R.string.backup_successful, getContext());
+            setBackupSubtitle();
         }
 
         @Override
         public void onBackupFailed() {
-
+            UIUtils.showLongToast(R.string.backup_failed, getContext());
         }
     };
 

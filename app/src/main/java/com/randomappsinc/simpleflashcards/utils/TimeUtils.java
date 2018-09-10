@@ -11,6 +11,7 @@ public class TimeUtils {
     private static final int SECONDS_PER_HOUR = 60 * SECONDS_PER_MINUTE;
 
     private static final String DATE_FORMAT = "MM/dd/yyyy";
+    private static final String EXACT_TIME_FORMAT = "EEEE, MMMM d, yyyy - h:mm:ss a";
 
     public static String getFlashcardSetTime(long unixTime) {
         Date date = new Date(unixTime);
@@ -28,5 +29,12 @@ public class TimeUtils {
         return String.format(Locale.getDefault(), "%02d", remainingHours)
                 + ":" + String.format(Locale.getDefault(), "%02d", remainingMinutes)
                 + ":" + String.format(Locale.getDefault(), "%02d", remainingSeconds);
+    }
+
+    public static String getLastBackupTime(long unixTime) {
+        Date date = new Date(unixTime);
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(EXACT_TIME_FORMAT, Locale.getDefault());
+        simpleDateFormat.setTimeZone(TimeZone.getDefault());
+        return simpleDateFormat.format(date);
     }
 }
