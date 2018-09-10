@@ -3,6 +3,8 @@ package com.randomappsinc.simpleflashcards.utils;
 import android.content.Context;
 import android.support.annotation.Nullable;
 
+import com.randomappsinc.simpleflashcards.managers.BackupDataManager;
+import com.randomappsinc.simpleflashcards.persistence.PreferencesManager;
 import com.randomappsinc.simpleflashcards.persistence.models.FlashcardSet;
 
 import java.io.File;
@@ -43,5 +45,16 @@ public class FileUtils {
             }
         }
         return contents;
+    }
+
+    @Nullable
+    public static File getBackupFile(Context context) {
+        PreferencesManager preferencesManager = new PreferencesManager(context);
+        String folderPath = preferencesManager.getBackupFolderPath();
+        if (folderPath == null) {
+            return null;
+        }
+        return new File(preferencesManager.getBackupFolderPath()
+                + "/" + BackupDataManager.BACKUP_FILE_NAME);
     }
 }

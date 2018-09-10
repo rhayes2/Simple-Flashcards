@@ -14,6 +14,10 @@
     <string name="backup_data">Backup Data</string>
     <string name="choose">Choose</string>
     <string name="export_data">Export Data</string>
+    <string name="export_data_with">Export data with</string>
+    <string name="cannot_export_nothing">
+        We cannot export your data if you have never backed it up.
+    </string>
 
     <string name="restore_data">Restore Data</string>
 </resources>

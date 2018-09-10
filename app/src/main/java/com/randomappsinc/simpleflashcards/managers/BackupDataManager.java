@@ -17,7 +17,7 @@ import java.util.List;
 
 public class BackupDataManager {
 
-    private static final String BACKUP_FILE_NAME = "simple-flashcards-plus-backup.txt";
+    public static final String BACKUP_FILE_NAME = "simple-flashcards-plus-backup.txt";
 
     public interface Listener {
         void onBackupStarted();

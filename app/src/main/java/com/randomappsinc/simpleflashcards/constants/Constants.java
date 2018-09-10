@@ -17,4 +17,5 @@ public class Constants {
     public static final String CAPTION_KEY = "caption";
 
     public static final String BACKUP_KEY = "backup";
+    public static final String FILE_AUTHORITY = "com.randomappsinc.simpleflashcards.provider";
 }
