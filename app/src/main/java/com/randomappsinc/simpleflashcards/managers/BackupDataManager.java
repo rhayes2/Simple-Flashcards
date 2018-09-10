@@ -53,12 +53,17 @@ public class BackupDataManager {
     }
 
     public void backupData(final Context context, final boolean userTriggered) {
+        PreferencesManager preferencesManager = new PreferencesManager(context);
+        final String backupFolderPath = preferencesManager.getBackupFolderPath();
+        if (backupFolderPath == null) {
+            return;
+        }
+
         final List<FlashcardSet> flashcardSets = databaseManager.getAllFlashcardSetsClean();
         backgroundHandler.post(new Runnable() {
             @Override
             public void run() {
-                PreferencesManager preferencesManager = new PreferencesManager(context);
-                File file = new File(preferencesManager.getBackupFolderPath(), BACKUP_FILE_NAME);
+                File file = new File(backupFolderPath, BACKUP_FILE_NAME);
                 try {
                     FileOutputStream stream = new FileOutputStream(file);
                     stream.write(JSONUtils.serializeFlashcardSets(flashcardSets).getBytes());
