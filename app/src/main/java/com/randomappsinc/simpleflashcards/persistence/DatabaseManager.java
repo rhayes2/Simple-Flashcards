@@ -238,6 +238,10 @@ public class DatabaseManager {
         }
     }
 
+    /**
+     * Gets all flashcard sets which contain the given search term, case insensitive.
+     * If the search term is empty, return all flashcard sets.
+     */
     public List<FlashcardSet> getFlashcardSets(String searchTerm) {
         List<FlashcardSet> flashcardSets;
         if (searchTerm.trim().isEmpty()) {
@@ -249,6 +253,13 @@ public class DatabaseManager {
                     .findAll();
         }
         return flashcardSets;
+    }
+
+    /**
+     * Creates a deep copy of all flashcard sets to avoid Realm access shenanigans.
+     */
+    public List<FlashcardSet> getAllFlashcardSetsClean() {
+        return DBConverter.createDeepCopyList(realm.where(FlashcardSet.class).findAll());
     }
 
     public List<Flashcard> getAllFlashcards(int setId) {

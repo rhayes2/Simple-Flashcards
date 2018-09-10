@@ -9,7 +9,9 @@ import android.support.v7.widget.Toolbar;
 import com.afollestad.materialdialogs.folderselector.FolderChooserDialog;
 import com.randomappsinc.simpleflashcards.R;
 import com.randomappsinc.simpleflashcards.adapters.BackupAndRestoreTabsAdapter;
-import com.randomappsinc.simpleflashcards.utils.UIUtils;
+import com.randomappsinc.simpleflashcards.constants.Constants;
+import com.randomappsinc.simpleflashcards.managers.BackupDataManager;
+import com.randomappsinc.simpleflashcards.persistence.PreferencesManager;
 
 import java.io.File;
 
@@ -39,7 +41,15 @@ public class BackupAndRestoreActivity extends StandardActivity implements Folder
 
     @Override
     public void onFolderSelection(@NonNull FolderChooserDialog dialog, @NonNull File folder) {
-        UIUtils.showLongToast("Tag: " + dialog.getTag() + " || " + folder.getAbsolutePath(), this);
+        if (dialog.getTag() == null) {
+            return;
+        }
+
+        if (dialog.getTag().equals(Constants.BACKUP_KEY)) {
+            PreferencesManager preferencesManager = new PreferencesManager(this);
+            preferencesManager.setBackupFolderPath(folder.getAbsolutePath());
+            BackupDataManager.get().backupData(this);
+        }
     }
 
     @Override

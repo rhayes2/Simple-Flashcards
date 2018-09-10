@@ -12,7 +12,7 @@ public class PreferencesManager {
     private static final String NEARBY_NAME = "nearbyName";
     private static final String SHAKE_IS_NEW = "shakeIsNew";
     private static final String ENABLE_SHAKE = "enableShake";
-    private static final String BACKUP_FILE_PATH = "backupFilePath";
+    private static final String BACKUP_FOLDER_PATH = "backupFilePath";
 
     private static final int NUM_APP_OPENS_BEFORE_ASKING_FOR_RATING = 5;
     private static final int NUM_APP_OPENS_BEFORE_ASKING_FOR_SHARE = 10;
@@ -69,11 +69,11 @@ public class PreferencesManager {
     }
 
     @Nullable
-    public String getBackupFilePath() {
-        return prefs.getString(BACKUP_FILE_PATH, null);
+    public String getBackupFolderPath() {
+        return prefs.getString(BACKUP_FOLDER_PATH, null);
     }
 
-    public void setBackupFilePath(String backupFilePath) {
-        prefs.edit().putString(BACKUP_FILE_PATH, backupFilePath).apply();
+    public void setBackupFolderPath(String backupFolderPath) {
+        prefs.edit().putString(BACKUP_FOLDER_PATH, backupFolderPath).apply();
     }
 }

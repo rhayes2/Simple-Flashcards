@@ -10,6 +10,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.List;
+
 import io.realm.RealmList;
 
 public class JSONUtils {
@@ -22,6 +24,23 @@ public class JSONUtils {
     private static final String DEFINITION_KEY = "definition";
 
     public static String serializeFlashcardSet(FlashcardSet flashcardSet) {
+        JSONObject flashcardSetJson = createFlashcardSetJson(flashcardSet);
+        return flashcardSetJson == null ? "" : flashcardSetJson.toString();
+    }
+
+    public static String serializeFlashcardSets(List<FlashcardSet> flashcardSets) {
+        JSONArray flashcardSetsArray = new JSONArray();
+        for (FlashcardSet flashcardSet : flashcardSets) {
+            JSONObject flashcardSetJson = createFlashcardSetJson(flashcardSet);
+            if (flashcardSetJson != null) {
+                flashcardSetsArray.put(flashcardSetJson);
+            }
+        }
+        return flashcardSetsArray.toString();
+    }
+
+    @Nullable
+    public static JSONObject createFlashcardSetJson(FlashcardSet flashcardSet) {
         try {
             JSONObject flashcardSetJson = new JSONObject();
             flashcardSetJson.put(QUIZLET_SET_ID_KEY, flashcardSet.getQuizletSetId());
@@ -37,9 +56,9 @@ public class JSONUtils {
             }
             flashcardSetJson.put(FLASHCARDS_KEY, flashcards);
 
-            return flashcardSetJson.toString();
+            return flashcardSetJson;
         } catch (JSONException e) {
-            return "";
+            return null;
         }
     }
 
