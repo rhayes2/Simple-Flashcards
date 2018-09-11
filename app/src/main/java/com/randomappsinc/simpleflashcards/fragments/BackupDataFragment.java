@@ -95,6 +95,18 @@ public class BackupDataFragment extends Fragment {
         }
     }
 
+    @OnClick(R.id.change_backup_folder)
+    public void changeBackupFolder() {
+        if (PermissionUtils.isPermissionGranted(Manifest.permission.WRITE_EXTERNAL_STORAGE, getContext())) {
+            folderChooserDialog.show(getActivity());
+        } else {
+            PermissionUtils.requestPermission(
+                    this,
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                    WRITE_EXTERNAL_STORAGE_CODE);
+        }
+    }
+
     @OnClick(R.id.export_data)
     public void exportData() {
         File backupFile = FileUtils.getBackupFile(getContext());

@@ -18,6 +18,7 @@
     <string name="backup_successful">Backup successful!</string>
     <string name="backup_failed">We failed to back up your data.</string>
     <string name="choose">Choose</string>
+    <string name="change_backup_folder">Change Backup Folder</string>
     <string name="export_data">Export Data</string>
     <string name="export_data_with">Export data with</string>
     <string name="cannot_export_nothing">

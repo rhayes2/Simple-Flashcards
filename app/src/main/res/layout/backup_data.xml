@@ -35,6 +35,11 @@
             style="@style/rounded_button"/>
 
         <TextView
+            android:id="@+id/change_backup_folder"
+            android:text="@string/change_backup_folder"
+            style="@style/rounded_button"/>
+
+        <TextView
             android:id="@+id/export_data"
             android:text="@string/export_data"
             style="@style/rounded_button"/>
