@@ -15,6 +15,7 @@ public class PreferencesManager {
     private static final String BACKUP_FOLDER_PATH = "backupFilePath";
     private static final String RATING_DIALOG_SEEN = "ratingDialogSeen";
     private static final String SHARING_DIALOG_SEEN = "sharingDialogSeen";
+    private static final String BACKUP_DATA_DIALOG_SEEN = "backupDataDialogSeen";
 
     private static final int NUM_APP_OPENS_BEFORE_ASKING_FOR_RATING = 5;
     private static final int NUM_APP_OPENS_BEFORE_ASKING_FOR_SHARE = 10;
@@ -56,6 +57,14 @@ public class PreferencesManager {
 
     public void rememberSharingDialogSeen() {
         prefs.edit().putBoolean(SHARING_DIALOG_SEEN, true).apply();
+    }
+
+    public boolean hasSeenBackupDataDialog() {
+        return prefs.getBoolean(BACKUP_DATA_DIALOG_SEEN, false);
+    }
+
+    public void rememberBackupDataDialogSeen() {
+        prefs.edit().putBoolean(BACKUP_DATA_DIALOG_SEEN, true).apply();
     }
 
     public String getNearbyName() {

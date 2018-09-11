@@ -10,6 +10,7 @@ import android.widget.Toast;
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.randomappsinc.simpleflashcards.R;
+import com.randomappsinc.simpleflashcards.activities.BackupAndRestoreActivity;
 import com.randomappsinc.simpleflashcards.persistence.PreferencesManager;
 
 public class DialogUtil {
@@ -22,6 +23,20 @@ public class DialogUtil {
                     .title(R.string.welcome)
                     .content(R.string.ask_for_help)
                     .positiveText(R.string.got_it)
+                    .show();
+        } else if (!preferencesManager.hasSeenBackupDataDialog()) {
+            preferencesManager.rememberBackupDataDialogSeen();
+            new MaterialDialog.Builder(activity)
+                    .title(R.string.backup_your_data)
+                    .content(R.string.backup_your_data_explanation)
+                    .negativeText(R.string.backup_deny)
+                    .positiveText(R.string.backup_confirm)
+                    .onPositive(new MaterialDialog.SingleButtonCallback() {
+                        @Override
+                        public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                            activity.startActivity(new Intent(activity, BackupAndRestoreActivity.class));
+                        }
+                    })
                     .show();
         } else if (preferencesManager.shouldAskForRating()) {
             preferencesManager.rememberRatingDialogSeen();
