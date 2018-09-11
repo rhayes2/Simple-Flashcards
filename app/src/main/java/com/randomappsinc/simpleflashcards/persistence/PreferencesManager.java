@@ -13,6 +13,8 @@ public class PreferencesManager {
     private static final String SHAKE_IS_NEW = "shakeIsNew";
     private static final String ENABLE_SHAKE = "enableShake";
     private static final String BACKUP_FOLDER_PATH = "backupFilePath";
+    private static final String RATING_DIALOG_SEEN = "ratingDialogSeen";
+    private static final String SHARING_DIALOG_SEEN = "sharingDialogSeen";
 
     private static final int NUM_APP_OPENS_BEFORE_ASKING_FOR_RATING = 5;
     private static final int NUM_APP_OPENS_BEFORE_ASKING_FOR_SHARE = 10;
@@ -38,12 +40,22 @@ public class PreferencesManager {
 
     public boolean shouldAskForRating() {
         int currentOpens = prefs.getInt(NUM_OPENS_KEY, 0);
-        return currentOpens == NUM_APP_OPENS_BEFORE_ASKING_FOR_RATING;
+        boolean ratingDialogSeen = prefs.getBoolean(RATING_DIALOG_SEEN, false);
+        return currentOpens >= NUM_APP_OPENS_BEFORE_ASKING_FOR_RATING && !ratingDialogSeen;
+    }
+
+    public void rememberRatingDialogSeen() {
+        prefs.edit().putBoolean(RATING_DIALOG_SEEN, true).apply();
     }
 
     public boolean shouldAskForShare() {
         int currentOpens = prefs.getInt(NUM_OPENS_KEY, 0);
-        return currentOpens == NUM_APP_OPENS_BEFORE_ASKING_FOR_SHARE;
+        boolean sharingDialogSeen = prefs.getBoolean(SHARING_DIALOG_SEEN, false);
+        return currentOpens >= NUM_APP_OPENS_BEFORE_ASKING_FOR_SHARE && !sharingDialogSeen;
+    }
+
+    public void rememberSharingDialogSeen() {
+        prefs.edit().putBoolean(SHARING_DIALOG_SEEN, true).apply();
     }
 
     public String getNearbyName() {

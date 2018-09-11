@@ -11,7 +11,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 
-import com.afollestad.materialdialogs.MaterialDialog;
 import com.joanzapata.iconify.IconDrawable;
 import com.joanzapata.iconify.fonts.IoniconsIcons;
 import com.randomappsinc.simpleflashcards.R;
@@ -23,6 +22,7 @@ import com.randomappsinc.simpleflashcards.managers.BackupDataManager;
 import com.randomappsinc.simpleflashcards.persistence.DatabaseManager;
 import com.randomappsinc.simpleflashcards.persistence.PreferencesManager;
 import com.randomappsinc.simpleflashcards.persistence.models.FlashcardSet;
+import com.randomappsinc.simpleflashcards.utils.DialogUtil;
 import com.randomappsinc.simpleflashcards.utils.UIUtils;
 import com.randomappsinc.simpleflashcards.views.SimpleDividerItemDecoration;
 
@@ -57,18 +57,7 @@ public class MainActivity extends StandardActivity
 
         PreferencesManager preferencesManager = new PreferencesManager(this);
         preferencesManager.logAppOpen();
-        if (preferencesManager.isFirstTimeUser()) {
-            preferencesManager.rememberWelcome();
-            new MaterialDialog.Builder(this)
-                    .title(R.string.welcome)
-                    .content(R.string.ask_for_help)
-                    .positiveText(android.R.string.yes)
-                    .show();
-        } else if (preferencesManager.shouldAskForRating()) {
-            UIUtils.askForRating(this);
-        } else if (preferencesManager.shouldAskForShare()) {
-            UIUtils.askToShare(this);
-        }
+        DialogUtil.showHomepageDialog(this);
 
         addFlashcardSet.setImageDrawable(new IconDrawable(this, IoniconsIcons.ion_android_add)
                 .colorRes(R.color.white)
