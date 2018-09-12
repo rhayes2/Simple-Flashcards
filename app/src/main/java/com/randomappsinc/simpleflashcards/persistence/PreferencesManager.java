@@ -2,12 +2,8 @@ package com.randomappsinc.simpleflashcards.persistence;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.net.Uri;
 import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
-
-import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
 
 public class PreferencesManager {
 

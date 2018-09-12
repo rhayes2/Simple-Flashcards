@@ -11,7 +11,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
-import android.support.v4.content.FileProvider;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,12 +21,9 @@ import com.randomappsinc.simpleflashcards.R;
 import com.randomappsinc.simpleflashcards.constants.Constants;
 import com.randomappsinc.simpleflashcards.managers.BackupDataManager;
 import com.randomappsinc.simpleflashcards.persistence.PreferencesManager;
-import com.randomappsinc.simpleflashcards.utils.FileUtils;
 import com.randomappsinc.simpleflashcards.utils.PermissionUtils;
 import com.randomappsinc.simpleflashcards.utils.TimeUtils;
 import com.randomappsinc.simpleflashcards.utils.UIUtils;
-
-import java.io.File;
 
 import butterknife.BindString;
 import butterknife.BindView;

@@ -13,7 +13,6 @@ import com.randomappsinc.simpleflashcards.constants.Constants;
 import com.randomappsinc.simpleflashcards.persistence.DatabaseManager;
 import com.randomappsinc.simpleflashcards.persistence.PreferencesManager;
 import com.randomappsinc.simpleflashcards.persistence.models.FlashcardSet;
-import com.randomappsinc.simpleflashcards.utils.FileUtils;
 import com.randomappsinc.simpleflashcards.utils.JSONUtils;
 
 import java.io.File;
