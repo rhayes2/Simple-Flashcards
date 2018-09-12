@@ -60,7 +60,7 @@ public class RestoreDataFragment extends Fragment {
             UIUtils.showShortToast(R.string.flashcard_sets_restored, getContext());
 
             Activity activity = getActivity();
-            if (activity != null) {
+            if (activity != null && addedSetIds.length > 0) {
                 Intent intent = new Intent(activity, AddedFlashcardSetsActivity.class)
                         .putExtra(Constants.ADDED_SET_IDS_KEY, addedSetIds);
                 activity.startActivity(intent);

@@ -108,26 +108,11 @@ public class TextToSpeechManager implements TextToSpeech.OnInitListener {
     public void onInit(int status) {
         enabled = (status == TextToSpeech.SUCCESS);
         if (enabled) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH_MR1) {
-                setUtteranceListenerPost15();
-            } else {
-                setUtteranceListenerPre15();
-            }
+            setUtteranceListener();
         }
     }
 
-    @SuppressWarnings("SuppressWarnings")
-    private void setUtteranceListenerPre15() {
-        textToSpeech.setOnUtteranceCompletedListener(new TextToSpeech.OnUtteranceCompletedListener() {
-            @Override
-            public void onUtteranceCompleted(String utteranceId) {
-                audioManager.abandonAudioFocus(audioFocusChangeListener);
-            }
-        });
-    }
-
-    @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH_MR1)
-    private void setUtteranceListenerPost15() {
+    private void setUtteranceListener() {
         textToSpeech.setOnUtteranceProgressListener(new UtteranceProgressListener() {
             @Override
             public void onStart(String utteranceId) {}
@@ -161,5 +146,10 @@ public class TextToSpeechManager implements TextToSpeech.OnInitListener {
             audioManager.abandonAudioFocus(audioFocusChangeListener);
             textToSpeech.stop();
         }
+    }
+
+    public void shutdown() {
+        textToSpeech.shutdown();
+        listener = null;
     }
 }

@@ -209,7 +209,8 @@ public class BrowseFlashcardsActivity extends StandardActivity implements ShakeD
 
     @Override
     public void onDestroy() {
-        super.onDestroy();
+        textToSpeechManager.shutdown();
         settingsManager.shutdown();
+        super.onDestroy();
     }
 }
