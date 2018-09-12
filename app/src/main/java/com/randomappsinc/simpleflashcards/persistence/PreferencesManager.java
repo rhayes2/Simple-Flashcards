@@ -12,7 +12,15 @@ public class PreferencesManager {
     private static final String NEARBY_NAME = "nearbyName";
     private static final String SHAKE_IS_NEW = "shakeIsNew";
     private static final String ENABLE_SHAKE = "enableShake";
-    private static final String BACKUP_FOLDER_PATH = "backupFilePath";
+
+    // Pre-Kitkat (19), we work with file paths
+    private static final String BACKUP_FILE_PATH = "backupFilePath";
+
+    // On KitKat+, we work with URIs (Storage Access Framework)
+    private static final String BACKUP_URI = "backupUri";
+
+    private static final String LAST_BACKUP_TIME = "lastBackupTime";
+
     private static final String RATING_DIALOG_SEEN = "ratingDialogSeen";
     private static final String SHARING_DIALOG_SEEN = "sharingDialogSeen";
     private static final String BACKUP_DATA_DIALOG_SEEN = "backupDataDialogSeen";
@@ -90,11 +98,28 @@ public class PreferencesManager {
     }
 
     @Nullable
-    public String getBackupFolderPath() {
-        return prefs.getString(BACKUP_FOLDER_PATH, null);
+    public String getBackupFilePath() {
+        return prefs.getString(BACKUP_FILE_PATH, null);
     }
 
-    public void setBackupFolderPath(String backupFolderPath) {
-        prefs.edit().putString(BACKUP_FOLDER_PATH, backupFolderPath).apply();
+    public void setBackupFilePath(String backupFilePath) {
+        prefs.edit().putString(BACKUP_FILE_PATH, backupFilePath).apply();
+    }
+
+    @Nullable
+    public String getBackupUri() {
+        return prefs.getString(BACKUP_URI, null);
+    }
+
+    public void setBackupUri(String backupUriPath) {
+        prefs.edit().putString(BACKUP_URI, backupUriPath).apply();
+    }
+
+    public long getLastBackupTime() {
+        return prefs.getLong(LAST_BACKUP_TIME, 0);
+    }
+
+    public void updateLastBackupTime() {
+        prefs.edit().putLong(LAST_BACKUP_TIME, System.currentTimeMillis()).apply();
     }
 }

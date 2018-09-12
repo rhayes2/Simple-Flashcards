@@ -1,9 +1,13 @@
 package com.randomappsinc.simpleflashcards.fragments;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
+import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
@@ -34,6 +38,7 @@ import butterknife.Unbinder;
 public class BackupDataFragment extends Fragment {
 
     private static final int WRITE_EXTERNAL_STORAGE_CODE = 1;
+    private static final int WRITE_BACKUP_FILE_CODE = 350;
 
     @BindView(R.id.backup_subtitle) TextView backupSubtitle;
     @BindString(R.string.backup_subtitle_with_backup) String subtitleTemplate;
@@ -50,6 +55,7 @@ public class BackupDataFragment extends Fragment {
                 container,
                 false);
         unbinder = ButterKnife.bind(this, rootView);
+        preferencesManager = new PreferencesManager(getContext());
         setBackupSubtitle();
         return rootView;
     }
@@ -57,7 +63,6 @@ public class BackupDataFragment extends Fragment {
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        preferencesManager = new PreferencesManager(getContext());
         folderChooserDialog = new FolderChooserDialog.Builder(getActivity())
                 .tag(Constants.BACKUP_KEY)
                 .chooseButton(R.string.choose)
@@ -66,12 +71,13 @@ public class BackupDataFragment extends Fragment {
     }
 
     protected void setBackupSubtitle() {
-        File backupFile = FileUtils.getBackupFile(getContext());
-        if (backupFile == null) {
+        String backupFilePath = preferencesManager.getBackupFilePath();
+        if (backupFilePath == null) {
             backupSubtitle.setText(R.string.backup_data_explanation);
         } else {
-            String lastBackupTime = TimeUtils.getLastBackupTime(backupFile.lastModified());
-            backupSubtitle.setText(String.format(subtitleTemplate, lastBackupTime, backupFile.getAbsolutePath()));
+            long lastBackupUnixTime = preferencesManager.getLastBackupTime();
+            String lastBackupTime = TimeUtils.getLastBackupTime(lastBackupUnixTime);
+            backupSubtitle.setText(String.format(subtitleTemplate, lastBackupTime, backupFilePath));
         }
     }
 
@@ -88,17 +94,29 @@ public class BackupDataFragment extends Fragment {
     }
 
     private void backupData() {
-        if (preferencesManager.getBackupFolderPath() == null) {
-            folderChooserDialog.show(getActivity());
+        if (preferencesManager.getBackupFilePath() == null) {
+            chooseBackupLocation();
         } else {
             backupDataManager.backupData(getContext(), true);
+        }
+    }
+
+    private void chooseBackupLocation() {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT) {
+            folderChooserDialog.show(getActivity());
+        } else {
+            Intent intent = new Intent(Intent.ACTION_CREATE_DOCUMENT);
+            intent.addCategory(Intent.CATEGORY_OPENABLE);
+            intent.setType("text/plain");
+            intent.putExtra(Intent.EXTRA_TITLE, BackupDataManager.BACKUP_FILE_NAME);
+            startActivityForResult(intent, WRITE_BACKUP_FILE_CODE);
         }
     }
 
     @OnClick(R.id.change_backup_folder)
     public void changeBackupFolder() {
         if (PermissionUtils.isPermissionGranted(Manifest.permission.WRITE_EXTERNAL_STORAGE, getContext())) {
-            folderChooserDialog.show(getActivity());
+            chooseBackupLocation();
         } else {
             PermissionUtils.requestPermission(
                     this,
@@ -139,17 +157,36 @@ public class BackupDataFragment extends Fragment {
         }
     };
 
+    @SuppressLint("NewApi")
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent resultData) {
+        if (requestCode == WRITE_BACKUP_FILE_CODE && resultCode == Activity.RESULT_OK && resultData != null) {
+            Context context = getContext();
+            Uri uri = resultData.getData();
+            if (uri == null || context == null) {
+                backupDataListener.onBackupFailed();
+            } else {
+                // Persist ability to read/write to this file
+                int takeFlags = resultData.getFlags()
+                        & (Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+                context.getContentResolver().takePersistableUriPermission(uri, takeFlags);
+
+                preferencesManager.setBackupUri(uri.toString());
+                backupDataManager.backupData(getContext(), true);
+            }
+        }
+    }
+
     @Override
     public void onRequestPermissionsResult(
             int requestCode,
             @NonNull String permissions[],
             @NonNull int[] grantResults) {
-        if (requestCode != WRITE_EXTERNAL_STORAGE_CODE
-                || grantResults.length <= 0
-                || grantResults[0] != PackageManager.PERMISSION_GRANTED) {
-            return;
+        if (requestCode == WRITE_EXTERNAL_STORAGE_CODE
+                && grantResults.length > 0
+                && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+            backupData();
         }
-        backupData();
     }
 
     @Override
