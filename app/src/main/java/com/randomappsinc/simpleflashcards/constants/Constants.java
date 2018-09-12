@@ -21,4 +21,5 @@ public class Constants {
     public static final String FILE_AUTHORITY = "com.randomappsinc.simpleflashcards.provider";
 
     public static final String GO_TO_RESTORE_IMMEDIATELY_KEY = "goToRestoreImmediately";
+    public static final String ADDED_SET_IDS_KEY = "addedSetIds";
 }

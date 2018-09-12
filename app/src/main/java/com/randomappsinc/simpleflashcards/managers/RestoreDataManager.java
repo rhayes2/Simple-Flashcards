@@ -20,7 +20,7 @@ import java.util.List;
 public class RestoreDataManager {
 
     public interface Listener {
-        void onDataRestorationComplete();
+        void onDataRestorationComplete(int[] addedSetIds);
 
         void onFileNotFound();
     }
@@ -115,10 +115,10 @@ public class RestoreDataManager {
             @Override
             public void run() {
                 DatabaseManager databaseManager = DatabaseManager.get();
-                databaseManager.restoreFlashcardSets(flashcardSets);
+                int[] addedSetIds = databaseManager.restoreFlashcardSets(flashcardSets);
 
                 if (listener != null) {
-                    listener.onDataRestorationComplete();
+                    listener.onDataRestorationComplete(addedSetIds);
                 }
             }
         });

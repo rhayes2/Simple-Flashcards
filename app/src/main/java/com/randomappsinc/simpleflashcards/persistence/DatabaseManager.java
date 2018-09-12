@@ -362,7 +362,8 @@ public class DatabaseManager {
     /**
      * Adds a flashcard set from nearby sharing or data restoration to DB.
      */
-    public void addExternalSetToDb(FlashcardSet flashcardSet) {
+    @Nullable
+    public Integer addExternalSetToDb(FlashcardSet flashcardSet) {
         try {
             realm.beginTransaction();
 
@@ -386,15 +387,28 @@ public class DatabaseManager {
 
             realm.copyToRealm(set);
             realm.commitTransaction();
+
+            return newSetId;
         } catch (Exception e) {
             realm.cancelTransaction();
+            return null;
         }
     }
 
-    public void restoreFlashcardSets(final List<FlashcardSet> flashcardSets) {
+    public int[] restoreFlashcardSets(final List<FlashcardSet> flashcardSets) {
+        List<Integer> setIds = new ArrayList<>();
         for (FlashcardSet flashcardSet : flashcardSets) {
-            addExternalSetToDb(flashcardSet);
+            Integer addedSetId = addExternalSetToDb(flashcardSet);
+            if (addedSetId != null) {
+                setIds.add(addedSetId);
+            }
         }
+
+        int[] setIdsArray = new int[setIds.size()];
+        for (int i = 0; i < setIds.size() ; i++) {
+            setIdsArray[i] = setIds.get(i);
+        }
+        return setIdsArray;
     }
 
     public boolean alreadyHasQuizletSet(long quizletSetId) {

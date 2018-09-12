@@ -85,4 +85,6 @@
     <string name="cancel">Cancel</string>
 
     <string name="image_load_fail">Failed to load image.</string>
+
+    <string name="added_flashcard_sets">Added Flashcard Sets</string>
 </resources>

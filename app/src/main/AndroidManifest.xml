@@ -112,5 +112,10 @@
             android:theme="@style/AppTheme.NoActionBar"
             android:label="@string/backup_and_restore_title"
             android:configChanges="orientation|screenSize"/>
+
+        <activity
+            android:name=".activities.AddedFlashcardSetsActivity"
+            android:label="@string/added_flashcard_sets"
+            android:configChanges="orientation|screenSize"/>
     </application>
 </manifest>

@@ -15,6 +15,7 @@ import android.view.ViewGroup;
 
 import com.afollestad.materialdialogs.folderselector.FolderChooserDialog;
 import com.randomappsinc.simpleflashcards.R;
+import com.randomappsinc.simpleflashcards.activities.AddedFlashcardSetsActivity;
 import com.randomappsinc.simpleflashcards.constants.Constants;
 import com.randomappsinc.simpleflashcards.managers.RestoreDataManager;
 import com.randomappsinc.simpleflashcards.utils.PermissionUtils;
@@ -55,8 +56,16 @@ public class RestoreDataFragment extends Fragment {
 
     private final RestoreDataManager.Listener restoreDataListener = new RestoreDataManager.Listener() {
         @Override
-        public void onDataRestorationComplete() {
+        public void onDataRestorationComplete(int[] addedSetIds) {
             UIUtils.showShortToast(R.string.flashcard_sets_restored, getContext());
+
+            Activity activity = getActivity();
+            if (activity != null) {
+                Intent intent = new Intent(activity, AddedFlashcardSetsActivity.class)
+                        .putExtra(Constants.ADDED_SET_IDS_KEY, addedSetIds);
+                activity.startActivity(intent);
+                activity.overridePendingTransition(R.anim.slide_in_bottom, R.anim.stay);
+            }
         }
 
         @Override
