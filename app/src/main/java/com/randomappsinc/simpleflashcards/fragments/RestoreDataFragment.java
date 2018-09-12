@@ -1,7 +1,11 @@
 package com.randomappsinc.simpleflashcards.fragments;
 
 import android.Manifest;
+import android.app.Activity;
+import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
@@ -23,6 +27,7 @@ import butterknife.Unbinder;
 public class RestoreDataFragment extends Fragment {
 
     private static final int READ_EXTERNAL_STORAGE_CODE = 2;
+    private static final int READ_BACKUP_REQUEST_CODE = 9001;
 
     private FolderChooserDialog folderChooserDialog;
     private RestoreDataManager restoreDataManager = RestoreDataManager.get();
@@ -63,7 +68,7 @@ public class RestoreDataFragment extends Fragment {
     @OnClick(R.id.restore_data)
     public void restoreDataClicked() {
         if (PermissionUtils.isPermissionGranted(Manifest.permission.READ_EXTERNAL_STORAGE, getContext())) {
-            folderChooserDialog.show(getActivity());
+            chooseBackupLocation();
         } else {
             PermissionUtils.requestPermission(
                     this,
@@ -72,17 +77,35 @@ public class RestoreDataFragment extends Fragment {
         }
     }
 
+    private void chooseBackupLocation() {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT) {
+            folderChooserDialog.show(getActivity());
+        } else {
+            Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
+            intent.addCategory(Intent.CATEGORY_OPENABLE);
+            intent.setType("text/*");
+            startActivityForResult(intent, READ_BACKUP_REQUEST_CODE);
+        }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent resultData) {
+        if (requestCode == READ_BACKUP_REQUEST_CODE && resultCode == Activity.RESULT_OK && resultData != null) {
+            Uri uri = resultData.getData();
+            restoreDataManager.restoreDataFromUri(uri, getContext());
+        }
+    }
+
     @Override
     public void onRequestPermissionsResult(
             int requestCode,
             @NonNull String permissions[],
             @NonNull int[] grantResults) {
-        if (requestCode != READ_EXTERNAL_STORAGE_CODE
-                || grantResults.length <= 0
-                || grantResults[0] != PackageManager.PERMISSION_GRANTED) {
-            return;
+        if (requestCode == READ_EXTERNAL_STORAGE_CODE
+                && grantResults.length > 0
+                && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+            chooseBackupLocation();
         }
-        folderChooserDialog.show(getActivity());
     }
 
     @Override

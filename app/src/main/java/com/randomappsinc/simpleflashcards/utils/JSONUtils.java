@@ -103,16 +103,19 @@ public class JSONUtils {
     }
 
     public static List<FlashcardSet> getSetsForDataRestoration(File backupFile) {
-        List<FlashcardSet> flashcardSets = new ArrayList<>();
         String fileContents = FileUtils.getFileContents(backupFile);
+        return deserializeSets(fileContents);
+    }
+
+    public static List<FlashcardSet> deserializeSets(String setsJson) {
+        List<FlashcardSet> flashcardSets = new ArrayList<>();
         try {
-            JSONArray setsArray = new JSONArray(fileContents);
+            JSONArray setsArray = new JSONArray(setsJson);
             for (int i = 0; i < setsArray.length(); i++) {
                 JSONObject flashcardSetJson = setsArray.getJSONObject(i);
                 flashcardSets.add(getFlashcardSetFromJson(flashcardSetJson));
             }
-        }
-        catch (JSONException ignored) {}
+        } catch (JSONException ignored) {}
         return flashcardSets;
     }
 }
