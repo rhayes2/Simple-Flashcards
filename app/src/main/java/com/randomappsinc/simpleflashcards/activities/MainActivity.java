@@ -112,6 +112,13 @@ public class MainActivity extends StandardActivity
         flashcardSetCreatorDialog.show();
     }
 
+    @OnClick(R.id.restore_sets_button)
+    public void restoreSets() {
+        Intent intent = new Intent(this, BackupAndRestoreActivity.class)
+                .putExtra(Constants.GO_TO_RESTORE_IMMEDIATELY_KEY, true);
+        startActivity(intent);
+    }
+
     @OnClick(R.id.share_with_nearby_button)
     public void shareWithNearby() {
         startActivity(new Intent(this, NearbySharingActivity.class));

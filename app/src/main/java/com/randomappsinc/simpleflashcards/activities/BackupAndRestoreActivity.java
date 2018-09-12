@@ -37,6 +37,11 @@ public class BackupAndRestoreActivity extends StandardActivity implements Folder
 
         viewPager.setAdapter(new BackupAndRestoreTabsAdapter(getSupportFragmentManager(), tabNames));
         tabs.setupWithViewPager(viewPager);
+
+        boolean goToRestore = getIntent().getBooleanExtra(Constants.GO_TO_RESTORE_IMMEDIATELY_KEY, false);
+        if (goToRestore) {
+            viewPager.setCurrentItem(1);
+        }
     }
 
     @Override
