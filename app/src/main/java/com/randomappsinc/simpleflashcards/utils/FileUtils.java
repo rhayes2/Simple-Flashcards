@@ -1,6 +1,14 @@
 package com.randomappsinc.simpleflashcards.utils;
 
+import android.annotation.TargetApi;
+import android.content.ContentUris;
 import android.content.Context;
+import android.database.Cursor;
+import android.net.Uri;
+import android.os.Build;
+import android.os.Environment;
+import android.provider.DocumentsContract;
+import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 
 import com.randomappsinc.simpleflashcards.persistence.PreferencesManager;
@@ -44,15 +52,5 @@ public class FileUtils {
             }
         }
         return contents;
-    }
-
-    @Nullable
-    public static File getBackupFile(Context context) {
-        PreferencesManager preferencesManager = new PreferencesManager(context);
-        String folderPath = preferencesManager.getBackupFilePath();
-        if (folderPath == null) {
-            return null;
-        }
-        return new File(preferencesManager.getBackupFilePath());
     }
 }

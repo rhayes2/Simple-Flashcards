@@ -71,13 +71,12 @@ public class BackupDataFragment extends Fragment {
     }
 
     protected void setBackupSubtitle() {
-        String backupFilePath = preferencesManager.getBackupFilePath();
-        if (backupFilePath == null) {
+        if (backupDataManager.getBackupPath(getContext()) == null) {
             backupSubtitle.setText(R.string.backup_data_explanation);
         } else {
             long lastBackupUnixTime = preferencesManager.getLastBackupTime();
             String lastBackupTime = TimeUtils.getLastBackupTime(lastBackupUnixTime);
-            backupSubtitle.setText(String.format(subtitleTemplate, lastBackupTime, backupFilePath));
+            backupSubtitle.setText(String.format(subtitleTemplate, lastBackupTime));
         }
     }
 
@@ -94,7 +93,8 @@ public class BackupDataFragment extends Fragment {
     }
 
     private void backupData() {
-        if (preferencesManager.getBackupFilePath() == null) {
+        String backupPath = backupDataManager.getBackupPath(getContext());
+        if (backupPath == null) {
             chooseBackupLocation();
         } else {
             backupDataManager.backupData(getContext(), true);
@@ -127,16 +127,12 @@ public class BackupDataFragment extends Fragment {
 
     @OnClick(R.id.export_data)
     public void exportData() {
-        File backupFile = FileUtils.getBackupFile(getContext());
-        if (backupFile == null) {
+        Uri backupUri = backupDataManager.getBackupUriForExporting(getContext());
+        if (backupUri == null) {
             UIUtils.showLongToast(R.string.cannot_export_nothing, getContext());
             return;
         }
 
-        Uri backupUri = FileProvider.getUriForFile(
-                getContext(),
-                Constants.FILE_AUTHORITY,
-                backupFile);
         Intent sharingIntent = new Intent(Intent.ACTION_SEND);
         sharingIntent.setType("text/*");
         sharingIntent.putExtra(Intent.EXTRA_STREAM, backupUri);
@@ -170,6 +166,9 @@ public class BackupDataFragment extends Fragment {
                 int takeFlags = resultData.getFlags()
                         & (Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
                 context.getContentResolver().takePersistableUriPermission(uri, takeFlags);
+
+                // Clear out existing saved file path (legacy)
+                preferencesManager.setBackupFilePath(null);
 
                 preferencesManager.setBackupUri(uri.toString());
                 backupDataManager.backupData(getContext(), true);

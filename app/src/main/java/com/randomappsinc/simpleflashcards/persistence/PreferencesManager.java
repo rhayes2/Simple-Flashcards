@@ -2,8 +2,12 @@ package com.randomappsinc.simpleflashcards.persistence;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
+
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 
 public class PreferencesManager {
 
@@ -102,7 +106,7 @@ public class PreferencesManager {
         return prefs.getString(BACKUP_FILE_PATH, null);
     }
 
-    public void setBackupFilePath(String backupFilePath) {
+    public void setBackupFilePath(@Nullable String backupFilePath) {
         prefs.edit().putString(BACKUP_FILE_PATH, backupFilePath).apply();
     }
 
@@ -111,8 +115,8 @@ public class PreferencesManager {
         return prefs.getString(BACKUP_URI, null);
     }
 
-    public void setBackupUri(String backupUriPath) {
-        prefs.edit().putString(BACKUP_URI, backupUriPath).apply();
+    public void setBackupUri(@Nullable String uriString) {
+        prefs.edit().putString(BACKUP_URI, uriString).apply();
     }
 
     public long getLastBackupTime() {

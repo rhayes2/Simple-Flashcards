@@ -5,9 +5,7 @@
         Click \"Backup Data\" to tell Simple Flashcards Plus where you want it
         to back up your data and have it start doing regular backups!
     </string>
-    <string name="backup_subtitle_with_backup">
-        Last backed up on: %1$s\nBackup file location: %2$s
-    </string>
+    <string name="backup_subtitle_with_backup">Last backed up on: %s</string>
 
     <string-array name="backup_and_restore_tabs">
         <item>Backup</item>
