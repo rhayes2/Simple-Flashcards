@@ -47,7 +47,7 @@ public class BackupDataManager {
 
     private Handler backgroundHandler;
     private Handler uiHandler = new Handler(Looper.getMainLooper());
-    private DatabaseManager databaseManager = DatabaseManager.get();
+    protected DatabaseManager databaseManager = DatabaseManager.get();
     @Nullable protected Listener listener;
 
     private BackupDataManager() {
@@ -99,7 +99,6 @@ public class BackupDataManager {
 
     public void backupData(final Context context, final boolean userTriggered) {
         final PreferencesManager preferencesManager = new PreferencesManager(context);
-        final List<FlashcardSet> flashcardSets = databaseManager.getAllFlashcardSetsClean();
 
         // Try the File IO strategy (should only apply on pre-KitKat devices)
         final String backupFolderPath = preferencesManager.getBackupFilePath();
@@ -110,6 +109,7 @@ public class BackupDataManager {
                     File file = new File(backupFolderPath);
                     try {
                         FileOutputStream stream = new FileOutputStream(file);
+                        List<FlashcardSet> flashcardSets = databaseManager.getAllFlashcardSetsOnAnyThread();
                         stream.write(JSONUtils.serializeFlashcardSets(flashcardSets).getBytes());
                         stream.close();
                         preferencesManager.updateLastBackupTime();
@@ -141,6 +141,7 @@ public class BackupDataManager {
                         }
                         FileOutputStream fileOutputStream =
                                 new FileOutputStream(fileDescriptor.getFileDescriptor());
+                        List<FlashcardSet> flashcardSets = databaseManager.getAllFlashcardSetsOnAnyThread();
                         fileOutputStream.write(JSONUtils.serializeFlashcardSets(flashcardSets).getBytes());
                         fileOutputStream.close();
                         fileDescriptor.close();

@@ -54,6 +54,10 @@ public class UIUtils {
         Toast.makeText(context, stringId, duration).show();
     }
 
+    public static void showShortToast(String text, Context context) {
+        showToast(text, Toast.LENGTH_SHORT, context);
+    }
+
     public static void showLongToast(String text, Context context) {
         showToast(text, Toast.LENGTH_LONG, context);
     }

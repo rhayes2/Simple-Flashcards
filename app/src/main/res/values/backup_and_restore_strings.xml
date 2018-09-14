@@ -24,6 +24,10 @@
     </string>
 
     <string name="restore_data">Restore Data</string>
+    <string name="restoring_your_data">Restoring your flashcards&#8230;</string>
+    <string name="data_restoration_failed">
+        We failed to restore your flashcard sets from the file you provided.
+    </string>
     <string name="restore_data_explanation">
         Click \"Restore Data\" to tell Simple Flashcards Plus where your data
         backup file is and have it restore your flashcard sets!
@@ -32,5 +36,6 @@
         We were unable to find \"simple-flashcards-plus-backup.txt\"
         in your specified folder.
     </string>
-    <string name="flashcard_sets_restored">Flashcard sets restored.</string>
+    <string name="one_flashcard_set_restored">1 flashcard set restored.</string>
+    <string name="x_flashcard_sets_restored">%d flashcard sets restored.</string>
 </resources>

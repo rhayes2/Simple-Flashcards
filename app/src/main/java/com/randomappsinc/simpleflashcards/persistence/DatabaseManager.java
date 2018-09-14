@@ -62,7 +62,7 @@ public class DatabaseManager {
         }
     }
 
-    public void setListener(@Nullable final Listener listener) {
+    public void setListener(@Nullable Listener listener) {
         this.listener = listener;
         if (listener == null) {
             realm.removeChangeListener(realmChangeListener);
@@ -284,8 +284,8 @@ public class DatabaseManager {
     /**
      * Creates a deep copy of all flashcard sets to avoid Realm access shenanigans.
      */
-    public List<FlashcardSet> getAllFlashcardSetsClean() {
-        return DBConverter.createDeepCopyList(realm.where(FlashcardSet.class).findAll());
+    public List<FlashcardSet> getAllFlashcardSetsOnAnyThread() {
+        return Realm.getDefaultInstance().where(FlashcardSet.class).findAll();
     }
 
     public List<Flashcard> getAllFlashcards(int setId) {
@@ -360,10 +360,9 @@ public class DatabaseManager {
     }
 
     /**
-     * Adds a flashcard set from nearby sharing or data restoration to DB.
+     * Adds a flashcard set from nearby sharing to DB.
      */
-    @Nullable
-    public Integer addExternalSetToDb(FlashcardSet flashcardSet) {
+    public void addExternalSetToDb(FlashcardSet flashcardSet) {
         try {
             realm.beginTransaction();
 
@@ -387,28 +386,43 @@ public class DatabaseManager {
 
             realm.copyToRealm(set);
             realm.commitTransaction();
-
-            return newSetId;
         } catch (Exception e) {
             realm.cancelTransaction();
-            return null;
         }
     }
 
-    public int[] restoreFlashcardSets(final List<FlashcardSet> flashcardSets) {
-        List<Integer> setIds = new ArrayList<>();
-        for (FlashcardSet flashcardSet : flashcardSets) {
-            Integer addedSetId = addExternalSetToDb(flashcardSet);
-            if (addedSetId != null) {
-                setIds.add(addedSetId);
-            }
-        }
+    public void restoreFlashcardSets(final List<FlashcardSet> flashcardSets) {
+        Realm backgroundRealm = Realm.getDefaultInstance();
+        backgroundRealm.executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(@NonNull Realm realm) {
+                Number setNumber = realm.where(FlashcardSet.class).findAll().max("id");
+                int nextSetId = setNumber == null ? 1 : setNumber.intValue() + 1;
 
-        int[] setIdsArray = new int[setIds.size()];
-        for (int i = 0; i < setIds.size() ; i++) {
-            setIdsArray[i] = setIds.get(i);
-        }
-        return setIdsArray;
+                Number flashcardNumber = realm.where(Flashcard.class).findAll().max("id");
+                int nextCardId = flashcardNumber == null ? 1 : flashcardNumber.intValue() + 1;
+
+                for (FlashcardSet flashcardSet : flashcardSets) {
+                    FlashcardSet set = realm.createObject(FlashcardSet.class);
+                    set.setId(nextSetId);
+                    set.setQuizletSetId(flashcardSet.getQuizletSetId());
+                    set.setName(flashcardSet.getName());
+
+                    RealmList<Flashcard> flashcards = new RealmList<>();
+                    for (Flashcard original : flashcardSet.getFlashcards()) {
+                        Flashcard flashcard = realm.createObject(Flashcard.class);
+                        flashcard.setId(nextCardId++);
+                        flashcard.setTerm(original.getTerm());
+                        flashcard.setDefinition(original.getDefinition());
+                        flashcard.setTermImageUrl(original.getTermImageUrl());
+                        flashcards.add(flashcard);
+                    }
+                    set.setFlashcards(flashcards);
+
+                    nextSetId++;
+                }
+            }
+        });
     }
 
     public boolean alreadyHasQuizletSet(long quizletSetId) {

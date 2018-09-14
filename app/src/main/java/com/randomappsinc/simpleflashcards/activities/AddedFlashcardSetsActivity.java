@@ -8,7 +8,10 @@ import com.joanzapata.iconify.fonts.IoniconsIcons;
 import com.randomappsinc.simpleflashcards.R;
 import com.randomappsinc.simpleflashcards.adapters.AddedFlashcardSetsAdapter;
 import com.randomappsinc.simpleflashcards.constants.Constants;
+import com.randomappsinc.simpleflashcards.models.FlashcardSetPreview;
 import com.randomappsinc.simpleflashcards.views.SimpleDividerItemDecoration;
+
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -32,8 +35,8 @@ public class AddedFlashcardSetsActivity extends StandardActivity {
                         .colorRes(R.color.white)
                         .actionBarSize());
 
-        int[] setIds = getIntent().getIntArrayExtra(Constants.ADDED_SET_IDS_KEY);
-        AddedFlashcardSetsAdapter adapter = new AddedFlashcardSetsAdapter(setIds);
+        List<FlashcardSetPreview> sets = getIntent().getParcelableArrayListExtra(Constants.ADDED_SET_PREVIEWS);
+        AddedFlashcardSetsAdapter adapter = new AddedFlashcardSetsAdapter(sets);
         addedSetsList.setAdapter(adapter);
         addedSetsList.addItemDecoration(new SimpleDividerItemDecoration(this));
     }

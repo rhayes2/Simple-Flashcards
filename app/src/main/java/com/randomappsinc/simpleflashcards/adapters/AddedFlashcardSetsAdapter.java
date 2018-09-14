@@ -8,10 +8,8 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.randomappsinc.simpleflashcards.R;
-import com.randomappsinc.simpleflashcards.persistence.DatabaseManager;
-import com.randomappsinc.simpleflashcards.persistence.models.FlashcardSet;
+import com.randomappsinc.simpleflashcards.models.FlashcardSetPreview;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindString;
@@ -21,13 +19,10 @@ import butterknife.ButterKnife;
 public class AddedFlashcardSetsAdapter
         extends RecyclerView.Adapter<AddedFlashcardSetsAdapter.FlashcardSetViewHolder>{
 
-    protected List<FlashcardSet> flashcardSets = new ArrayList<>();
+    protected List<FlashcardSetPreview> setPreviews;
 
-    public AddedFlashcardSetsAdapter(int[] setIds) {
-        DatabaseManager databaseManager = DatabaseManager.get();
-        for (int setId : setIds) {
-            flashcardSets.add(databaseManager.getFlashcardSet(setId));
-        }
+    public AddedFlashcardSetsAdapter(List<FlashcardSetPreview> setPreviews) {
+        this.setPreviews = setPreviews;
     }
 
     @NonNull
@@ -47,7 +42,7 @@ public class AddedFlashcardSetsAdapter
 
     @Override
     public int getItemCount() {
-        return flashcardSets.size();
+        return setPreviews.size();
     }
 
     class FlashcardSetViewHolder extends RecyclerView.ViewHolder {
@@ -63,9 +58,9 @@ public class AddedFlashcardSetsAdapter
         }
 
         void loadFlashcardSet(int position) {
-            FlashcardSet flashcardSet = flashcardSets.get(position);
-            setName.setText(flashcardSet.getName());
-            int numFlashcards = flashcardSet.getFlashcards().size();
+            FlashcardSetPreview setPreview = setPreviews.get(position);
+            setName.setText(setPreview.getSetName());
+            int numFlashcards = setPreview.getNumCards();
             numFlashcardsText.setText(numFlashcards == 1
                     ? oneFlashcard
                     : String.format(manyFlashcardsTemplate, numFlashcards));

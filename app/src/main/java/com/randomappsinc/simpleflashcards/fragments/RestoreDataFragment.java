@@ -13,13 +13,17 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.afollestad.materialdialogs.folderselector.FolderChooserDialog;
 import com.randomappsinc.simpleflashcards.R;
 import com.randomappsinc.simpleflashcards.activities.AddedFlashcardSetsActivity;
 import com.randomappsinc.simpleflashcards.constants.Constants;
 import com.randomappsinc.simpleflashcards.managers.RestoreDataManager;
+import com.randomappsinc.simpleflashcards.models.FlashcardSetPreview;
 import com.randomappsinc.simpleflashcards.utils.PermissionUtils;
 import com.randomappsinc.simpleflashcards.utils.UIUtils;
+
+import java.util.ArrayList;
 
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -32,6 +36,7 @@ public class RestoreDataFragment extends Fragment {
 
     private FolderChooserDialog folderChooserDialog;
     private RestoreDataManager restoreDataManager = RestoreDataManager.get();
+    protected MaterialDialog progressDialog;
     private Unbinder unbinder;
 
     @Override
@@ -52,24 +57,48 @@ public class RestoreDataFragment extends Fragment {
                 .chooseButton(R.string.choose)
                 .build();
         restoreDataManager.setListener(restoreDataListener);
+        progressDialog = new MaterialDialog.Builder(getActivity())
+                .content(R.string.restoring_your_data)
+                .progress(true, 0)
+                .cancelable(false)
+                .build();
     }
 
     private final RestoreDataManager.Listener restoreDataListener = new RestoreDataManager.Listener() {
         @Override
-        public void onDataRestorationComplete(int[] addedSetIds) {
-            UIUtils.showShortToast(R.string.flashcard_sets_restored, getContext());
+        public void onDataRestorationStarted() {
+            progressDialog.show();
+        }
+
+        @Override
+        public void onDataRestorationComplete(ArrayList<FlashcardSetPreview> previews) {
+            progressDialog.dismiss();
 
             Activity activity = getActivity();
-            if (activity != null && addedSetIds.length > 0) {
+            if (activity != null && !previews.isEmpty()) {
+                if (previews.size() == 1) {
+                    UIUtils.showShortToast(R.string.one_flashcard_set_restored, getContext());
+                } else {
+                    UIUtils.showShortToast(
+                            getString(R.string.x_flashcard_sets_restored, previews.size()),
+                            getContext());
+                }
                 Intent intent = new Intent(activity, AddedFlashcardSetsActivity.class)
-                        .putExtra(Constants.ADDED_SET_IDS_KEY, addedSetIds);
+                        .putExtra(Constants.ADDED_SET_PREVIEWS, previews);
                 activity.startActivity(intent);
                 activity.overridePendingTransition(R.anim.slide_in_bottom, R.anim.stay);
             }
         }
 
         @Override
+        public void onDataRestorationFailed() {
+            progressDialog.dismiss();
+            UIUtils.showLongToast(R.string.data_restoration_failed, getContext());
+        }
+
+        @Override
         public void onFileNotFound() {
+            progressDialog.dismiss();
             UIUtils.showLongToast(R.string.backup_file_not_found, getContext());
         }
     };
@@ -120,6 +149,7 @@ public class RestoreDataFragment extends Fragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+        progressDialog.dismiss();
         restoreDataManager.setListener(null);
         unbinder.unbind();
     }
