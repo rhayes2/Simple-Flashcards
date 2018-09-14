@@ -1,5 +1,7 @@
 package com.randomappsinc.simpleflashcards.fragments;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
@@ -10,8 +12,11 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.randomappsinc.simpleflashcards.R;
+import com.randomappsinc.simpleflashcards.activities.PlainSetViewActivity;
 import com.randomappsinc.simpleflashcards.adapters.ReceivedFlashcardsAdapter;
+import com.randomappsinc.simpleflashcards.constants.Constants;
 import com.randomappsinc.simpleflashcards.managers.NearbyConnectionsManager;
+import com.randomappsinc.simpleflashcards.models.FlashcardSetPreview;
 import com.randomappsinc.simpleflashcards.persistence.models.FlashcardSet;
 import com.randomappsinc.simpleflashcards.utils.UIUtils;
 import com.randomappsinc.simpleflashcards.views.SimpleDividerItemDecoration;
@@ -45,7 +50,7 @@ public class ReceivedFlashcardsFragment extends Fragment {
         noFlashcards.setText(getString(
                 R.string.no_flashcards_received,
                 nearbyConnectionsManager.getOtherSideName()));
-        receivedFlashcardsAdapter = new ReceivedFlashcardsAdapter();
+        receivedFlashcardsAdapter = new ReceivedFlashcardsAdapter(listClickListener);
         flashcardSets.setAdapter(receivedFlashcardsAdapter);
         flashcardSets.addItemDecoration(new SimpleDividerItemDecoration(getActivity()));
         nearbyConnectionsManager.setFlashcardSetReceiptListener(flashcardSetReceiptListener);
@@ -61,6 +66,19 @@ public class ReceivedFlashcardsFragment extends Fragment {
                 flashcardSets.setVisibility(View.VISIBLE);
             }
             UIUtils.showLongToast(getString(R.string.received_set, flashcardSet.getName()), getContext());
+        }
+    };
+
+    private final ReceivedFlashcardsAdapter.Listener listClickListener = new ReceivedFlashcardsAdapter.Listener() {
+        @Override
+        public void onCellClicked(FlashcardSetPreview setPreview) {
+            Activity activity = getActivity();
+            if (activity != null) {
+                Intent intent = new Intent(activity, PlainSetViewActivity.class)
+                        .putExtra(Constants.SET_PREVIEW_KEY, setPreview);
+                startActivity(intent);
+                activity.overridePendingTransition(R.anim.slide_in_bottom, R.anim.stay);
+            }
         }
     };
 

@@ -262,8 +262,9 @@ public class NearbyConnectionsManager {
                         if (flashcardSet == null) {
                             return;
                         }
-                        databaseManager.addExternalSetToDb(flashcardSet);
+                        int newSetId = databaseManager.addExternalSetToDb(flashcardSet);
                         if (flashcardSetReceiptListener != null) {
+                            flashcardSet.setId(newSetId);
                             flashcardSetReceiptListener.onFlashcardSetReceived(flashcardSet);
                         }
                     }

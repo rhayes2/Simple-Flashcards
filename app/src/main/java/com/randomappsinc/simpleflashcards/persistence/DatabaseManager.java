@@ -363,7 +363,7 @@ public class DatabaseManager {
     /**
      * Adds a flashcard set from nearby sharing to DB.
      */
-    public void addExternalSetToDb(FlashcardSet flashcardSet) {
+    public int addExternalSetToDb(FlashcardSet flashcardSet) {
         try {
             realm.beginTransaction();
 
@@ -387,8 +387,10 @@ public class DatabaseManager {
 
             realm.copyToRealm(set);
             realm.commitTransaction();
+            return newSetId;
         } catch (Exception e) {
             realm.cancelTransaction();
+            return 0;
         }
     }
 

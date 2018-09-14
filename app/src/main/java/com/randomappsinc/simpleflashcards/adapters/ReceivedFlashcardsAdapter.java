@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.randomappsinc.simpleflashcards.R;
+import com.randomappsinc.simpleflashcards.models.FlashcardSetPreview;
 import com.randomappsinc.simpleflashcards.persistence.models.FlashcardSet;
 
 import java.util.ArrayList;
@@ -16,11 +17,21 @@ import java.util.List;
 import butterknife.BindString;
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 public class ReceivedFlashcardsAdapter
         extends RecyclerView.Adapter<ReceivedFlashcardsAdapter.FlashcardSetViewHolder>{
 
+    public interface Listener {
+        void onCellClicked(FlashcardSetPreview setPreview);
+    }
+
+    protected Listener listener;
     protected List<FlashcardSet> flashcardSets = new ArrayList<>();
+
+    public ReceivedFlashcardsAdapter(Listener listener) {
+        this.listener = listener;
+    }
 
     public void addFlashcardSet(FlashcardSet flashcardSet) {
         flashcardSets.add(flashcardSet);
@@ -66,6 +77,12 @@ public class ReceivedFlashcardsAdapter
             numFlashcardsText.setText(numFlashcards == 1
                     ? oneFlashcard
                     : String.format(manyFlashcardsTemplate, numFlashcards));
+        }
+
+        @OnClick(R.id.set_preview_parent)
+        public void onCellClicked() {
+            FlashcardSet flashcardSet = flashcardSets.get(getAdapterPosition());
+            listener.onCellClicked(new FlashcardSetPreview(flashcardSet));
         }
     }
 }
