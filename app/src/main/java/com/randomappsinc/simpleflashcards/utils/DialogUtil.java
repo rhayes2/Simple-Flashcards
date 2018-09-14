@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ShareCompat;
-import android.widget.Toast;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -52,7 +51,7 @@ public class DialogUtil {
                             if (!(activity
                                     .getPackageManager()
                                     .queryIntentActivities(intent, 0).size() > 0)) {
-                                UIUtils.showToast(R.string.play_store_error, Toast.LENGTH_LONG, activity);
+                                UIUtils.showLongToast(R.string.play_store_error, activity);
                                 return;
                             }
                             activity.startActivity(intent);

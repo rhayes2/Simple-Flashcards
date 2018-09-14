@@ -1,5 +1,6 @@
 package com.randomappsinc.simpleflashcards.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 
@@ -36,10 +37,20 @@ public class AddedFlashcardSetsActivity extends StandardActivity {
                         .actionBarSize());
 
         List<FlashcardSetPreview> sets = getIntent().getParcelableArrayListExtra(Constants.ADDED_SET_PREVIEWS);
-        AddedFlashcardSetsAdapter adapter = new AddedFlashcardSetsAdapter(sets);
+        AddedFlashcardSetsAdapter adapter = new AddedFlashcardSetsAdapter(listClickListener, sets);
         addedSetsList.setAdapter(adapter);
         addedSetsList.addItemDecoration(new SimpleDividerItemDecoration(this));
     }
+
+    private final AddedFlashcardSetsAdapter.Listener listClickListener = new AddedFlashcardSetsAdapter.Listener() {
+        @Override
+        public void onCellClicked(FlashcardSetPreview setPreview) {
+            Intent intent = new Intent(AddedFlashcardSetsActivity.this, PlainSetViewActivity.class)
+                    .putExtra(Constants.SET_PREVIEW_KEY, setPreview);
+            startActivity(intent);
+            overridePendingTransition(R.anim.slide_in_bottom, R.anim.stay);
+        }
+    };
 
     @Override
     public void finish() {

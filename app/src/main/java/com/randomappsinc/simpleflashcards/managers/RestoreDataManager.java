@@ -74,8 +74,8 @@ public class RestoreDataManager {
                 @Override
                 public void run() {
                     List<FlashcardSet> flashcardSets = JSONUtils.getSetsForDataRestoration(backupFile);
-                    databaseManager.restoreFlashcardSets(flashcardSets);
-                    alertOfDataRestorationComplete(getPreviews(flashcardSets));
+                    ArrayList<FlashcardSetPreview> previews = databaseManager.restoreFlashcardSets(flashcardSets);
+                    alertOfDataRestorationComplete(previews);
                 }
             });
         } else {
@@ -108,21 +108,13 @@ public class RestoreDataManager {
                     inputStream.close();
                     String setsJson = stringBuilder.toString();
                     List<FlashcardSet> flashcardSets = JSONUtils.deserializeSets(setsJson);
-                    databaseManager.restoreFlashcardSets(flashcardSets);
-                    alertOfDataRestorationComplete(getPreviews(flashcardSets));
+                    ArrayList<FlashcardSetPreview> previews = databaseManager.restoreFlashcardSets(flashcardSets);
+                    alertOfDataRestorationComplete(previews);
                 } catch (IOException exception) {
                     alertOfDataRestorationFailed();
                 }
             }
         });
-    }
-
-    protected ArrayList<FlashcardSetPreview> getPreviews(List<FlashcardSet> flashcardSets) {
-        ArrayList<FlashcardSetPreview> previews = new ArrayList<>();
-        for (FlashcardSet flashcardSet : flashcardSets) {
-            previews.add(new FlashcardSetPreview(flashcardSet));
-        }
-        return previews;
     }
 
     protected void alertOfFileNotFound() {

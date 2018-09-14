@@ -117,5 +117,9 @@
             android:name=".activities.AddedFlashcardSetsActivity"
             android:label="@string/added_flashcard_sets"
             android:configChanges="orientation|screenSize"/>
+
+        <activity
+            android:name=".activities.PlainSetViewActivity"
+            android:configChanges="orientation|screenSize"/>
     </application>
 </manifest>

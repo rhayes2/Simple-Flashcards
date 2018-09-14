@@ -15,13 +15,20 @@ import java.util.List;
 import butterknife.BindString;
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 public class AddedFlashcardSetsAdapter
         extends RecyclerView.Adapter<AddedFlashcardSetsAdapter.FlashcardSetViewHolder>{
 
+    public interface Listener {
+        void onCellClicked(FlashcardSetPreview setPreview);
+    }
+
+    protected Listener listener;
     protected List<FlashcardSetPreview> setPreviews;
 
-    public AddedFlashcardSetsAdapter(List<FlashcardSetPreview> setPreviews) {
+    public AddedFlashcardSetsAdapter(Listener listener, List<FlashcardSetPreview> setPreviews) {
+        this.listener = listener;
         this.setPreviews = setPreviews;
     }
 
@@ -29,7 +36,7 @@ public class AddedFlashcardSetsAdapter
     @Override
     public FlashcardSetViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(parent.getContext()).inflate(
-                R.layout.received_flashcard_set_cell,
+                R.layout.set_preview_cell,
                 parent,
                 false);
         return new FlashcardSetViewHolder(itemView);
@@ -64,6 +71,12 @@ public class AddedFlashcardSetsAdapter
             numFlashcardsText.setText(numFlashcards == 1
                     ? oneFlashcard
                     : String.format(manyFlashcardsTemplate, numFlashcards));
+        }
+
+        @OnClick(R.id.set_preview_parent)
+        public void onCellClicked() {
+            FlashcardSetPreview preview = setPreviews.get(getAdapterPosition());
+            listener.onCellClicked(preview);
         }
     }
 }

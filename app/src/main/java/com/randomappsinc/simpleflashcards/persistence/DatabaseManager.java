@@ -5,6 +5,7 @@ import android.support.annotation.Nullable;
 
 import com.randomappsinc.simpleflashcards.api.models.QuizletFlashcard;
 import com.randomappsinc.simpleflashcards.api.models.QuizletFlashcardSet;
+import com.randomappsinc.simpleflashcards.models.FlashcardSetPreview;
 import com.randomappsinc.simpleflashcards.persistence.models.Flashcard;
 import com.randomappsinc.simpleflashcards.persistence.models.FlashcardSet;
 
@@ -391,7 +392,8 @@ public class DatabaseManager {
         }
     }
 
-    public void restoreFlashcardSets(final List<FlashcardSet> flashcardSets) {
+    public ArrayList<FlashcardSetPreview> restoreFlashcardSets(final List<FlashcardSet> flashcardSets) {
+        final ArrayList<FlashcardSetPreview> previews = new ArrayList<>();
         Realm backgroundRealm = Realm.getDefaultInstance();
         backgroundRealm.executeTransaction(new Realm.Transaction() {
             @Override
@@ -420,9 +422,11 @@ public class DatabaseManager {
                     set.setFlashcards(flashcards);
 
                     nextSetId++;
+                    previews.add(new FlashcardSetPreview(set));
                 }
             }
         });
+        return previews;
     }
 
     public boolean alreadyHasQuizletSet(long quizletSetId) {

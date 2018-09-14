@@ -12,6 +12,7 @@ import com.randomappsinc.simpleflashcards.adapters.BackupAndRestoreTabsAdapter;
 import com.randomappsinc.simpleflashcards.constants.Constants;
 import com.randomappsinc.simpleflashcards.managers.BackupDataManager;
 import com.randomappsinc.simpleflashcards.managers.RestoreDataManager;
+import com.randomappsinc.simpleflashcards.persistence.PreferencesManager;
 
 import java.io.File;
 
@@ -29,6 +30,9 @@ public class BackupAndRestoreActivity extends StandardActivity implements Folder
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        PreferencesManager preferencesManager = new PreferencesManager(this);
+        preferencesManager.rememberBackupDataDialogSeen();
+
         setContentView(R.layout.backup_and_restore);
         ButterKnife.bind(this);
 

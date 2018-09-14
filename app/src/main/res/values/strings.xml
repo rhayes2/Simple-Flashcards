@@ -19,7 +19,7 @@
     <string name="backup_your_data">Back Up Your Data!</string>
     <string name="backup_your_data_explanation">
         Simple Flashcards Plus can automatically back up your data, so
-        you can save it to your SD card or export it to another device.
+        you can save it to your Google Drive or export it to another device.
         Want to try it out? If you don\'t want to right now,
         you can find this feature in the settings menu.
     </string>

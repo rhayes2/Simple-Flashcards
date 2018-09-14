@@ -31,7 +31,7 @@ public class ReceivedFlashcardsAdapter
     @Override
     public FlashcardSetViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(parent.getContext()).inflate(
-                R.layout.received_flashcard_set_cell,
+                R.layout.set_preview_cell,
                 parent,
                 false);
         return new FlashcardSetViewHolder(itemView);
