@@ -10,9 +10,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.randomappsinc.simpleflashcards.R;
-import com.randomappsinc.simpleflashcards.dialogs.DeleteFlashcardDialog;
-import com.randomappsinc.simpleflashcards.dialogs.EditFlashcardDefinitionDialog;
-import com.randomappsinc.simpleflashcards.dialogs.EditFlashcardTermDialog;
 import com.randomappsinc.simpleflashcards.persistence.DatabaseManager;
 import com.randomappsinc.simpleflashcards.persistence.models.Flashcard;
 import com.squareup.picasso.Picasso;
@@ -25,62 +22,50 @@ import butterknife.OnClick;
 
 public class EditFlashcardsAdapter extends RecyclerView.Adapter<EditFlashcardsAdapter.FlashcardViewHolder> {
 
-    protected Context context;
+    public interface Listener {
+        void onEditTerm(Flashcard flashcard);
+
+        void onEditDefinition(Flashcard flashcard);
+
+        void onDeleteFlashcard(Flashcard flashcard);
+    }
+
+    protected Listener listener;
     protected List<Flashcard> flashcards;
     private View noContent;
     private int setId;
-    protected DeleteFlashcardDialog deleteFlashcardDialog;
-    protected EditFlashcardTermDialog editFlashcardTermDialog;
-    protected EditFlashcardDefinitionDialog editFlashcardDefinitionDialog;
     private TextView numFlashcards;
     protected int selectedItemPosition = -1;
 
-    public EditFlashcardsAdapter(Context context, int setId, View noContent, TextView numFlashcards) {
-        this.context = context;
+    public EditFlashcardsAdapter(Listener listener, int setId, View noContent, TextView numFlashcards) {
+        this.listener = listener;
         this.setId = setId;
         this.noContent = noContent;
-        this.deleteFlashcardDialog = new DeleteFlashcardDialog(context, flashcardDeleteListener);
-        this.editFlashcardTermDialog = new EditFlashcardTermDialog(context, flashcardTermEditListener);
-        this.editFlashcardDefinitionDialog = new EditFlashcardDefinitionDialog(
-                context,
-                flashcardDefinitionEditListener);
         this.numFlashcards = numFlashcards;
         refreshSet();
     }
 
-    private final DeleteFlashcardDialog.Listener flashcardDeleteListener =
-            new DeleteFlashcardDialog.Listener() {
-                @Override
-                public void onFlashcardSetDeleted() {
-                    refreshSet();
-                }
-            };
+    public void onFlashcardDeleted() {
+        refreshSet();
+    }
 
-    private final EditFlashcardTermDialog.Listener flashcardTermEditListener =
-            new EditFlashcardTermDialog.Listener() {
-                @Override
-                public void onFlashcardTermEdited(String newTerm) {
-                    if (selectedItemPosition < 0) {
-                        return;
-                    }
-                    flashcards.get(selectedItemPosition).setTerm(newTerm);
-                    notifyItemChanged(selectedItemPosition);
-                    selectedItemPosition = -1;
-                }
-            };
+    public void onFlashcardTermEdited(String newTerm) {
+        if (selectedItemPosition < 0) {
+            return;
+        }
+        flashcards.get(selectedItemPosition).setTerm(newTerm);
+        notifyItemChanged(selectedItemPosition);
+        selectedItemPosition = -1;
+    }
 
-    private final EditFlashcardDefinitionDialog.Listener flashcardDefinitionEditListener =
-            new EditFlashcardDefinitionDialog.Listener() {
-                @Override
-                public void onFlashcardDefinitionEdited(String newDefinition) {
-                    if (selectedItemPosition < 0) {
-                        return;
-                    }
-                    flashcards.get(selectedItemPosition).setDefinition(newDefinition);
-                    notifyItemChanged(selectedItemPosition);
-                    selectedItemPosition = -1;
-                }
-            };
+    public void onFlashcardDefinitionEdited(String newDefinition) {
+        if (selectedItemPosition < 0) {
+            return;
+        }
+        flashcards.get(selectedItemPosition).setDefinition(newDefinition);
+        notifyItemChanged(selectedItemPosition);
+        selectedItemPosition = -1;
+    }
 
     private void setNoContent() {
         int visibility = flashcards.size() == 0 ? View.VISIBLE : View.GONE;
@@ -96,6 +81,7 @@ public class EditFlashcardsAdapter extends RecyclerView.Adapter<EditFlashcardsAd
 
     protected void refreshCount() {
         int flashcardsCount = getItemCount();
+        Context context = numFlashcards.getContext();
         String numFlashcardsText = flashcardsCount == 1
                 ? context.getString(R.string.one_flashcard)
                 : context.getString(R.string.x_flashcards, flashcardsCount);
@@ -105,8 +91,8 @@ public class EditFlashcardsAdapter extends RecyclerView.Adapter<EditFlashcardsAd
     @NonNull
     @Override
     public FlashcardViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View itemView = LayoutInflater.from(context).inflate(
-                R.layout.flashcard_editing_cell,
+        View itemView = LayoutInflater.from(parent.getContext()).inflate(
+                R.layout.edit_flashcard_cell,
                 parent,
                 false);
         return new FlashcardViewHolder(itemView);
@@ -136,7 +122,7 @@ public class EditFlashcardsAdapter extends RecyclerView.Adapter<EditFlashcardsAd
 
         void loadFlashcard(int position) {
             Flashcard flashcard = flashcards.get(position);
-            positionInfo.setText(context.getString(
+            positionInfo.setText(positionInfo.getContext().getString(
                     R.string.flashcard_x_of_y,
                     position + 1,
                     getItemCount()));
@@ -154,18 +140,18 @@ public class EditFlashcardsAdapter extends RecyclerView.Adapter<EditFlashcardsAd
         @OnClick(R.id.term)
         public void editTerm() {
             selectedItemPosition = getAdapterPosition();
-            editFlashcardTermDialog.show(flashcards.get(getAdapterPosition()));
+            listener.onEditTerm(flashcards.get(getAdapterPosition()));
         }
 
         @OnClick(R.id.definition)
         public void editDefinition() {
             selectedItemPosition = getAdapterPosition();
-            editFlashcardDefinitionDialog.show(flashcards.get(getAdapterPosition()));
+            listener.onEditDefinition(flashcards.get(getAdapterPosition()));
         }
 
         @OnClick(R.id.delete_flashcard)
         public void deleteFlashcard() {
-            deleteFlashcardDialog.show(flashcards.get(getAdapterPosition()).getId());
+            listener.onDeleteFlashcard(flashcards.get(getAdapterPosition()));
         }
     }
 }

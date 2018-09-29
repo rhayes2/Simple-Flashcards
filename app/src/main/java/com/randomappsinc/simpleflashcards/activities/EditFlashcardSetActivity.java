@@ -14,7 +14,11 @@ import com.randomappsinc.simpleflashcards.R;
 import com.randomappsinc.simpleflashcards.adapters.EditFlashcardsAdapter;
 import com.randomappsinc.simpleflashcards.constants.Constants;
 import com.randomappsinc.simpleflashcards.dialogs.CreateFlashcardDialog;
+import com.randomappsinc.simpleflashcards.dialogs.DeleteFlashcardDialog;
+import com.randomappsinc.simpleflashcards.dialogs.EditFlashcardDefinitionDialog;
+import com.randomappsinc.simpleflashcards.dialogs.EditFlashcardTermDialog;
 import com.randomappsinc.simpleflashcards.persistence.DatabaseManager;
+import com.randomappsinc.simpleflashcards.persistence.models.Flashcard;
 import com.randomappsinc.simpleflashcards.utils.UIUtils;
 
 import butterknife.BindView;
@@ -34,6 +38,9 @@ public class EditFlashcardSetActivity extends StandardActivity {
     protected EditFlashcardsAdapter adapter;
     private int setId;
     private CreateFlashcardDialog createFlashcardDialog;
+    protected DeleteFlashcardDialog deleteFlashcardDialog;
+    protected EditFlashcardTermDialog editFlashcardTermDialog;
+    protected EditFlashcardDefinitionDialog editFlashcardDefinitionDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,7 +55,11 @@ public class EditFlashcardSetActivity extends StandardActivity {
                 new IconDrawable(this, IoniconsIcons.ion_android_add)
                         .colorRes(R.color.white));
         createFlashcardDialog = new CreateFlashcardDialog(this, flashcardCreatedListener, setId);
-        adapter = new EditFlashcardsAdapter(this, setId, noFlashcards, numFlashcards);
+        deleteFlashcardDialog = new DeleteFlashcardDialog(this, flashcardDeleteListener);
+        editFlashcardTermDialog = new EditFlashcardTermDialog(this, flashcardTermEditListener);
+        editFlashcardDefinitionDialog = new EditFlashcardDefinitionDialog(
+                this, flashcardDefinitionEditListener);
+        adapter = new EditFlashcardsAdapter(flashcardEditingListener, setId, noFlashcards, numFlashcards);
         flashcards.setAdapter(adapter);
     }
 
@@ -98,6 +109,48 @@ public class EditFlashcardSetActivity extends StandardActivity {
                 public void onFlashcardCreated() {
                     adapter.refreshSet();
                     flashcards.scrollToPosition(adapter.getItemCount() - 1);
+                }
+            };
+
+    private final EditFlashcardsAdapter.Listener flashcardEditingListener =
+            new EditFlashcardsAdapter.Listener() {
+                @Override
+                public void onEditTerm(Flashcard flashcard) {
+                    editFlashcardTermDialog.show(flashcard);
+                }
+
+                @Override
+                public void onEditDefinition(Flashcard flashcard) {
+                    editFlashcardDefinitionDialog.show(flashcard);
+                }
+
+                @Override
+                public void onDeleteFlashcard(Flashcard flashcard) {
+                    deleteFlashcardDialog.show(flashcard.getId());
+                }
+            };
+
+    private final DeleteFlashcardDialog.Listener flashcardDeleteListener =
+            new DeleteFlashcardDialog.Listener() {
+                @Override
+                public void onFlashcardDeleted() {
+                    adapter.onFlashcardDeleted();
+                }
+            };
+
+    private final EditFlashcardTermDialog.Listener flashcardTermEditListener =
+            new EditFlashcardTermDialog.Listener() {
+                @Override
+                public void onFlashcardTermEdited(String newTerm) {
+                    adapter.onFlashcardTermEdited(newTerm);
+                }
+            };
+
+    private final EditFlashcardDefinitionDialog.Listener flashcardDefinitionEditListener =
+            new EditFlashcardDefinitionDialog.Listener() {
+                @Override
+                public void onFlashcardDefinitionEdited(String newDefinition) {
+                    adapter.onFlashcardDefinitionEdited(newDefinition);
                 }
             };
 }

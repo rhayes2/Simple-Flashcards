@@ -11,7 +11,7 @@ import com.randomappsinc.simpleflashcards.persistence.DatabaseManager;
 public class DeleteFlashcardDialog {
 
     public interface Listener {
-        void onFlashcardSetDeleted();
+        void onFlashcardDeleted();
     }
 
     private MaterialDialog dialog;
@@ -27,7 +27,7 @@ public class DeleteFlashcardDialog {
                     @Override
                     public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
                         DatabaseManager.get().deleteFlashcard(flashcardId);
-                        listener.onFlashcardSetDeleted();
+                        listener.onFlashcardDeleted();
                     }
                 })
                 .build();
