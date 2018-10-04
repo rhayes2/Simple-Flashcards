@@ -17,4 +17,7 @@
     <string name="set_flashcard_definition">Set Flashcard Definition</string>
     <string name="next">Next</string>
     <string name="back">Back</string>
+
+    <string name="picture_icon">{ion-android-image}</string>
+    <string name="add_image">Add Image</string>
 </resources>
