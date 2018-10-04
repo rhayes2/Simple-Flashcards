@@ -137,7 +137,7 @@ public class EditFlashcardsAdapter extends RecyclerView.Adapter<EditFlashcardsAd
             definition.setText(flashcard.getDefinition());
         }
 
-        @OnClick(R.id.term)
+        @OnClick(R.id.term_text)
         public void editTerm() {
             selectedItemPosition = getAdapterPosition();
             listener.onEditTerm(flashcards.get(getAdapterPosition()));
