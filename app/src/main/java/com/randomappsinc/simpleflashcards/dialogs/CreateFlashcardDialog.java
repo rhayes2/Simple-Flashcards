@@ -6,20 +6,17 @@ import android.support.annotation.NonNull;
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.randomappsinc.simpleflashcards.R;
-import com.randomappsinc.simpleflashcards.persistence.DatabaseManager;
 
 public class CreateFlashcardDialog {
 
     public interface Listener {
-        void onFlashcardCreated();
+        void onFlashcardCreated(String term, String definition);
     }
 
     protected MaterialDialog termDialog;
     protected MaterialDialog definitionDialog;
-    protected int setId;
 
-    public CreateFlashcardDialog(Context context, @NonNull final Listener listener, final int setId) {
-        this.setId = setId;
+    public CreateFlashcardDialog(Context context, @NonNull final Listener listener) {
         termDialog = new MaterialDialog.Builder(context)
                 .title(R.string.set_flashcard_term)
                 .alwaysCallInputCallback()
@@ -64,8 +61,7 @@ public class CreateFlashcardDialog {
                     public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
                         String term = termDialog.getInputEditText().getText().toString().trim();
                         String definition = dialog.getInputEditText().getText().toString().trim();
-                        DatabaseManager.get().addFlashcard(setId, term, definition);
-                        listener.onFlashcardCreated();
+                        listener.onFlashcardCreated(term, definition);
                     }
                 })
                 .onNeutral(new MaterialDialog.SingleButtonCallback() {

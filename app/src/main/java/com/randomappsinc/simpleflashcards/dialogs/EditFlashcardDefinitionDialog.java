@@ -6,7 +6,6 @@ import android.support.annotation.NonNull;
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.randomappsinc.simpleflashcards.R;
-import com.randomappsinc.simpleflashcards.persistence.DatabaseManager;
 import com.randomappsinc.simpleflashcards.persistence.models.Flashcard;
 
 public class EditFlashcardDefinitionDialog {
@@ -16,7 +15,6 @@ public class EditFlashcardDefinitionDialog {
     }
 
     private MaterialDialog dialog;
-    protected Flashcard flashcard;
 
     public EditFlashcardDefinitionDialog(Context context, @NonNull final Listener listener) {
         dialog = new MaterialDialog.Builder(context)
@@ -38,7 +36,6 @@ public class EditFlashcardDefinitionDialog {
                     @Override
                     public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
                         String newDefinition = dialog.getInputEditText().getText().toString().trim();
-                        DatabaseManager.get().updateFlashcardDefinition(flashcard.getId(), newDefinition);
                         listener.onFlashcardDefinitionEdited(newDefinition);
                     }
                 })
@@ -47,7 +44,6 @@ public class EditFlashcardDefinitionDialog {
     }
 
     public void show(Flashcard flashcard) {
-        this.flashcard = flashcard;
         dialog.getInputEditText().setText(flashcard.getDefinition());
         dialog.show();
     }

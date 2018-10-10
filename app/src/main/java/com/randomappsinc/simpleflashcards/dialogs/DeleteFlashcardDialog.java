@@ -6,7 +6,6 @@ import android.support.annotation.NonNull;
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.randomappsinc.simpleflashcards.R;
-import com.randomappsinc.simpleflashcards.persistence.DatabaseManager;
 
 public class DeleteFlashcardDialog {
 
@@ -15,7 +14,6 @@ public class DeleteFlashcardDialog {
     }
 
     private MaterialDialog dialog;
-    protected int flashcardId;
 
     public DeleteFlashcardDialog(Context context, @NonNull final Listener listener) {
         dialog = new MaterialDialog.Builder(context)
@@ -26,15 +24,13 @@ public class DeleteFlashcardDialog {
                 .onPositive(new MaterialDialog.SingleButtonCallback() {
                     @Override
                     public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                        DatabaseManager.get().deleteFlashcard(flashcardId);
                         listener.onFlashcardDeleted();
                     }
                 })
                 .build();
     }
 
-    public void show(int flashcardId) {
-        this.flashcardId = flashcardId;
+    public void show() {
         dialog.show();
     }
 }

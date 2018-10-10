@@ -141,6 +141,7 @@ public class DatabaseManager {
                 } else {
                     throw new IllegalStateException("Flashcard schema doesn't exist.");
                 }
+                oldVersion++;
             }
         }
     };
@@ -234,6 +235,19 @@ public class DatabaseManager {
                     .equalTo("id", flashcardId)
                     .findFirst();
             flashcard.setDefinition(newDefinition);
+            realm.commitTransaction();
+        } catch (Exception e) {
+            realm.cancelTransaction();
+        }
+    }
+
+    public void updateFlashcardTermImageUrl(int flashcardId, String termImageUrl) {
+        try {
+            realm.beginTransaction();
+            Flashcard flashcard = realm.where(Flashcard.class)
+                    .equalTo("id", flashcardId)
+                    .findFirst();
+            flashcard.setTermImageUrl(termImageUrl);
             realm.commitTransaction();
         } catch (Exception e) {
             realm.cancelTransaction();

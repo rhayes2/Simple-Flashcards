@@ -3,6 +3,7 @@ package com.randomappsinc.simpleflashcards.utils;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
 
+import com.randomappsinc.simpleflashcards.constants.Constants;
 import com.randomappsinc.simpleflashcards.persistence.models.Flashcard;
 import com.randomappsinc.simpleflashcards.persistence.models.FlashcardSet;
 
@@ -52,7 +53,13 @@ public class JSONUtils {
             for (Flashcard flashcard : flashcardSet.getFlashcards()) {
                 JSONObject flashcardJson = new JSONObject();
                 flashcardJson.put(TERM_KEY, flashcard.getTerm());
-                flashcardJson.put(TERM_IMAGE_URL_KEY, flashcard.getTermImageUrl());
+                String termImageUrl = flashcard.getTermImageUrl();
+
+                // Only transfer images with actual URLs since URIs won't work
+                if (termImageUrl != null && termImageUrl.contains(Constants.QUIZLET_URL)) {
+                    flashcardJson.put(TERM_IMAGE_URL_KEY, flashcard.getTermImageUrl());
+                }
+
                 flashcardJson.put(DEFINITION_KEY, flashcard.getDefinition());
                 flashcards.put(flashcardJson);
             }

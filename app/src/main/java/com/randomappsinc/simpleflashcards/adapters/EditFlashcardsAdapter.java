@@ -2,6 +2,7 @@ package com.randomappsinc.simpleflashcards.adapters;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
+import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,6 +13,7 @@ import android.widget.TextView;
 import com.randomappsinc.simpleflashcards.R;
 import com.randomappsinc.simpleflashcards.persistence.DatabaseManager;
 import com.randomappsinc.simpleflashcards.persistence.models.Flashcard;
+import com.randomappsinc.simpleflashcards.utils.ViewUtils;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -28,6 +30,10 @@ public class EditFlashcardsAdapter extends RecyclerView.Adapter<EditFlashcardsAd
         void onEditDefinition(Flashcard flashcard);
 
         void onDeleteFlashcard(Flashcard flashcard);
+
+        void onImageClicked(Flashcard flashcard);
+
+        void onAddImageClicked(Flashcard flashcard);
     }
 
     protected Listener listener;
@@ -63,6 +69,15 @@ public class EditFlashcardsAdapter extends RecyclerView.Adapter<EditFlashcardsAd
             return;
         }
         flashcards.get(selectedItemPosition).setDefinition(newDefinition);
+        notifyItemChanged(selectedItemPosition);
+        selectedItemPosition = -1;
+    }
+
+    public void onTermImageAdded(String termImageUrl) {
+        if (selectedItemPosition < 0) {
+            return;
+        }
+        flashcards.get(selectedItemPosition).setTermImageUrl(termImageUrl);
         notifyItemChanged(selectedItemPosition);
         selectedItemPosition = -1;
     }
@@ -113,6 +128,7 @@ public class EditFlashcardsAdapter extends RecyclerView.Adapter<EditFlashcardsAd
         @BindView(R.id.position_info) TextView positionInfo;
         @BindView(R.id.term_text) TextView termText;
         @BindView(R.id.term_image) ImageView termImage;
+        @BindView(R.id.add_image) View addImage;
         @BindView(R.id.definition) TextView definition;
 
         FlashcardViewHolder(View view) {
@@ -127,20 +143,44 @@ public class EditFlashcardsAdapter extends RecyclerView.Adapter<EditFlashcardsAd
                     position + 1,
                     getItemCount()));
             termText.setText(flashcard.getTerm());
-            String imageUrl = flashcard.getTermImageUrl();
+            final String imageUrl = flashcard.getTermImageUrl();
             if (imageUrl == null) {
                 termImage.setVisibility(View.GONE);
+                addImage.setVisibility(View.VISIBLE);
             } else {
-                Picasso.get().load(imageUrl).into(termImage);
+                addImage.setVisibility(View.GONE);
                 termImage.setVisibility(View.VISIBLE);
+                if (ViewCompat.isLaidOut(termImage)) {
+                    loadImage(imageUrl);
+                } else {
+                    ViewUtils.runOnPreDraw(termImage, new Runnable() {
+                        @Override
+                        public void run() {
+                            loadImage(imageUrl);
+                        }
+                    });
+                }
             }
             definition.setText(flashcard.getDefinition());
+        }
+
+        protected void loadImage(String imageUrl) {
+            Picasso.get()
+                    .load(imageUrl)
+                    .resize(termImage.getWidth(), 0)
+                    .into(termImage);
         }
 
         @OnClick(R.id.term_text)
         public void editTerm() {
             selectedItemPosition = getAdapterPosition();
             listener.onEditTerm(flashcards.get(getAdapterPosition()));
+        }
+
+        @OnClick(R.id.add_image)
+        public void addImage() {
+            selectedItemPosition = getAdapterPosition();
+            listener.onAddImageClicked(flashcards.get(getAdapterPosition()));
         }
 
         @OnClick(R.id.definition)
