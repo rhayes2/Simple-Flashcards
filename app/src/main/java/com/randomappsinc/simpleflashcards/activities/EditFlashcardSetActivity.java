@@ -20,6 +20,7 @@ import com.randomappsinc.simpleflashcards.dialogs.CreateFlashcardDialog;
 import com.randomappsinc.simpleflashcards.dialogs.DeleteFlashcardDialog;
 import com.randomappsinc.simpleflashcards.dialogs.EditFlashcardDefinitionDialog;
 import com.randomappsinc.simpleflashcards.dialogs.EditFlashcardTermDialog;
+import com.randomappsinc.simpleflashcards.dialogs.FlashcardImageOptionsDialog;
 import com.randomappsinc.simpleflashcards.persistence.DatabaseManager;
 import com.randomappsinc.simpleflashcards.persistence.models.Flashcard;
 import com.randomappsinc.simpleflashcards.utils.UIUtils;
@@ -46,6 +47,7 @@ public class EditFlashcardSetActivity extends StandardActivity {
     protected DeleteFlashcardDialog deleteFlashcardDialog;
     protected EditFlashcardTermDialog editFlashcardTermDialog;
     protected EditFlashcardDefinitionDialog editFlashcardDefinitionDialog;
+    protected FlashcardImageOptionsDialog flashcardImageOptionsDialog;
     protected int currentlySelectedFlashcardId;
     protected DatabaseManager databaseManager = DatabaseManager.get();
 
@@ -66,6 +68,8 @@ public class EditFlashcardSetActivity extends StandardActivity {
         editFlashcardTermDialog = new EditFlashcardTermDialog(this, flashcardTermEditListener);
         editFlashcardDefinitionDialog = new EditFlashcardDefinitionDialog(
                 this, flashcardDefinitionEditListener);
+        flashcardImageOptionsDialog = new FlashcardImageOptionsDialog(
+                this, flashcardOptionsListener);
         adapter = new EditFlashcardsAdapter(flashcardEditingListener, setId, noFlashcards, numFlashcards);
         flashcards.setAdapter(adapter);
     }
@@ -119,7 +123,7 @@ public class EditFlashcardSetActivity extends StandardActivity {
             if (resultData != null && resultData.getData() != null) {
                 String uriString = resultData.getData().toString();
                 databaseManager.updateFlashcardTermImageUrl(currentlySelectedFlashcardId, uriString);
-                adapter.onTermImageAdded(uriString);
+                adapter.onTermImageUpdated(uriString);
             }
         }
     }
@@ -157,6 +161,7 @@ public class EditFlashcardSetActivity extends StandardActivity {
                 @Override
                 public void onImageClicked(Flashcard flashcard) {
                     currentlySelectedFlashcardId = flashcard.getId();
+                    flashcardImageOptionsDialog.show();
                 }
 
                 @Override
@@ -190,6 +195,20 @@ public class EditFlashcardSetActivity extends StandardActivity {
                 public void onFlashcardDefinitionEdited(String newDefinition) {
                     databaseManager.updateFlashcardDefinition(currentlySelectedFlashcardId, newDefinition);
                     adapter.onFlashcardDefinitionEdited(newDefinition);
+                }
+            };
+
+    private final FlashcardImageOptionsDialog.Listener flashcardOptionsListener =
+            new FlashcardImageOptionsDialog.Listener() {
+                @Override
+                public void onFlashcardImageChangeRequested() {
+                    searchForImageFile();
+                }
+
+                @Override
+                public void onFlashcardImageDeleted() {
+                    databaseManager.updateFlashcardTermImageUrl(currentlySelectedFlashcardId, null);
+                    adapter.onTermImageUpdated(null);
                 }
             };
 }

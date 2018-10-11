@@ -2,6 +2,7 @@ package com.randomappsinc.simpleflashcards.adapters;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -73,7 +74,7 @@ public class EditFlashcardsAdapter extends RecyclerView.Adapter<EditFlashcardsAd
         selectedItemPosition = -1;
     }
 
-    public void onTermImageAdded(String termImageUrl) {
+    public void onTermImageUpdated(@Nullable String termImageUrl) {
         if (selectedItemPosition < 0) {
             return;
         }
@@ -181,6 +182,12 @@ public class EditFlashcardsAdapter extends RecyclerView.Adapter<EditFlashcardsAd
         public void addImage() {
             selectedItemPosition = getAdapterPosition();
             listener.onAddImageClicked(flashcards.get(getAdapterPosition()));
+        }
+
+        @OnClick(R.id.term_image)
+        public void onImageClicked() {
+            selectedItemPosition = getAdapterPosition();
+            listener.onImageClicked(flashcards.get(getAdapterPosition()));
         }
 
         @OnClick(R.id.definition)

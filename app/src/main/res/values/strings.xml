@@ -82,6 +82,7 @@
     </string>
 
     <string name="yes">Yes</string>
+    <string name="no">No</string>
     <string name="cancel">Cancel</string>
 
     <string name="image_load_fail">Failed to load image.</string>
