@@ -1,6 +1,7 @@
 package com.randomappsinc.simpleflashcards.adapters;
 
 import android.support.annotation.NonNull;
+import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -11,6 +12,7 @@ import android.widget.TextView;
 
 import com.randomappsinc.simpleflashcards.R;
 import com.randomappsinc.simpleflashcards.models.Problem;
+import com.randomappsinc.simpleflashcards.utils.ViewUtils;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -87,10 +89,19 @@ public class QuizResultsAdapter extends RecyclerView.Adapter<QuizResultsAdapter.
             questionHeader.setText(headerText);
             question.setText(problem.getQuestion());
 
-            String imageUrl = problem.getQuestionImageUrl();
+            final String imageUrl = problem.getQuestionImageUrl();
             if (!TextUtils.isEmpty(imageUrl)) {
-                Picasso.get().load(imageUrl).into(questionImage);
                 questionImage.setVisibility(View.VISIBLE);
+                if (ViewCompat.isLaidOut(questionImage)) {
+                    loadImage(imageUrl);
+                } else {
+                    ViewUtils.runOnPreDraw(questionImage, new Runnable() {
+                        @Override
+                        public void run() {
+                            loadImage(imageUrl);
+                        }
+                    });
+                }
             } else {
                 questionImage.setVisibility(View.GONE);
             }
@@ -109,6 +120,13 @@ public class QuizResultsAdapter extends RecyclerView.Adapter<QuizResultsAdapter.
                 correctAnswerHeader.setVisibility(View.VISIBLE);
                 correctAnswerContainer.setVisibility(View.VISIBLE);
             }
+        }
+
+        protected void loadImage(String imageUrl) {
+            Picasso.get()
+                    .load(imageUrl)
+                    .resize(0, questionImage.getHeight())
+                    .into(questionImage);
         }
 
         @OnClick(R.id.question_image)

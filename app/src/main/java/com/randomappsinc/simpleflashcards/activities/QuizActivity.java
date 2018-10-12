@@ -4,6 +4,7 @@ import android.animation.Animator;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.view.ViewCompat;
 import android.text.TextUtils;
 import android.view.MenuItem;
 import android.view.View;
@@ -24,6 +25,7 @@ import com.randomappsinc.simpleflashcards.models.QuizSettings;
 import com.randomappsinc.simpleflashcards.persistence.DatabaseManager;
 import com.randomappsinc.simpleflashcards.persistence.models.FlashcardSet;
 import com.randomappsinc.simpleflashcards.utils.UIUtils;
+import com.randomappsinc.simpleflashcards.utils.ViewUtils;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -119,10 +121,19 @@ public class QuizActivity extends StandardActivity implements QuitQuizDialog.Lis
         Problem problem = quiz.getCurrentProblem();
         questionText.setText(problem.getQuestion());
 
-        String imageUrl = problem.getQuestionImageUrl();
+        final String imageUrl = problem.getQuestionImageUrl();
         if (!TextUtils.isEmpty(imageUrl)) {
             questionImage.setVisibility(View.VISIBLE);
-            Picasso.get().load(imageUrl).into(questionImage);
+            if (ViewCompat.isLaidOut(questionImage)) {
+                loadImage(imageUrl);
+            } else {
+                ViewUtils.runOnPreDraw(questionImage, new Runnable() {
+                    @Override
+                    public void run() {
+                        loadImage(imageUrl);
+                    }
+                });
+            }
         } else {
             questionImage.setVisibility(View.GONE);
         }
@@ -131,6 +142,13 @@ public class QuizActivity extends StandardActivity implements QuitQuizDialog.Lis
         for (int i = 0; i < options.size(); i++) {
             optionButtons.get(i).setText(options.get(i));
         }
+    }
+
+    protected void loadImage(String imageUrl) {
+        Picasso.get()
+                .load(imageUrl)
+                .resize(0, questionImage.getHeight())
+                .into(questionImage);
     }
 
     @OnClick(R.id.question_image)

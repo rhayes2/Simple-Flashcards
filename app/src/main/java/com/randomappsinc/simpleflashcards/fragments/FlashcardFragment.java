@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.ViewCompat;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,6 +22,7 @@ import com.randomappsinc.simpleflashcards.constants.Constants;
 import com.randomappsinc.simpleflashcards.managers.BrowseFlashcardsSettingsManager;
 import com.randomappsinc.simpleflashcards.persistence.DatabaseManager;
 import com.randomappsinc.simpleflashcards.persistence.models.Flashcard;
+import com.randomappsinc.simpleflashcards.utils.ViewUtils;
 import com.squareup.picasso.Picasso;
 
 import java.util.Locale;
@@ -53,7 +55,7 @@ public class FlashcardFragment extends Fragment {
 
     @BindInt(R.integer.default_anim_length) int flipAnimLength;
 
-    private Flashcard flashcard;
+    protected Flashcard flashcard;
     protected boolean isShowingTerm;
     private Unbinder unbinder;
     private BrowseFlashcardsSettingsManager settingsManager = BrowseFlashcardsSettingsManager.get();
@@ -138,11 +140,27 @@ public class FlashcardFragment extends Fragment {
         content.setText(isShowingTerm ? flashcard.getTerm() : flashcard.getDefinition());
         String termImageUrl = flashcard.getTermImageUrl();
         if (isShowingTerm && !TextUtils.isEmpty(termImageUrl)) {
-            Picasso.get().load(termImageUrl).into(termImage);
             termImage.setVisibility(View.VISIBLE);
+            if (ViewCompat.isLaidOut(termImage)) {
+                loadImage(flashcard.getTermImageUrl());
+            } else {
+                ViewUtils.runOnPreDraw(termImage, new Runnable() {
+                    @Override
+                    public void run() {
+                        loadImage(flashcard.getTermImageUrl());
+                    }
+                });
+            }
         } else {
             termImage.setVisibility(View.GONE);
         }
+    }
+
+    protected void loadImage(String imageUrl) {
+        Picasso.get()
+                .load(imageUrl)
+                .resize(0, termImage.getHeight())
+                .into(termImage);
     }
 
     private final BrowseFlashcardsSettingsManager.Listener defaultSideListener =
