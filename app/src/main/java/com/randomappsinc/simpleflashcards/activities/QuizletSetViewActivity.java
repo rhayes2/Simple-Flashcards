@@ -7,6 +7,8 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.TextView;
 
+import com.joanzapata.iconify.IconDrawable;
+import com.joanzapata.iconify.fonts.IoniconsIcons;
 import com.randomappsinc.simpleflashcards.R;
 import com.randomappsinc.simpleflashcards.adapters.QuizletFlashcardsAdapter;
 import com.randomappsinc.simpleflashcards.api.QuizletFlashcardSetFetcher;
@@ -20,7 +22,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class ViewQuizletSetActivity extends StandardActivity {
+public class QuizletSetViewActivity extends StandardActivity {
 
     @BindView(R.id.skeleton_cards) View skeletonCards;
     @BindView(R.id.flashcards) RecyclerView flashcards;
@@ -39,6 +41,10 @@ public class ViewQuizletSetActivity extends StandardActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.view_quizlet_set);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar()
+                .setHomeAsUpIndicator(new IconDrawable(this, IoniconsIcons.ion_android_close)
+                        .colorRes(R.color.white)
+                        .actionBarSize());
         ButterKnife.bind(this);
 
         String title = getIntent().getStringExtra(Constants.QUIZLET_SET_TITLE);
@@ -80,7 +86,7 @@ public class ViewQuizletSetActivity extends StandardActivity {
                 @Override
                 public void onImageClicked(QuizletFlashcard flashcard) {
                     Intent intent = new Intent(
-                            ViewQuizletSetActivity.this,
+                            QuizletSetViewActivity.this,
                             PictureFullViewActivity.class)
                             .putExtra(Constants.IMAGE_URL_KEY, flashcard.getImageUrl())
                             .putExtra(Constants.CAPTION_KEY, flashcard.getTerm());
@@ -96,6 +102,12 @@ public class ViewQuizletSetActivity extends StandardActivity {
             button.setText(R.string.saved_to_library);
             button.setBackgroundColor(green);
         }
+    }
+
+    @Override
+    public void finish() {
+        super.finish();
+        overridePendingTransition(0, R.anim.slide_out_bottom);
     }
 
     @Override

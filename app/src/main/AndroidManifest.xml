@@ -79,7 +79,7 @@
             android:configChanges="orientation|screenSize"/>
 
         <activity
-            android:name=".activities.ViewQuizletSetActivity"
+            android:name=".activities.QuizletSetViewActivity"
             android:configChanges="orientation|screenSize"/>
 
         <activity

@@ -127,11 +127,11 @@ public class QuizletSearchActivity extends StandardActivity {
                 @Override
                 public void onResultClicked(QuizletSetResult result) {
                     Intent intent = new Intent(
-                            QuizletSearchActivity.this,
-                            ViewQuizletSetActivity.class)
+                            QuizletSearchActivity.this, QuizletSetViewActivity.class)
                             .putExtra(Constants.QUIZLET_SET_ID, result.getQuizletSetId())
                             .putExtra(Constants.QUIZLET_SET_TITLE, result.getTitle());
                     startActivity(intent);
+                    overridePendingTransition(R.anim.slide_in_bottom, R.anim.stay);
                 }
             };
 
