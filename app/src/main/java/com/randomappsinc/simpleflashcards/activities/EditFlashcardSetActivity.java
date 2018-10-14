@@ -1,9 +1,13 @@
 package com.randomappsinc.simpleflashcards.activities;
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -23,6 +27,7 @@ import com.randomappsinc.simpleflashcards.dialogs.EditFlashcardTermDialog;
 import com.randomappsinc.simpleflashcards.dialogs.FlashcardImageOptionsDialog;
 import com.randomappsinc.simpleflashcards.persistence.DatabaseManager;
 import com.randomappsinc.simpleflashcards.persistence.models.Flashcard;
+import com.randomappsinc.simpleflashcards.utils.PermissionUtils;
 import com.randomappsinc.simpleflashcards.utils.UIUtils;
 
 import butterknife.BindView;
@@ -32,7 +37,11 @@ import butterknife.OnEditorAction;
 
 public class EditFlashcardSetActivity extends StandardActivity {
 
+    // Intent codes
     private static final int IMAGE_FILE_REQUEST_CODE = 1;
+
+    // Permission codes
+    private static final int READ_EXTERNAL_STORAGE_REQUEST_CODE = 1;
 
     @BindView(R.id.set_name_card) View setNameCard;
     @BindView(R.id.flashcard_set_name) EditText flashcardSetName;
@@ -108,6 +117,17 @@ public class EditFlashcardSetActivity extends StandardActivity {
         createFlashcardDialog.show();
     }
 
+    protected void verifyReadExternalStoragePermission() {
+        if (PermissionUtils.isPermissionGranted(Manifest.permission.READ_EXTERNAL_STORAGE, this)) {
+            searchForImageFile();
+        } else {
+            PermissionUtils.requestPermission(
+                    this,
+                    Manifest.permission.READ_EXTERNAL_STORAGE,
+                    READ_EXTERNAL_STORAGE_REQUEST_CODE);
+        }
+    }
+
     protected void searchForImageFile() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
@@ -119,12 +139,33 @@ public class EditFlashcardSetActivity extends StandardActivity {
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent resultData) {
-        if (requestCode == IMAGE_FILE_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT
+                && requestCode == IMAGE_FILE_REQUEST_CODE
+                && resultCode == Activity.RESULT_OK) {
             if (resultData != null && resultData.getData() != null) {
-                String uriString = resultData.getData().toString();
+                Uri uri = resultData.getData();
+
+                // Persist ability to read from this file
+                int takeFlags = resultData.getFlags()
+                        & (Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+                getContentResolver().takePersistableUriPermission(uri, takeFlags);
+
+                String uriString = uri.toString();
                 databaseManager.updateFlashcardTermImageUrl(currentlySelectedFlashcardId, uriString);
                 adapter.onTermImageUpdated(uriString);
             }
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(
+            int requestCode,
+            @NonNull String permissions[],
+            @NonNull int[] grantResults) {
+        if (requestCode == READ_EXTERNAL_STORAGE_REQUEST_CODE
+                && grantResults.length > 0
+                && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+            searchForImageFile();
         }
     }
 
@@ -167,7 +208,7 @@ public class EditFlashcardSetActivity extends StandardActivity {
                 @Override
                 public void onAddImageClicked(Flashcard flashcard) {
                     currentlySelectedFlashcardId = flashcard.getId();
-                    searchForImageFile();
+                    verifyReadExternalStoragePermission();
                 }
             };
 
@@ -202,7 +243,7 @@ public class EditFlashcardSetActivity extends StandardActivity {
             new FlashcardImageOptionsDialog.Listener() {
                 @Override
                 public void onFlashcardImageChangeRequested() {
-                    searchForImageFile();
+                    verifyReadExternalStoragePermission();
                 }
 
                 @Override

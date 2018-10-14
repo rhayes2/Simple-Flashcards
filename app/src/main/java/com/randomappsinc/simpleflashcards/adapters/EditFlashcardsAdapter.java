@@ -79,7 +79,7 @@ public class EditFlashcardsAdapter extends RecyclerView.Adapter<EditFlashcardsAd
             return;
         }
         flashcards.get(selectedItemPosition).setTermImageUrl(termImageUrl);
-        notifyItemChanged(selectedItemPosition);
+        notifyDataSetChanged();
         selectedItemPosition = -1;
     }
 
