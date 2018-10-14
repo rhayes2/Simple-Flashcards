@@ -13,6 +13,9 @@
     </string-array>
 
     <string name="backup_data">Backup Data</string>
+    <string name="choose_backup_folder">
+        Navigate to the folder where you want Simple Flashcards Plus to backup your data.
+    </string>
     <string name="backup_successful">Backup successful!</string>
     <string name="backup_failed">We failed to back up your data.</string>
     <string name="choose">Choose</string>

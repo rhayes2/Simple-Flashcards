@@ -101,6 +101,7 @@ public class BackupDataFragment extends Fragment {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT) {
             folderChooserDialog.show(getActivity());
         } else {
+            UIUtils.showLongToast(R.string.choose_backup_folder, getContext());
             Intent intent = new Intent(Intent.ACTION_CREATE_DOCUMENT);
             intent.addCategory(Intent.CATEGORY_OPENABLE);
             intent.setType("text/plain");
