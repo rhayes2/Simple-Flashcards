@@ -9,8 +9,12 @@ import com.joanzapata.iconify.IconDrawable;
 import com.joanzapata.iconify.fonts.IoniconsIcons;
 import com.randomappsinc.simpleflashcards.R;
 import com.randomappsinc.simpleflashcards.constants.Constants;
+import com.randomappsinc.simpleflashcards.constants.QuestionType;
 import com.randomappsinc.simpleflashcards.models.QuizSettings;
 import com.randomappsinc.simpleflashcards.persistence.DatabaseManager;
+import com.randomappsinc.simpleflashcards.utils.UIUtils;
+
+import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -19,10 +23,17 @@ import butterknife.OnClick;
 
 public class QuizSettingsActivity extends StandardActivity {
 
+    // Number of questions
     @BindView(R.id.num_questions) TextView numQuestions;
+
+    // Time limit
     @BindView(R.id.no_time_limit) CheckBox noTimeLimit;
     @BindView(R.id.set_time_limit) CheckBox setTimeLimit;
     @BindView(R.id.num_minutes) TextView numMinutes;
+
+    // Question types
+    @BindView(R.id.multiple_choice_toggle) CheckBox multipleChoiceToggle;
+    @BindView(R.id.free_form_input_toggle) CheckBox freeFormInputToggle;
 
     private int numFlashcards;
 
@@ -103,20 +114,6 @@ public class QuizSettingsActivity extends StandardActivity {
         setTimeLimit.setChecked(true);
     }
 
-    @OnClick(R.id.start_quiz)
-    public void startQuiz() {
-        int flashcardSetId = getIntent().getIntExtra(Constants.FLASHCARD_SET_ID_KEY, 0);
-        int questionsValue = Integer.valueOf(numQuestions.getText().toString());
-        int numMinutesValue = Integer.valueOf(numMinutes.getText().toString());
-        int finalNumMinutes = noTimeLimit.isChecked() ? 0 : numMinutesValue;
-        QuizSettings quizSettings = new QuizSettings(questionsValue, finalNumMinutes);
-        finish();
-        startActivity(new Intent(
-                this, QuizActivity.class)
-                .putExtra(Constants.FLASHCARD_SET_ID_KEY, flashcardSetId)
-                .putExtra(Constants.QUIZ_SETTINGS_KEY, quizSettings));
-    }
-
     @OnCheckedChanged(R.id.no_time_limit)
     public void noTimeLimitSelected(boolean isChecked) {
         if (isChecked) {
@@ -133,6 +130,40 @@ public class QuizSettingsActivity extends StandardActivity {
             noTimeLimit.setChecked(false);
             noTimeLimit.setClickable(true);
         }
+    }
+
+    private boolean needsQuestionType() {
+        return !multipleChoiceToggle.isChecked() && !freeFormInputToggle.isChecked();
+    }
+
+    private ArrayList<Integer> getChosenQuestionTypes() {
+        ArrayList<Integer> questionTypes = new ArrayList<>();
+        if (multipleChoiceToggle.isChecked()) {
+            questionTypes.add(QuestionType.MULTIPLE_CHOICE);
+        }
+        if (freeFormInputToggle.isChecked()) {
+            questionTypes.add(QuestionType.FREE_FORM_INPUT);
+        }
+        return questionTypes;
+    }
+
+    @OnClick(R.id.start_quiz)
+    public void startQuiz() {
+        if (needsQuestionType()) {
+            UIUtils.showLongToast(R.string.question_type_needed, this);
+            return;
+        }
+
+        int flashcardSetId = getIntent().getIntExtra(Constants.FLASHCARD_SET_ID_KEY, 0);
+        int questionsValue = Integer.valueOf(numQuestions.getText().toString());
+        int numMinutesValue = Integer.valueOf(numMinutes.getText().toString());
+        int finalNumMinutes = noTimeLimit.isChecked() ? 0 : numMinutesValue;
+        QuizSettings quizSettings = new QuizSettings(questionsValue, finalNumMinutes, getChosenQuestionTypes());
+        finish();
+        startActivity(new Intent(
+                this, QuizActivity.class)
+                .putExtra(Constants.FLASHCARD_SET_ID_KEY, flashcardSetId)
+                .putExtra(Constants.QUIZ_SETTINGS_KEY, quizSettings));
     }
 
     @Override

@@ -146,6 +146,33 @@
                     android:text="@string/plus_5"
                     style="@style/quiz_settings_number_change_button"/>
             </LinearLayout>
+
+            <LinearLayout
+                android:layout_marginTop="16dp"
+                style="@style/quiz_settings_header_container">
+
+                <com.joanzapata.iconify.widget.IconTextView
+                    android:text="@string/question_mark_icon"
+                    style="@style/quiz_settings_icon"/>
+
+                <TextView
+                    android:text="@string/question_types"
+                    style="@style/quiz_settings_section_title"/>
+            </LinearLayout>
+
+            <View style="@style/quiz_settings_divider"/>
+
+            <CheckBox
+                android:id="@+id/multiple_choice_toggle"
+                android:text="@string/multiple_choice"
+                android:checked="true"
+                style="@style/quiz_settings_checkbox"/>
+
+            <CheckBox
+                android:id="@+id/free_form_input_toggle"
+                android:text="@string/free_form_input"
+                android:checked="true"
+                style="@style/quiz_settings_checkbox"/>
         </LinearLayout>
     </ScrollView>
 
