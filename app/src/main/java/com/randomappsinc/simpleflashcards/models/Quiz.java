@@ -1,5 +1,6 @@
 package com.randomappsinc.simpleflashcards.models;
 
+import com.randomappsinc.simpleflashcards.constants.QuestionType;
 import com.randomappsinc.simpleflashcards.constants.QuizScore;
 import com.randomappsinc.simpleflashcards.persistence.models.Flashcard;
 import com.randomappsinc.simpleflashcards.persistence.models.FlashcardSet;
@@ -8,10 +9,10 @@ import com.randomappsinc.simpleflashcards.utils.RandUtils;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.Random;
 
 public class Quiz {
 
-    private static final int NUM_ANSWER_OPTIONS = 4;
     private static final float GOOD_PERCENTAGE_THRESHOLD = 80;
     private static final float OKAY_PERCENTAGE_THRESHOLD = 60;
 
@@ -48,7 +49,7 @@ public class Quiz {
         }
     }
 
-    public Quiz(FlashcardSet flashcardSet, int numQuestions) {
+    public Quiz(FlashcardSet flashcardSet, int numQuestions, List<Integer> questionTypes) {
         problems = new ArrayList<>();
         List<Flashcard> flashcards = flashcardSet.getFlashcards();
 
@@ -56,24 +57,22 @@ public class Quiz {
         List<Integer> indexes = RandUtils.getProblemIndexes(flashcards.size(), numQuestions);
 
         int currentQuestionPosition = 1;
+        Random random = new Random();
         for (int index : indexes) {
             Flashcard flashcard = flashcards.get(index);
-
-            Problem problem = new Problem();
-            problem.setQuestionNumber(currentQuestionPosition);
-            problem.setQuestion(flashcard.getTerm());
-            problem.setQuestionImageUrl(flashcard.getTermImageUrl());
-            problem.setAnswer(flashcard.getDefinition());
-
-            int numOptions = Math.min(NUM_ANSWER_OPTIONS, flashcards.size());
-            List<Integer> optionIndexes = RandUtils.getQuizChoicesIndexes(flashcards.size(), numOptions, index);
-            List<String> options = new ArrayList<>(optionIndexes.size());
-            for (int j : optionIndexes) {
-                options.add(flashcards.get(j).getDefinition());
+            Problem problem = new Problem(currentQuestionPosition);
+            int questionTypeIndex = random.nextInt(questionTypes.size());
+            switch (questionTypes.get(questionTypeIndex)) {
+                case QuestionType.MULTIPLE_CHOICE:
+                    problem.setAsMultipleChoiceQuestion(flashcard, index, flashcards);
+                    break;
+                case QuestionType.FREE_FORM_INPUT:
+                    problem.setAsFreeFormInputQuestion(flashcard);
+                    break;
+                default:
+                    throw new IllegalArgumentException("Unsupported question type");
             }
-            problem.setOptions(options);
             problems.add(problem);
-
             currentQuestionPosition++;
         }
     }

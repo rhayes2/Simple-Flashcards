@@ -4,26 +4,56 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import android.support.annotation.Nullable;
 
+import com.randomappsinc.simpleflashcards.constants.QuestionType;
+import com.randomappsinc.simpleflashcards.persistence.models.Flashcard;
+import com.randomappsinc.simpleflashcards.utils.RandUtils;
+import com.randomappsinc.simpleflashcards.utils.StringUtils;
+
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 
 public class Problem implements Parcelable {
 
+    private static final int NUM_ANSWER_OPTIONS = 4;
+
+    private @QuestionType int questionType;
     private int questionNumber;
     private String question;
     @Nullable private String questionImageUrl;
     private String answer;
-    private List<String> options;
+    @Nullable private List<String> options;
     private String givenAnswer;
 
-    Problem() {}
+    Problem(int questionNumber) {
+        this.questionNumber = questionNumber;
+    }
+
+    public void setAsMultipleChoiceQuestion(Flashcard flashcard, int index, List<Flashcard> flashcards) {
+        questionType = QuestionType.MULTIPLE_CHOICE;
+        question = flashcard.getTerm();
+        questionImageUrl = flashcard.getTermImageUrl();
+        answer = flashcard.getDefinition();
+
+        int numOptions = Math.min(NUM_ANSWER_OPTIONS, flashcards.size());
+        List<Integer> optionIndexes = RandUtils.getQuizChoicesIndexes(flashcards.size(), numOptions, index);
+        List<String> options = new ArrayList<>(optionIndexes.size());
+        for (int optionIndex : optionIndexes) {
+            options.add(flashcards.get(optionIndex).getDefinition());
+        }
+        this.options = options;
+    }
+
+    public void setAsFreeFormInputQuestion(Flashcard flashcard) {
+        questionType = QuestionType.FREE_FORM_INPUT;
+        question = flashcard.getTerm();
+        questionImageUrl = flashcard.getTermImageUrl();
+        answer = flashcard.getDefinition();
+    }
 
     public int getQuestionNumber() {
         return questionNumber;
-    }
-
-    public void setQuestionNumber(int questionNumber) {
-        this.questionNumber = questionNumber;
     }
 
     public String getQuestion() {
@@ -39,24 +69,13 @@ public class Problem implements Parcelable {
         return questionImageUrl;
     }
 
-    void setQuestionImageUrl(@Nullable String questionImageUrl) {
-        this.questionImageUrl = questionImageUrl;
-    }
-
     public String getAnswer() {
         return answer;
     }
 
-    void setAnswer(String answer) {
-        this.answer = answer;
-    }
-
+    @Nullable
     public List<String> getOptions() {
         return options;
-    }
-
-    void setOptions(List<String> options) {
-        this.options = options;
     }
 
     public String getGivenAnswer() {
@@ -68,7 +87,36 @@ public class Problem implements Parcelable {
     }
 
     public boolean wasUserCorrect() {
-        return answer.equals(givenAnswer);
+        switch (questionType) {
+            case QuestionType.MULTIPLE_CHOICE:
+                return answer.equals(givenAnswer);
+            case QuestionType.FREE_FORM_INPUT:
+                return isFreeFormInputCloseEnoughMatch();
+            default:
+                throw new IllegalStateException("Unsupported question type");
+        }
+    }
+
+    private boolean isFreeFormInputCloseEnoughMatch() {
+        String[] answerSplits = answer.split("\\s+");
+        HashMap<String, Integer> answerWords = StringUtils.getWordAmounts(answerSplits);
+        HashMap<String, Integer> responseWords = StringUtils.getWordAmounts(givenAnswer.split("\\s+"));
+        int allowedMisses = answerSplits.length / 10;
+        int numMisses = 0;
+        for (String responseWord : responseWords.keySet()) {
+            int responseAmount = responseWords.get(responseWord);
+            if (answerWords.containsKey(responseWord)) {
+                int answerAmount = answerWords.get(responseWord);
+                int newAmount = answerAmount - responseAmount;
+                answerWords.put(responseWord, newAmount);
+            } else {
+                numMisses += responseAmount;
+            }
+        }
+        for (String answerWord : answerWords.keySet()) {
+            numMisses += Math.abs(answerWords.get(answerWord));
+        }
+        return numMisses <= allowedMisses;
     }
 
     protected Problem(Parcel in) {
