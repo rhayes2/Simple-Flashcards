@@ -11,12 +11,11 @@ import com.randomappsinc.simpleflashcards.utils.StringUtils;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 
 public class Problem implements Parcelable {
 
-    private static final int NUM_ANSWER_OPTIONS = 4;
+    public static final int NORMAL_NUM_ANSWER_OPTIONS = 4;
 
     private @QuestionType int questionType;
     private int questionNumber;
@@ -36,7 +35,7 @@ public class Problem implements Parcelable {
         questionImageUrl = flashcard.getTermImageUrl();
         answer = flashcard.getDefinition();
 
-        int numOptions = Math.min(NUM_ANSWER_OPTIONS, flashcards.size());
+        int numOptions = Math.min(NORMAL_NUM_ANSWER_OPTIONS, flashcards.size());
         List<Integer> optionIndexes = RandUtils.getQuizChoicesIndexes(flashcards.size(), numOptions, index);
         List<String> options = new ArrayList<>(optionIndexes.size());
         for (int optionIndex : optionIndexes) {
@@ -50,6 +49,10 @@ public class Problem implements Parcelable {
         question = flashcard.getTerm();
         questionImageUrl = flashcard.getTermImageUrl();
         answer = flashcard.getDefinition();
+    }
+
+    public @QuestionType int getQuestionType() {
+        return questionType;
     }
 
     public int getQuestionNumber() {
@@ -120,6 +123,7 @@ public class Problem implements Parcelable {
     }
 
     protected Problem(Parcel in) {
+        questionType = in.readInt();
         questionNumber = in.readInt();
         question = in.readString();
         questionImageUrl = in.readString();
@@ -140,6 +144,7 @@ public class Problem implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(questionType);
         dest.writeInt(questionNumber);
         dest.writeString(question);
         dest.writeString(questionImageUrl);

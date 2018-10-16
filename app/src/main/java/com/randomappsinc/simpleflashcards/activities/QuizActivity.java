@@ -8,6 +8,7 @@ import android.support.v4.view.ViewCompat;
 import android.text.TextUtils;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -16,6 +17,7 @@ import android.widget.TextView;
 
 import com.randomappsinc.simpleflashcards.R;
 import com.randomappsinc.simpleflashcards.constants.Constants;
+import com.randomappsinc.simpleflashcards.constants.QuestionType;
 import com.randomappsinc.simpleflashcards.constants.QuizScore;
 import com.randomappsinc.simpleflashcards.dialogs.QuitQuizDialog;
 import com.randomappsinc.simpleflashcards.managers.TimerManager;
@@ -46,6 +48,7 @@ public class QuizActivity extends StandardActivity implements QuitQuizDialog.Lis
     @BindView(R.id.question_image) ImageView questionImage;
     @BindView(R.id.options) RadioGroup optionsContainer;
     @BindViews({R.id.option_1, R.id.option_2, R.id.option_3, R.id.option_4}) List<RadioButton> optionButtons;
+    @BindView(R.id.answer_input) EditText answerInput;
     @BindView(R.id.submit) View submitButton;
     @BindView(R.id.results_page) View resultsPage;
     @BindView(R.id.results_header) TextView resultsHeader;
@@ -138,9 +141,20 @@ public class QuizActivity extends StandardActivity implements QuitQuizDialog.Lis
             questionImage.setVisibility(View.GONE);
         }
 
-        List<String> options = problem.getOptions();
-        for (int i = 0; i < options.size(); i++) {
-            optionButtons.get(i).setText(options.get(i));
+        switch (quiz.getCurrentProblem().getQuestionType()) {
+            case QuestionType.MULTIPLE_CHOICE:
+                answerInput.setVisibility(View.GONE);
+                List<String> options = problem.getOptions();
+                for (int i = 0; i < options.size(); i++) {
+                    optionButtons.get(i).setText(options.get(i));
+                }
+                optionsContainer.setVisibility(View.VISIBLE);
+                break;
+            case QuestionType.FREE_FORM_INPUT:
+                optionsContainer.setVisibility(View.GONE);
+                answerInput.setText("");
+                answerInput.setVisibility(View.VISIBLE);
+                break;
         }
     }
 
@@ -181,9 +195,7 @@ public class QuizActivity extends StandardActivity implements QuitQuizDialog.Lis
                     }
 
                     @Override
-                    public void onAnimationCancel(Animator animation) {
-                        makeQuestionViewSane();
-                    }
+                    public void onAnimationCancel(Animator animation) {}
 
                     @Override
                     public void onAnimationRepeat(Animator animation) {}
@@ -207,31 +219,11 @@ public class QuizActivity extends StandardActivity implements QuitQuizDialog.Lis
                     }
 
                     @Override
-                    public void onAnimationCancel(Animator animation) {
-                        makeQuestionViewSane();
-                    }
+                    public void onAnimationCancel(Animator animation) {}
 
                     @Override
                     public void onAnimationRepeat(Animator animation) {}
                 });
-    }
-
-    protected void makeQuestionViewSane() {
-        problemParent.setTranslationX(0);
-        problemParent.setAlpha(1);
-        loadCurrentQuestionIntoView();
-        submitButton.setEnabled(true);
-        resultsPage.setVisibility(View.GONE);
-        resultsPage.setAlpha(0);
-        problemParent.setVisibility(View.VISIBLE);
-        submitButton.setVisibility(View.VISIBLE);
-    }
-
-    protected void makeResultsPageSane() {
-        resultsPage.setAlpha(1);
-        resultsPage.setVisibility(View.VISIBLE);
-        problemParent.setVisibility(View.GONE);
-        submitButton.setVisibility(View.GONE);
     }
 
     @OnClick(R.id.submit)
@@ -239,21 +231,39 @@ public class QuizActivity extends StandardActivity implements QuitQuizDialog.Lis
         if (quiz.isQuizComplete()) {
             return;
         }
-        RadioButton chosenButton = getChosenButton();
-        if (chosenButton == null) {
-            UIUtils.showLongToast(R.string.please_check_something, this);
-        } else {
-            problemParent.fullScroll(ScrollView.FOCUS_UP);
-            quiz.submitAnswer(chosenButton.getText().toString());
-            quiz.advanceToNextProblem();
-            if (quiz.isQuizComplete()) {
-                if (timerManager != null) {
-                    timerManager.stopTimer();
+
+        // Verify the user's input and extract answer
+        switch (quiz.getCurrentProblem().getQuestionType()) {
+            case QuestionType.MULTIPLE_CHOICE:
+                RadioButton chosenButton = getChosenButton();
+                if (chosenButton == null) {
+                    UIUtils.showLongToast(R.string.please_check_something, this);
+                    return;
+                } else {
+                    quiz.submitAnswer(chosenButton.getText().toString());
                 }
-                fadeOutProblemPage();
-            } else {
-                animateQuestionOut();
+                break;
+            case QuestionType.FREE_FORM_INPUT:
+                String input = answerInput.getText().toString().trim();
+                if (input.isEmpty()) {
+                    UIUtils.showLongToast(R.string.please_enter_in_something, this);
+                    return;
+                } else {
+                    UIUtils.closeKeyboard(this);
+                    quiz.submitAnswer(input);
+                }
+                break;
+        }
+
+        problemParent.fullScroll(ScrollView.FOCUS_UP);
+        quiz.advanceToNextProblem();
+        if (quiz.isQuizComplete()) {
+            if (timerManager != null) {
+                timerManager.stopTimer();
             }
+            fadeOutProblemPage();
+        } else {
+            animateQuestionOut();
         }
     }
 
@@ -274,9 +284,7 @@ public class QuizActivity extends StandardActivity implements QuitQuizDialog.Lis
                     }
 
                     @Override
-                    public void onAnimationCancel(Animator animation) {
-                        makeResultsPageSane();
-                    }
+                    public void onAnimationCancel(Animator animation) {}
 
                     @Override
                     public void onAnimationRepeat(Animator animation) {}
@@ -327,9 +335,7 @@ public class QuizActivity extends StandardActivity implements QuitQuizDialog.Lis
                     public void onAnimationEnd(Animator animation) {}
 
                     @Override
-                    public void onAnimationCancel(Animator animation) {
-                        makeResultsPageSane();
-                    }
+                    public void onAnimationCancel(Animator animation) {}
 
                     @Override
                     public void onAnimationRepeat(Animator animation) {}
@@ -352,9 +358,7 @@ public class QuizActivity extends StandardActivity implements QuitQuizDialog.Lis
                     }
 
                     @Override
-                    public void onAnimationCancel(Animator animation) {
-                        makeQuestionViewSane();
-                    }
+                    public void onAnimationCancel(Animator animation) {}
 
                     @Override
                     public void onAnimationRepeat(Animator animation) {}
@@ -378,9 +382,7 @@ public class QuizActivity extends StandardActivity implements QuitQuizDialog.Lis
                     public void onAnimationEnd(Animator animation) {}
 
                     @Override
-                    public void onAnimationCancel(Animator animation) {
-                        makeQuestionViewSane();
-                    }
+                    public void onAnimationCancel(Animator animation) {}
 
                     @Override
                     public void onAnimationRepeat(Animator animation) {}

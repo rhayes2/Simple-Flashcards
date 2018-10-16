@@ -74,6 +74,16 @@
                     style="@style/quiz_radio_button"
                     android:visibility="gone"/>
             </RadioGroup>
+
+            <EditText
+                android:id="@+id/answer_input"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="12dp"
+                android:layout_marginRight="12dp"
+                android:hint="@string/free_form_input_hint"
+                android:textSize="17sp"
+                android:textColor="@color/dark_gray"/>
         </LinearLayout>
     </ScrollView>
 

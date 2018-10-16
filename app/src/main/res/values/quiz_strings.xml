@@ -2,12 +2,14 @@
 <resources>
     <string name="submit">Submit</string>
     <string name="please_check_something">You need to choose an answer before submitting.</string>
+    <string name="please_enter_in_something">You should enter in a definition before submitting.</string>
     <string name="confirm_quiz_exit">Confirm Quiz Exit</string>
     <string name="confirm_quiz_exit_body">
         Are you sure you want to quit your currently unfinished quiz?
         Your current progress will not be saved.
     </string>
     <string name="quiz_question_header">Question %d of %d</string>
+    <string name="free_form_input_hint">Enter your definition here</string>
     <string name="good_score_message">Congratulations!</string>
     <string name="okay_score_message">Not bad!</string>
     <string name="bad_score_message">Better luck next time!</string>

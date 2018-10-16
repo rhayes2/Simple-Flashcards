@@ -18,6 +18,7 @@ public class Quiz {
 
     private ArrayList<Problem> problems;
     private int currentProblem = 0;
+    private int numOptions = 0;
 
     public class Grade {
         private @QuizScore int score = QuizScore.BAD;
@@ -52,6 +53,7 @@ public class Quiz {
     public Quiz(FlashcardSet flashcardSet, int numQuestions, List<Integer> questionTypes) {
         problems = new ArrayList<>();
         List<Flashcard> flashcards = flashcardSet.getFlashcards();
+        numOptions = Math.min(flashcards.size(), Problem.NORMAL_NUM_ANSWER_OPTIONS);
 
         // Indexes of the flashcards we are generating questions for
         List<Integer> indexes = RandUtils.getProblemIndexes(flashcards.size(), numQuestions);
@@ -90,7 +92,7 @@ public class Quiz {
     }
 
     public int getNumOptions() {
-        return problems.get(0).getOptions().size();
+        return numOptions;
     }
 
     public boolean isQuizComplete() {
@@ -109,7 +111,7 @@ public class Quiz {
         Grade grade = new Grade();
         int numCorrect = 0;
         for (Problem problem : problems) {
-            if (problem.getAnswer().equals(problem.getGivenAnswer())) {
+            if (problem.wasUserCorrect()) {
                 numCorrect++;
             }
         }
