@@ -3,7 +3,6 @@ package com.randomappsinc.simpleflashcards.adapters;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,7 +13,6 @@ import android.widget.TextView;
 import com.randomappsinc.simpleflashcards.R;
 import com.randomappsinc.simpleflashcards.persistence.DatabaseManager;
 import com.randomappsinc.simpleflashcards.persistence.models.Flashcard;
-import com.randomappsinc.simpleflashcards.utils.ViewUtils;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -144,32 +142,20 @@ public class EditFlashcardsAdapter extends RecyclerView.Adapter<EditFlashcardsAd
                     position + 1,
                     getItemCount()));
             termText.setText(flashcard.getTerm());
-            final String imageUrl = flashcard.getTermImageUrl();
+            String imageUrl = flashcard.getTermImageUrl();
             if (imageUrl == null) {
                 termImage.setVisibility(View.GONE);
                 addImage.setVisibility(View.VISIBLE);
             } else {
                 addImage.setVisibility(View.GONE);
                 termImage.setVisibility(View.VISIBLE);
-                if (ViewCompat.isLaidOut(termImage)) {
-                    loadImage(imageUrl);
-                } else {
-                    ViewUtils.runOnPreDraw(termImage, new Runnable() {
-                        @Override
-                        public void run() {
-                            loadImage(imageUrl);
-                        }
-                    });
-                }
+                Picasso.get()
+                        .load(imageUrl)
+                        .fit()
+                        .centerCrop()
+                        .into(termImage);
             }
             definition.setText(flashcard.getDefinition());
-        }
-
-        protected void loadImage(String imageUrl) {
-            Picasso.get()
-                    .load(imageUrl)
-                    .resize(termImage.getWidth(), 0)
-                    .into(termImage);
         }
 
         @OnClick(R.id.term_text)

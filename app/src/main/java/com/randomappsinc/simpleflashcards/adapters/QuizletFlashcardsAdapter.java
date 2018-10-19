@@ -2,7 +2,6 @@ package com.randomappsinc.simpleflashcards.adapters;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
-import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -13,7 +12,6 @@ import android.widget.TextView;
 
 import com.randomappsinc.simpleflashcards.R;
 import com.randomappsinc.simpleflashcards.api.models.QuizletFlashcard;
-import com.randomappsinc.simpleflashcards.utils.ViewUtils;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -83,30 +81,18 @@ public class QuizletFlashcardsAdapter extends RecyclerView.Adapter<QuizletFlashc
                     position + 1,
                     getItemCount()));
             termText.setText(flashcard.getTerm());
-            final String imageUrl = flashcard.getImageUrl();
+            String imageUrl = flashcard.getImageUrl();
             if (imageUrl == null) {
                 termImage.setVisibility(View.GONE);
             } else {
                 termImage.setVisibility(View.VISIBLE);
-                if (ViewCompat.isLaidOut(termImage)) {
-                    loadImage(imageUrl);
-                } else {
-                    ViewUtils.runOnPreDraw(termImage, new Runnable() {
-                        @Override
-                        public void run() {
-                            loadImage(imageUrl);
-                        }
-                    });
-                }
+                Picasso.get()
+                        .load(imageUrl)
+                        .fit()
+                        .centerCrop()
+                        .into(termImage);
             }
             definition.setText(flashcard.getDefinition());
-        }
-
-        protected void loadImage(String imageUrl) {
-            Picasso.get()
-                    .load(imageUrl)
-                    .resize(termImage.getWidth(), 0)
-                    .into(termImage);
         }
 
         @OnClick(R.id.term_image)
