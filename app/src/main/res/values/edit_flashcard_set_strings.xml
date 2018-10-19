@@ -21,9 +21,11 @@
     <string name="picture_icon">{ion-android-image}</string>
     <string name="add_image">Add Image</string>
 
+    <string name="view_image">View image</string>
     <string name="change_image">Change image</string>
     <string name="delete_image">Delete image</string>
     <string-array name="flashcard_image_options">
+        <item>@string/view_image</item>
         <item>@string/change_image</item>
         <item>@string/delete_image</item>
     </string-array>

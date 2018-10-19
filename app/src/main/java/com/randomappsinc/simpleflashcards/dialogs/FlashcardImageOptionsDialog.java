@@ -11,6 +11,8 @@ import com.randomappsinc.simpleflashcards.R;
 public class FlashcardImageOptionsDialog {
 
     public interface Listener {
+        void onFullViewRequested();
+
         void onFlashcardImageChangeRequested();
 
         void onFlashcardImageDeleted();
@@ -29,9 +31,12 @@ public class FlashcardImageOptionsDialog {
                             MaterialDialog dialog, View itemView, int position, CharSequence text) {
                         switch (position) {
                             case 0:
-                                listener.onFlashcardImageChangeRequested();
+                                listener.onFullViewRequested();
                                 break;
                             case 1:
+                                listener.onFlashcardImageChangeRequested();
+                                break;
+                            case 2:
                                 confirmDeletionDialog.show();
                                 break;
                             default:

@@ -102,6 +102,10 @@ public class EditFlashcardsAdapter extends RecyclerView.Adapter<EditFlashcardsAd
         numFlashcards.setText(numFlashcardsText);
     }
 
+    public Flashcard getCurrentlyChosenFlashcard() {
+        return flashcards.get(selectedItemPosition);
+    }
+
     @NonNull
     @Override
     public FlashcardViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {

@@ -242,6 +242,18 @@ public class EditFlashcardSetActivity extends StandardActivity {
     private final FlashcardImageOptionsDialog.Listener flashcardOptionsListener =
             new FlashcardImageOptionsDialog.Listener() {
                 @Override
+                public void onFullViewRequested() {
+                    Flashcard flashcard = adapter.getCurrentlyChosenFlashcard();
+                    Intent intent = new Intent(
+                            EditFlashcardSetActivity.this,
+                            PictureFullViewActivity.class)
+                            .putExtra(Constants.IMAGE_URL_KEY, flashcard.getTermImageUrl())
+                            .putExtra(Constants.CAPTION_KEY, flashcard.getTerm());
+                    startActivity(intent);
+                    overridePendingTransition(R.anim.fade_in, 0);
+                }
+
+                @Override
                 public void onFlashcardImageChangeRequested() {
                     verifyReadExternalStoragePermission();
                 }
