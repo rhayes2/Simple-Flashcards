@@ -33,4 +33,10 @@
         android:layout_gravity="end|center_vertical"
         android:visibility="gone"
         style="@style/search_icon"/>
+
+    <com.joanzapata.iconify.widget.IconTextView
+        android:id="@+id/voice_search"
+        android:text="@string/microphone_icon"
+        android:layout_gravity="end|center_vertical"
+        style="@style/search_icon"/>
 </FrameLayout>

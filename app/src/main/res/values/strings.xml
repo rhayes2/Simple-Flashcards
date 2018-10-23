@@ -64,6 +64,7 @@
     <string name="download_icon">{ion-android-download}</string>
     <string name="add_circle_icon">{ion-android-add-circle}</string>
     <string name="share_nearby_icon">{ion-arrow-swap}</string>
+    <string name="microphone_icon">{ion-android-microphone}</string>
 
     <string name="download_sets_button_text">Download them from the Internet</string>
     <string name="get_from_nearby">Get them from nearby study buddies</string>
@@ -88,4 +89,12 @@
     <string name="image_load_fail">Failed to load image.</string>
 
     <string name="added_flashcard_sets">Added Flashcard Sets</string>
+
+    <string name="speech_message">Tell us what you\'re searching for.</string>
+    <string name="speech_not_supported">
+        Sorry, but your Android device doesn\'t support speech recognition.
+    </string>
+    <string name="speech_unrecognized">
+        We couldn\'t recognize what you said. Please try again.
+    </string>
 </resources>

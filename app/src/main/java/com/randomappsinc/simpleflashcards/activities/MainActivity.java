@@ -1,7 +1,9 @@
 package com.randomappsinc.simpleflashcards.activities;
 
+import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.os.Bundle;
+import android.speech.RecognizerIntent;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.widget.RecyclerView;
@@ -10,6 +12,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.joanzapata.iconify.IconDrawable;
 import com.joanzapata.iconify.fonts.IoniconsIcons;
@@ -23,8 +26,12 @@ import com.randomappsinc.simpleflashcards.persistence.DatabaseManager;
 import com.randomappsinc.simpleflashcards.persistence.PreferencesManager;
 import com.randomappsinc.simpleflashcards.persistence.models.FlashcardSet;
 import com.randomappsinc.simpleflashcards.utils.DialogUtil;
+import com.randomappsinc.simpleflashcards.utils.StringUtils;
 import com.randomappsinc.simpleflashcards.utils.UIUtils;
 import com.randomappsinc.simpleflashcards.views.SimpleDividerItemDecoration;
+
+import java.util.List;
+import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -34,9 +41,12 @@ import butterknife.OnTextChanged;
 public class MainActivity extends StandardActivity
         implements FlashcardSetsAdapter.Listener, DeleteFlashcardSetDialog.Listener {
 
+    private static final int SPEECH_REQUEST_CODE = 1;
+
     @BindView(R.id.parent) View parent;
     @BindView(R.id.search_bar) View searchBar;
     @BindView(R.id.flashcard_set_search) EditText setSearch;
+    @BindView(R.id.voice_search) View voiceSearch;
     @BindView(R.id.clear_search) View clearSearch;
     @BindView(R.id.flashcard_sets) RecyclerView sets;
     @BindView(R.id.no_sets) View noSetsAtAll;
@@ -89,6 +99,7 @@ public class MainActivity extends StandardActivity
     @OnTextChanged(value = R.id.flashcard_set_search, callback = OnTextChanged.Callback.AFTER_TEXT_CHANGED)
     public void afterTextChanged(Editable input) {
         adapter.refreshContent(input.toString());
+        voiceSearch.setVisibility(input.length() == 0 ? View.VISIBLE : View.GONE);
         clearSearch.setVisibility(input.length() == 0 ? View.GONE : View.VISIBLE);
     }
 
@@ -198,6 +209,48 @@ public class MainActivity extends StandardActivity
                 noSetsMatch.setVisibility(View.GONE);
                 sets.setVisibility(View.VISIBLE);
             }
+        }
+    }
+
+    @OnClick(R.id.voice_search)
+    public void searchWithVoice() {
+        showGoogleSpeechDialog();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        switch (requestCode) {
+            case SPEECH_REQUEST_CODE:
+                if (resultCode != RESULT_OK || data == null) {
+                    return;
+                }
+
+                List<String> result = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
+                if (result == null || result.isEmpty()) {
+                    UIUtils.showLongToast(R.string.speech_unrecognized, this);
+                    return;
+                }
+                String searchInput = StringUtils.capitalizeWords(result.get(0));
+                setSearch.setText(searchInput);
+                break;
+            default:
+                super.onActivityResult(requestCode, resultCode, data);
+        }
+    }
+
+
+    private void showGoogleSpeechDialog() {
+        Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
+        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
+        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.getDefault());
+        intent.putExtra(RecognizerIntent.EXTRA_PROMPT, getString(R.string.speech_message));
+        try {
+            startActivityForResult(intent, SPEECH_REQUEST_CODE);
+        } catch (ActivityNotFoundException exception) {
+            Toast.makeText(
+                    this,
+                    R.string.speech_not_supported,
+                    Toast.LENGTH_SHORT).show();
         }
     }
 
