@@ -1,9 +1,11 @@
 package com.randomappsinc.simpleflashcards.activities;
 
 import android.app.Activity;
+import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.speech.RecognizerIntent;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.view.Menu;
@@ -12,6 +14,7 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.joanzapata.iconify.fonts.IoniconsIcons;
 import com.randomappsinc.simpleflashcards.R;
@@ -19,9 +22,11 @@ import com.randomappsinc.simpleflashcards.adapters.QuizletSearchResultsAdapter;
 import com.randomappsinc.simpleflashcards.api.QuizletSearchManager;
 import com.randomappsinc.simpleflashcards.api.models.QuizletSetResult;
 import com.randomappsinc.simpleflashcards.constants.Constants;
+import com.randomappsinc.simpleflashcards.utils.StringUtils;
 import com.randomappsinc.simpleflashcards.utils.UIUtils;
 
 import java.util.List;
+import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -30,10 +35,14 @@ import butterknife.OnTextChanged;
 
 public class QuizletSearchActivity extends StandardActivity {
 
+    private static final int FILTER_REQUEST_CODE = 1;
+    private static final int SPEECH_REQUEST_CODE = 2;
+
     private static final long MILLIS_DELAY_FOR_KEYBOARD = 150;
 
     @BindView(R.id.parent) View parent;
     @BindView(R.id.flashcard_set_search) EditText setSearch;
+    @BindView(R.id.voice_search) View voiceSearch;
     @BindView(R.id.clear_search) View clearSearch;
     @BindView(R.id.search_empty_text) TextView searchEmptyText;
     @BindView(R.id.quizlet_attribution) View quizletAttribution;
@@ -100,6 +109,7 @@ public class QuizletSearchActivity extends StandardActivity {
         }
         searchEmptyText.setVisibility(input.length() == 0 ? View.VISIBLE : View.GONE);
         quizletAttribution.setVisibility(input.length() == 0 ? View.VISIBLE : View.GONE);
+        voiceSearch.setVisibility(input.length() == 0 ? View.VISIBLE : View.GONE);
         clearSearch.setVisibility(input.length() == 0 ? View.GONE : View.VISIBLE);
     }
 
@@ -135,15 +145,52 @@ public class QuizletSearchActivity extends StandardActivity {
                 }
             };
 
+    @OnClick(R.id.voice_search)
+    public void searchWithVoice() {
+        parent.requestFocus();
+        showGoogleSpeechDialog();
+    }
+
+    private void showGoogleSpeechDialog() {
+        Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
+        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
+        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.getDefault());
+        intent.putExtra(RecognizerIntent.EXTRA_PROMPT, getString(R.string.speech_message));
+        try {
+            startActivityForResult(intent, SPEECH_REQUEST_CODE);
+        } catch (ActivityNotFoundException exception) {
+            Toast.makeText(
+                    this,
+                    R.string.speech_not_supported,
+                    Toast.LENGTH_SHORT).show();
+        }
+    }
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        String input = setSearch.getText().toString();
-        if (resultCode == Activity.RESULT_OK && !input.isEmpty()) {
-            searchManager.performSearch(input);
-            searchResults.setVisibility(View.GONE);
-            searchResults.scrollToPosition(0);
-            skeletonResults.setVisibility(View.VISIBLE);
+        switch (requestCode) {
+            case FILTER_REQUEST_CODE:
+                String input = setSearch.getText().toString();
+                if (resultCode == Activity.RESULT_OK && !input.isEmpty()) {
+                    searchManager.performSearch(input);
+                    searchResults.setVisibility(View.GONE);
+                    searchResults.scrollToPosition(0);
+                    skeletonResults.setVisibility(View.VISIBLE);
+                }
+                break;
+            case SPEECH_REQUEST_CODE:
+                if (resultCode != RESULT_OK || data == null) {
+                    return;
+                }
+                List<String> result = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
+                if (result == null || result.isEmpty()) {
+                    UIUtils.showLongToast(R.string.speech_unrecognized, this);
+                    return;
+                }
+                String searchInput = StringUtils.capitalizeWords(result.get(0));
+                setSearch.setText(searchInput);
+                break;
         }
     }
 
@@ -166,7 +213,7 @@ public class QuizletSearchActivity extends StandardActivity {
             case R.id.filter:
                 startActivityForResult(
                         new Intent(this, QuizletSearchFilterActivity.class),
-                        1);
+                        FILTER_REQUEST_CODE);
                 overridePendingTransition(R.anim.slide_in_bottom, R.anim.stay);
                 return true;
             default:

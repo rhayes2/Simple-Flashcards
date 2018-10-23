@@ -217,28 +217,6 @@ public class MainActivity extends StandardActivity
         showGoogleSpeechDialog();
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        switch (requestCode) {
-            case SPEECH_REQUEST_CODE:
-                if (resultCode != RESULT_OK || data == null) {
-                    return;
-                }
-
-                List<String> result = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
-                if (result == null || result.isEmpty()) {
-                    UIUtils.showLongToast(R.string.speech_unrecognized, this);
-                    return;
-                }
-                String searchInput = StringUtils.capitalizeWords(result.get(0));
-                setSearch.setText(searchInput);
-                break;
-            default:
-                super.onActivityResult(requestCode, resultCode, data);
-        }
-    }
-
-
     private void showGoogleSpeechDialog() {
         Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
         intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
@@ -251,6 +229,25 @@ public class MainActivity extends StandardActivity
                     this,
                     R.string.speech_not_supported,
                     Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        switch (requestCode) {
+            case SPEECH_REQUEST_CODE:
+                if (resultCode != RESULT_OK || data == null) {
+                    return;
+                }
+                List<String> result = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
+                if (result == null || result.isEmpty()) {
+                    UIUtils.showLongToast(R.string.speech_unrecognized, this);
+                    return;
+                }
+                String searchInput = StringUtils.capitalizeWords(result.get(0));
+                setSearch.setText(searchInput);
+                break;
         }
     }
 
