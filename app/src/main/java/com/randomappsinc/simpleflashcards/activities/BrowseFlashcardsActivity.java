@@ -4,12 +4,10 @@ import android.hardware.SensorManager;
 import android.media.AudioManager;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
-import com.afollestad.materialdialogs.MaterialDialog;
 import com.randomappsinc.simpleflashcards.R;
 import com.randomappsinc.simpleflashcards.adapters.FlashcardsBrowsingAdapter;
 import com.randomappsinc.simpleflashcards.constants.Constants;
@@ -18,6 +16,7 @@ import com.randomappsinc.simpleflashcards.managers.TextToSpeechManager;
 import com.randomappsinc.simpleflashcards.persistence.DatabaseManager;
 import com.randomappsinc.simpleflashcards.persistence.PreferencesManager;
 import com.randomappsinc.simpleflashcards.persistence.models.FlashcardSet;
+import com.randomappsinc.simpleflashcards.utils.DialogUtil;
 import com.randomappsinc.simpleflashcards.utils.UIUtils;
 import com.squareup.seismic.ShakeDetector;
 
@@ -73,16 +72,11 @@ public class BrowseFlashcardsActivity extends StandardActivity implements ShakeD
         random = new Random();
         shakeDetector = new ShakeDetector(this);
         if (preferencesManager.shouldShowShakeAdvice()) {
-            TextView dialogView = (TextView) LayoutInflater.from(this).inflate(
-                    R.layout.dialog_body_text,
-                    null,
-                    false);
-            dialogView.setText(R.string.shake_now_supported);
-            new MaterialDialog.Builder(this)
-                    .title(R.string.shake_it)
-                    .positiveText(android.R.string.yes)
-                    .customView(dialogView, true)
-                    .show();
+            DialogUtil.showDialogWithIconTextBody(
+                    this,
+                    R.string.shake_now_supported,
+                    R.string.shake_it,
+                    android.R.string.ok);
         }
     }
 

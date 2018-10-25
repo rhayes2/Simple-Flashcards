@@ -1,10 +1,14 @@
 package com.randomappsinc.simpleflashcards.utils;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.support.annotation.NonNull;
+import android.support.annotation.StringRes;
 import android.support.v4.app.ShareCompat;
+import android.view.LayoutInflater;
+import android.widget.TextView;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -79,5 +83,22 @@ public class DialogUtil {
                     })
                     .show();
         }
+    }
+
+    public static void showDialogWithIconTextBody(
+            Context context,
+            @StringRes int bodyText,
+            @StringRes int titleText,
+            @StringRes int positiveText) {
+        TextView dialogView = (TextView) LayoutInflater.from(context).inflate(
+                R.layout.dialog_body_text,
+                null,
+                false);
+        dialogView.setText(bodyText);
+        new MaterialDialog.Builder(context)
+                .title(titleText)
+                .positiveText(positiveText)
+                .customView(dialogView, true)
+                .show();
     }
 }
