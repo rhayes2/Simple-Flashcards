@@ -12,6 +12,7 @@ public class PreferencesManager {
     private static final String NEARBY_NAME = "nearbyName";
     private static final String SHAKE_IS_NEW = "shakeIsNew";
     private static final String ENABLE_SHAKE = "enableShake";
+    private static final String SHOULD_SHOW_FLASHCARD_SET_INSTRUCTIONS = "shouldShowFlashcardSetInstructions";
 
     // Pre-Kitkat (19), we work with file paths
     private static final String BACKUP_FILE_PATH = "backupFilePath";
@@ -121,5 +122,11 @@ public class PreferencesManager {
 
     public void updateLastBackupTime() {
         prefs.edit().putLong(LAST_BACKUP_TIME, System.currentTimeMillis()).apply();
+    }
+
+    public boolean shouldShowRenameFlashcardSetInstructions() {
+        boolean shouldShowShake = prefs.getBoolean(SHOULD_SHOW_FLASHCARD_SET_INSTRUCTIONS, true);
+        prefs.edit().putBoolean(SHOULD_SHOW_FLASHCARD_SET_INSTRUCTIONS, false).apply();
+        return shouldShowShake;
     }
 }

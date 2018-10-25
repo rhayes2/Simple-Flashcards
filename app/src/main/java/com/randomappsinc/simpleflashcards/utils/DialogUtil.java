@@ -99,6 +99,7 @@ public class DialogUtil {
                 .title(titleText)
                 .positiveText(positiveText)
                 .customView(dialogView, true)
+                .cancelable(false)
                 .show();
     }
 }

@@ -10,9 +10,8 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.RecyclerView;
-import android.view.View;
-import android.view.inputmethod.EditorInfo;
-import android.widget.EditText;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.TextView;
 
 import com.joanzapata.iconify.IconDrawable;
@@ -26,14 +25,15 @@ import com.randomappsinc.simpleflashcards.dialogs.EditFlashcardDefinitionDialog;
 import com.randomappsinc.simpleflashcards.dialogs.EditFlashcardTermDialog;
 import com.randomappsinc.simpleflashcards.dialogs.FlashcardImageOptionsDialog;
 import com.randomappsinc.simpleflashcards.persistence.DatabaseManager;
+import com.randomappsinc.simpleflashcards.persistence.PreferencesManager;
 import com.randomappsinc.simpleflashcards.persistence.models.Flashcard;
+import com.randomappsinc.simpleflashcards.utils.DialogUtil;
 import com.randomappsinc.simpleflashcards.utils.PermissionUtils;
 import com.randomappsinc.simpleflashcards.utils.UIUtils;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import butterknife.OnEditorAction;
 
 public class EditFlashcardSetActivity extends StandardActivity {
 
@@ -43,8 +43,6 @@ public class EditFlashcardSetActivity extends StandardActivity {
     // Permission codes
     private static final int READ_EXTERNAL_STORAGE_REQUEST_CODE = 1;
 
-    @BindView(R.id.set_name_card) View setNameCard;
-    @BindView(R.id.flashcard_set_name) EditText flashcardSetName;
     @BindView(R.id.num_flashcards) TextView numFlashcards;
     @BindView(R.id.no_flashcards) TextView noFlashcards;
     @BindView(R.id.flashcards) RecyclerView flashcards;
@@ -68,7 +66,7 @@ public class EditFlashcardSetActivity extends StandardActivity {
         ButterKnife.bind(this);
 
         setId = getIntent().getIntExtra(Constants.FLASHCARD_SET_ID_KEY, 0);
-        flashcardSetName.setText(DatabaseManager.get().getSetName(setId));
+        setTitle(DatabaseManager.get().getSetName(setId));
         addFlashcard.setImageDrawable(
                 new IconDrawable(this, IoniconsIcons.ion_android_add)
                         .colorRes(R.color.white));
@@ -81,35 +79,15 @@ public class EditFlashcardSetActivity extends StandardActivity {
                 this, flashcardOptionsListener);
         adapter = new EditFlashcardsAdapter(flashcardEditingListener, setId, noFlashcards, numFlashcards);
         flashcards.setAdapter(adapter);
-    }
 
-    @Override
-    public void onSaveInstanceState(Bundle savedInstanceState) {
-        super.onSaveInstanceState(savedInstanceState);
-        saveFlashcardSetName();
-    }
-
-    private void saveFlashcardSetName() {
-        String newSetName = flashcardSetName.getText().toString().trim();
-        if (!newSetName.isEmpty()) {
-            DatabaseManager.get().renameSet(setId, newSetName);
+        PreferencesManager preferencesManager = new PreferencesManager(this);
+        if (preferencesManager.shouldShowRenameFlashcardSetInstructions()) {
+            DialogUtil.showDialogWithIconTextBody(
+                    this,
+                    R.string.rename_set_instructions,
+                    R.string.rename_set_instructions_title,
+                    android.R.string.ok);
         }
-    }
-
-    @OnEditorAction(R.id.flashcard_set_name)
-    public boolean onEditorAction(int actionId) {
-        if (actionId == EditorInfo.IME_ACTION_DONE) {
-            setNameCard.requestFocus();
-            UIUtils.closeKeyboard(this);
-            return true;
-        }
-        return false;
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        saveFlashcardSetName();
     }
 
     @OnClick(R.id.add_flashcard)
@@ -264,4 +242,21 @@ public class EditFlashcardSetActivity extends StandardActivity {
                     adapter.onTermImageUpdated(null);
                 }
             };
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_edit_set, menu);
+        UIUtils.loadMenuIcon(menu, R.id.rename_flashcard_set, IoniconsIcons.ion_edit, this);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.rename_flashcard_set:
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
 }
