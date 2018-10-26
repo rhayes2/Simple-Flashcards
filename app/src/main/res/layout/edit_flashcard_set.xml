@@ -28,7 +28,6 @@
 
         <com.joanzapata.iconify.widget.IconTextView
             android:id="@+id/no_flashcards"
-            android:text="@string/no_flashcards"
             style="@style/empty_state_text"/>
 
         <FrameLayout

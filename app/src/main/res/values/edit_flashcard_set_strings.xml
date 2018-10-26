@@ -5,11 +5,13 @@
     <string name="rename_set_instructions">
         To rename this flashcard set, click the {ion-edit} button at the top right of the page.
     </string>
-    <string name="no_flashcards">
+    <string name="no_flashcards_with_add_cta">
         Use the {ion-android-add-circle} button below to start adding flashcards!
     </string>
 
-    <string name="no_flashcards_found_in_search">You do not have any flashcards that match your search.</string>
+    <string name="no_flashcards_found_in_search">
+        This flashcard set has no flashcards that match your search.
+    </string>
 
     <string name="one_flashcard">1 flashcard</string>
     <string name="x_flashcards">%d flashcards</string>

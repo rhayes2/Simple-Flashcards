@@ -15,6 +15,7 @@ import com.randomappsinc.simpleflashcards.persistence.DatabaseManager;
 import com.randomappsinc.simpleflashcards.persistence.models.Flashcard;
 import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -37,17 +38,43 @@ public class EditFlashcardsAdapter extends RecyclerView.Adapter<EditFlashcardsAd
 
     protected Listener listener;
     protected List<Flashcard> flashcards;
-    private View noContent;
+    protected List<Flashcard> filteredFlashcards;
+    private TextView noContent;
     private int setId;
     private TextView numFlashcards;
     protected int selectedItemPosition = -1;
+    private String currentQuery = "";
 
-    public EditFlashcardsAdapter(Listener listener, int setId, View noContent, TextView numFlashcards) {
+    public EditFlashcardsAdapter(Listener listener, int setId, TextView noContent, TextView numFlashcards) {
         this.listener = listener;
+        this.filteredFlashcards = new ArrayList<>();
         this.setId = setId;
         this.noContent = noContent;
         this.numFlashcards = numFlashcards;
         refreshSet();
+    }
+
+    public void setCurrentQuery(String query) {
+        currentQuery = query;
+        filterFlashcards();
+    }
+
+    public void filterFlashcards() {
+        filteredFlashcards.clear();
+        if (currentQuery.isEmpty()) {
+            filteredFlashcards.addAll(flashcards);
+        } else {
+            String lowerCaseQuery = currentQuery.toLowerCase();
+            for (Flashcard flashcard : flashcards) {
+                if (flashcard.getTerm().toLowerCase().contains(lowerCaseQuery)
+                        || flashcard.getDefinition().toLowerCase().contains(lowerCaseQuery)) {
+                    filteredFlashcards.add(flashcard);
+                }
+            }
+        }
+        notifyDataSetChanged();
+        setNoContent();
+        refreshCount();
     }
 
     public void onFlashcardDeleted() {
@@ -58,7 +85,7 @@ public class EditFlashcardsAdapter extends RecyclerView.Adapter<EditFlashcardsAd
         if (selectedItemPosition < 0) {
             return;
         }
-        flashcards.get(selectedItemPosition).setTerm(newTerm);
+        filteredFlashcards.get(selectedItemPosition).setTerm(newTerm);
         notifyItemChanged(selectedItemPosition);
         selectedItemPosition = -1;
     }
@@ -67,7 +94,7 @@ public class EditFlashcardsAdapter extends RecyclerView.Adapter<EditFlashcardsAd
         if (selectedItemPosition < 0) {
             return;
         }
-        flashcards.get(selectedItemPosition).setDefinition(newDefinition);
+        filteredFlashcards.get(selectedItemPosition).setDefinition(newDefinition);
         notifyItemChanged(selectedItemPosition);
         selectedItemPosition = -1;
     }
@@ -76,21 +103,26 @@ public class EditFlashcardsAdapter extends RecyclerView.Adapter<EditFlashcardsAd
         if (selectedItemPosition < 0) {
             return;
         }
-        flashcards.get(selectedItemPosition).setTermImageUrl(termImageUrl);
+        filteredFlashcards.get(selectedItemPosition).setTermImageUrl(termImageUrl);
         notifyDataSetChanged();
         selectedItemPosition = -1;
     }
 
     private void setNoContent() {
-        int visibility = flashcards.size() == 0 ? View.VISIBLE : View.GONE;
-        noContent.setVisibility(visibility);
+        if (flashcards.isEmpty()) {
+            noContent.setText(R.string.no_flashcards_with_add_cta);
+            noContent.setVisibility(View.VISIBLE);
+        } else if (filteredFlashcards.isEmpty()) {
+            noContent.setText(R.string.no_flashcards_found_in_search);
+            noContent.setVisibility(View.VISIBLE);
+        } else {
+            noContent.setVisibility(View.GONE);
+        }
     }
 
     public void refreshSet() {
         this.flashcards = DatabaseManager.get().getAllFlashcards(setId);
-        setNoContent();
-        notifyDataSetChanged();
-        refreshCount();
+        filterFlashcards();
     }
 
     protected void refreshCount() {
@@ -123,7 +155,7 @@ public class EditFlashcardsAdapter extends RecyclerView.Adapter<EditFlashcardsAd
 
     @Override
     public int getItemCount() {
-        return flashcards.size();
+        return filteredFlashcards.size();
     }
 
     public class FlashcardViewHolder extends RecyclerView.ViewHolder {
@@ -140,7 +172,7 @@ public class EditFlashcardsAdapter extends RecyclerView.Adapter<EditFlashcardsAd
         }
 
         void loadFlashcard(int position) {
-            Flashcard flashcard = flashcards.get(position);
+            Flashcard flashcard = filteredFlashcards.get(position);
             positionInfo.setText(positionInfo.getContext().getString(
                     R.string.flashcard_x_of_y,
                     position + 1,
@@ -165,30 +197,30 @@ public class EditFlashcardsAdapter extends RecyclerView.Adapter<EditFlashcardsAd
         @OnClick(R.id.term_text)
         public void editTerm() {
             selectedItemPosition = getAdapterPosition();
-            listener.onEditTerm(flashcards.get(getAdapterPosition()));
+            listener.onEditTerm(filteredFlashcards.get(getAdapterPosition()));
         }
 
         @OnClick(R.id.add_image)
         public void addImage() {
             selectedItemPosition = getAdapterPosition();
-            listener.onAddImageClicked(flashcards.get(getAdapterPosition()));
+            listener.onAddImageClicked(filteredFlashcards.get(getAdapterPosition()));
         }
 
         @OnClick(R.id.term_image)
         public void onImageClicked() {
             selectedItemPosition = getAdapterPosition();
-            listener.onImageClicked(flashcards.get(getAdapterPosition()));
+            listener.onImageClicked(filteredFlashcards.get(getAdapterPosition()));
         }
 
         @OnClick(R.id.definition)
         public void editDefinition() {
             selectedItemPosition = getAdapterPosition();
-            listener.onEditDefinition(flashcards.get(getAdapterPosition()));
+            listener.onEditDefinition(filteredFlashcards.get(getAdapterPosition()));
         }
 
         @OnClick(R.id.delete_flashcard)
         public void deleteFlashcard() {
-            listener.onDeleteFlashcard(flashcards.get(getAdapterPosition()));
+            listener.onDeleteFlashcard(filteredFlashcards.get(getAdapterPosition()));
         }
     }
 }

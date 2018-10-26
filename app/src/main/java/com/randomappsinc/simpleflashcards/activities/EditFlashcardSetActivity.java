@@ -112,6 +112,7 @@ public class EditFlashcardSetActivity extends StandardActivity {
 
     @OnTextChanged(value = R.id.search_input, callback = OnTextChanged.Callback.AFTER_TEXT_CHANGED)
     public void afterTextChanged(Editable input) {
+        adapter.setCurrentQuery(input.toString());
         voiceSearch.setVisibility(input.length() == 0 ? View.VISIBLE : View.GONE);
         clearSearch.setVisibility(input.length() == 0 ? View.GONE : View.VISIBLE);
     }
@@ -189,7 +190,8 @@ public class EditFlashcardSetActivity extends StandardActivity {
 
                         // Persist ability to read from this file
                         int takeFlags = resultData.getFlags()
-                                & (Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+                                & (Intent.FLAG_GRANT_READ_URI_PERMISSION
+                                | Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
                         getContentResolver().takePersistableUriPermission(uri, takeFlags);
 
                         String uriString = uri.toString();
