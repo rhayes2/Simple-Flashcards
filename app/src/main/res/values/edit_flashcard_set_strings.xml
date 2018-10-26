@@ -8,6 +8,9 @@
     <string name="no_flashcards">
         Use the {ion-android-add-circle} button below to start adding flashcards!
     </string>
+
+    <string name="no_flashcards_found_in_search">You do not have any flashcards that match your search.</string>
+
     <string name="one_flashcard">1 flashcard</string>
     <string name="x_flashcards">%d flashcards</string>
     <string name="flashcard_x_of_y">Flashcard %d of %d</string>

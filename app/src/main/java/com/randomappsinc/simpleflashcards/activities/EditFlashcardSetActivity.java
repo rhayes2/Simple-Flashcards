@@ -2,17 +2,23 @@ package com.randomappsinc.simpleflashcards.activities;
 
 import android.Manifest;
 import android.app.Activity;
+import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.speech.RecognizerIntent;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.joanzapata.iconify.IconDrawable;
 import com.joanzapata.iconify.fonts.IoniconsIcons;
@@ -30,20 +36,29 @@ import com.randomappsinc.simpleflashcards.persistence.PreferencesManager;
 import com.randomappsinc.simpleflashcards.persistence.models.Flashcard;
 import com.randomappsinc.simpleflashcards.utils.DialogUtil;
 import com.randomappsinc.simpleflashcards.utils.PermissionUtils;
+import com.randomappsinc.simpleflashcards.utils.StringUtils;
 import com.randomappsinc.simpleflashcards.utils.UIUtils;
+
+import java.util.List;
+import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import butterknife.OnTextChanged;
 
 public class EditFlashcardSetActivity extends StandardActivity {
 
     // Intent codes
     private static final int IMAGE_FILE_REQUEST_CODE = 1;
+    private static final int SPEECH_REQUEST_CODE = 2;
 
     // Permission codes
     private static final int READ_EXTERNAL_STORAGE_REQUEST_CODE = 1;
 
+    @BindView(R.id.search_input) EditText searchInput;
+    @BindView(R.id.voice_search) View voiceSearch;
+    @BindView(R.id.clear_search) View clearSearch;
     @BindView(R.id.num_flashcards) TextView numFlashcards;
     @BindView(R.id.no_flashcards) TextView noFlashcards;
     @BindView(R.id.flashcards) RecyclerView flashcards;
@@ -95,6 +110,37 @@ public class EditFlashcardSetActivity extends StandardActivity {
         }
     }
 
+    @OnTextChanged(value = R.id.search_input, callback = OnTextChanged.Callback.AFTER_TEXT_CHANGED)
+    public void afterTextChanged(Editable input) {
+        voiceSearch.setVisibility(input.length() == 0 ? View.VISIBLE : View.GONE);
+        clearSearch.setVisibility(input.length() == 0 ? View.GONE : View.VISIBLE);
+    }
+
+    @OnClick(R.id.clear_search)
+    public void clearSearch() {
+        searchInput.setText("");
+    }
+
+    @OnClick(R.id.voice_search)
+    public void searchWithVoice() {
+        showGoogleSpeechDialog();
+    }
+
+    private void showGoogleSpeechDialog() {
+        Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
+        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
+        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.getDefault());
+        intent.putExtra(RecognizerIntent.EXTRA_PROMPT, getString(R.string.speech_message));
+        try {
+            startActivityForResult(intent, SPEECH_REQUEST_CODE);
+        } catch (ActivityNotFoundException exception) {
+            Toast.makeText(
+                    this,
+                    R.string.speech_not_supported,
+                    Toast.LENGTH_SHORT).show();
+        }
+    }
+
     @OnClick(R.id.add_flashcard)
     public void addFlashcard() {
         createFlashcardDialog.show();
@@ -122,21 +168,36 @@ public class EditFlashcardSetActivity extends StandardActivity {
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent resultData) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT
-                && requestCode == IMAGE_FILE_REQUEST_CODE
-                && resultCode == Activity.RESULT_OK) {
-            if (resultData != null && resultData.getData() != null) {
-                Uri uri = resultData.getData();
+        switch (requestCode) {
+            case SPEECH_REQUEST_CODE:
+                if (resultCode != RESULT_OK || resultData == null) {
+                    return;
+                }
+                List<String> result = resultData.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
+                if (result == null || result.isEmpty()) {
+                    UIUtils.showLongToast(R.string.speech_unrecognized, this);
+                    return;
+                }
+                String searchQuery = StringUtils.capitalizeWords(result.get(0));
+                searchInput.setText(searchQuery);
+                break;
+            case IMAGE_FILE_REQUEST_CODE:
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT
+                        && resultCode == Activity.RESULT_OK) {
+                    if (resultData != null && resultData.getData() != null) {
+                        Uri uri = resultData.getData();
 
-                // Persist ability to read from this file
-                int takeFlags = resultData.getFlags()
-                        & (Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
-                getContentResolver().takePersistableUriPermission(uri, takeFlags);
+                        // Persist ability to read from this file
+                        int takeFlags = resultData.getFlags()
+                                & (Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+                        getContentResolver().takePersistableUriPermission(uri, takeFlags);
 
-                String uriString = uri.toString();
-                databaseManager.updateFlashcardTermImageUrl(currentlySelectedFlashcardId, uriString);
-                adapter.onTermImageUpdated(uriString);
-            }
+                        String uriString = uri.toString();
+                        databaseManager.updateFlashcardTermImageUrl(currentlySelectedFlashcardId, uriString);
+                        adapter.onTermImageUpdated(uriString);
+                    }
+                }
+                break;
         }
     }
 

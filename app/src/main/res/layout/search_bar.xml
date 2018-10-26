@@ -8,7 +8,7 @@
     tools:ignore="SpUsage">
 
     <EditText
-        android:id="@+id/flashcard_set_search"
+        android:id="@+id/search_input"
         android:layout_width="match_parent"
         android:layout_height="40dp"
         android:gravity="center_vertical"

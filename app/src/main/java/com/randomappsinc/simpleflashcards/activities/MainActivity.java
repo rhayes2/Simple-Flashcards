@@ -45,7 +45,7 @@ public class MainActivity extends StandardActivity
 
     @BindView(R.id.parent) View parent;
     @BindView(R.id.search_bar) View searchBar;
-    @BindView(R.id.flashcard_set_search) EditText setSearch;
+    @BindView(R.id.search_input) EditText setSearch;
     @BindView(R.id.voice_search) View voiceSearch;
     @BindView(R.id.clear_search) View clearSearch;
     @BindView(R.id.flashcard_sets) RecyclerView sets;
@@ -96,7 +96,7 @@ public class MainActivity extends StandardActivity
         adapter.refreshContent(setSearch.getText().toString());
     }
 
-    @OnTextChanged(value = R.id.flashcard_set_search, callback = OnTextChanged.Callback.AFTER_TEXT_CHANGED)
+    @OnTextChanged(value = R.id.search_input, callback = OnTextChanged.Callback.AFTER_TEXT_CHANGED)
     public void afterTextChanged(Editable input) {
         adapter.refreshContent(input.toString());
         voiceSearch.setVisibility(input.length() == 0 ? View.VISIBLE : View.GONE);

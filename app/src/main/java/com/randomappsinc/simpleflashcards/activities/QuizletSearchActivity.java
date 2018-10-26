@@ -41,7 +41,7 @@ public class QuizletSearchActivity extends StandardActivity {
     private static final long MILLIS_DELAY_FOR_KEYBOARD = 150;
 
     @BindView(R.id.parent) View parent;
-    @BindView(R.id.flashcard_set_search) EditText setSearch;
+    @BindView(R.id.search_input) EditText setSearch;
     @BindView(R.id.voice_search) View voiceSearch;
     @BindView(R.id.clear_search) View clearSearch;
     @BindView(R.id.search_empty_text) TextView searchEmptyText;
@@ -95,7 +95,7 @@ public class QuizletSearchActivity extends StandardActivity {
         adapter.notifyDataSetChanged();
     }
 
-    @OnTextChanged(value = R.id.flashcard_set_search, callback = OnTextChanged.Callback.AFTER_TEXT_CHANGED)
+    @OnTextChanged(value = R.id.search_input, callback = OnTextChanged.Callback.AFTER_TEXT_CHANGED)
     public void afterTextChanged(Editable input) {
         if (input.length() > 0) {
             searchManager.performSearch(input.toString());
