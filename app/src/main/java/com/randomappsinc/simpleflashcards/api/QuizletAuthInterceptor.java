@@ -17,7 +17,7 @@ public class QuizletAuthInterceptor implements Interceptor {
         HttpUrl url = request
                 .url()
                 .newBuilder()
-                .addQueryParameter(ApiConstants.CLIENT_ID_KEY, QuizletAuthConstants.CLIENT_ID)
+                .addQueryParameter(ApiConstants.CLIENT_ID_KEY, ApiConstants.CLIENT_ID_KEY)
                 .build();
         request = request.newBuilder().url(url).build();
         return chain.proceed(request);
