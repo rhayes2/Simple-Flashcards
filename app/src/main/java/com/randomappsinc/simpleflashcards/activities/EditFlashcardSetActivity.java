@@ -22,6 +22,7 @@ import com.randomappsinc.simpleflashcards.constants.Constants;
 import com.randomappsinc.simpleflashcards.dialogs.CreateFlashcardDialog;
 import com.randomappsinc.simpleflashcards.dialogs.DeleteFlashcardDialog;
 import com.randomappsinc.simpleflashcards.dialogs.EditFlashcardDefinitionDialog;
+import com.randomappsinc.simpleflashcards.dialogs.EditFlashcardSetNameDialog;
 import com.randomappsinc.simpleflashcards.dialogs.EditFlashcardTermDialog;
 import com.randomappsinc.simpleflashcards.dialogs.FlashcardImageOptionsDialog;
 import com.randomappsinc.simpleflashcards.persistence.DatabaseManager;
@@ -55,6 +56,7 @@ public class EditFlashcardSetActivity extends StandardActivity {
     protected EditFlashcardTermDialog editFlashcardTermDialog;
     protected EditFlashcardDefinitionDialog editFlashcardDefinitionDialog;
     protected FlashcardImageOptionsDialog flashcardImageOptionsDialog;
+    private EditFlashcardSetNameDialog editFlashcardSetNameDialog;
     protected int currentlySelectedFlashcardId;
     protected DatabaseManager databaseManager = DatabaseManager.get();
 
@@ -66,7 +68,8 @@ public class EditFlashcardSetActivity extends StandardActivity {
         ButterKnife.bind(this);
 
         setId = getIntent().getIntExtra(Constants.FLASHCARD_SET_ID_KEY, 0);
-        setTitle(DatabaseManager.get().getSetName(setId));
+        String currentSetName = databaseManager.getSetName(setId);
+        setTitle(currentSetName);
         addFlashcard.setImageDrawable(
                 new IconDrawable(this, IoniconsIcons.ion_android_add)
                         .colorRes(R.color.white));
@@ -77,6 +80,8 @@ public class EditFlashcardSetActivity extends StandardActivity {
                 this, flashcardDefinitionEditListener);
         flashcardImageOptionsDialog = new FlashcardImageOptionsDialog(
                 this, flashcardOptionsListener);
+        editFlashcardSetNameDialog = new EditFlashcardSetNameDialog(
+                this, currentSetName, editSetNameListener);
         adapter = new EditFlashcardsAdapter(flashcardEditingListener, setId, noFlashcards, numFlashcards);
         flashcards.setAdapter(adapter);
 
@@ -243,6 +248,18 @@ public class EditFlashcardSetActivity extends StandardActivity {
                 }
             };
 
+    private final EditFlashcardSetNameDialog.Listener editSetNameListener =
+            new EditFlashcardSetNameDialog.Listener() {
+                @Override
+                public void onFlashcardSetRename(String newSetName) {
+                    databaseManager.renameSet(setId, newSetName);
+                    setTitle(newSetName);
+                    UIUtils.showShortToast(
+                            R.string.flashcard_set_renamed,
+                            EditFlashcardSetActivity.this);
+                }
+            };
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_edit_set, menu);
@@ -254,6 +271,7 @@ public class EditFlashcardSetActivity extends StandardActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.rename_flashcard_set:
+                editFlashcardSetNameDialog.show();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

@@ -37,4 +37,7 @@
     </string-array>
     <string name="delete_image_confirmation_title">Delete Image Confirmation</string>
     <string name="delete_image_confirmation_body">Are you sure you want to delete this image?</string>
+
+    <string name="rename_flashcard_set_title">Rename Flashcard Set</string>
+    <string name="flashcard_set_renamed">Flashcard set renamed.</string>
 </resources>
